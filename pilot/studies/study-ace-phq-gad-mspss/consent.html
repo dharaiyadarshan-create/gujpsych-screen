@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="gu">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>સંમતિ પત્રક · Consent Form</title>
+  <link rel="stylesheet" href="../../assets/shared.css">
+  <style>
+    .consent-container { max-width: 800px; margin: 2rem auto; padding: 2rem; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); }
+    .pis-content { height: 400px; overflow-y: scroll; border: 1px solid var(--border); padding: 1.5rem; background: #fdfdfd; margin-bottom: 2rem; font-size: 0.95rem; line-height: 1.8; }
+    .consent-actions { display: flex; flex-direction: column; align-items: center; gap: 1rem; }
+    .checkbox-group { display: flex; align-items: flex-start; gap: 10px; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <div id="layout/site-header"></div>
+
+  <main class="page-main">
+    <div class="consent-container">
+      <h2>સંશોધન સહભાગી માહિતી પત્રક</h2>
+      <p style="color:var(--text-secondary); margin-bottom: 1rem;">Participant Information Sheet (PIS)</p>
+      
+      <div class="pis-content">
+        <h3>૧. અભ્યાસનું શીર્ષક</h3>
+        <p>ગુજરાતી સંસ્કરણમાં પ્રતિકૂળ બાળપણના અનુભવો (ACE-IQ) અને પરોપકારી બાળપણના અનુભવો (BCEs) સ્કેલનું મનોવૈજ્ઞાનિક મૂલ્યાંકન.</p>
+        
+        <h3>૨. હેતુ</h3>
+        <p>આ સંશોધનનો હેતુ ગુજરાતી ભાષામાં માનસિક સ્વાસ્થ્ય માપદંડોની વિશ્વસનીયતા તપાસવાનો છે...</p>
+        
+        <h3>૩. ગોપનીયતા</h3>
+        <p>તમારી બધી માહિતી સંપૂર્ણપણે ગોપનીય(ગુપ્ત) રાખવામાં આવશે. તમારું નામ,સરનામું કે સંપર્ક  નંબર આપવાની જરૂર નથી...</p>
+        
+        </div>
+
+      <div class="consent-actions">
+        <label class="checkbox-group">
+          <input type="checkbox" id="consent-check">
+          <span>મેં ઉપરની બધી માહિતી વાંચી છે અને હું આ અભ્યાસમાં સ્વેચ્છાએ ભાગ લેવા માટે સંમત છું.</span>
+        </label>
+        
+        <button id="btn-proceed" class="btn-primary" style="width: 100%; opacity: 0.5;" disabled>આગળ વધો · Proceed</button>
+        <a href="index.html" class="btn-ghost">અસ્વીકાર કરો · Decline</a>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const check = document.getElementById('consent-check');
+    const btn = document.getElementById('btn-proceed');
+
+    // Enable button only if checkbox is checked
+    check.addEventListener('change', () => {
+      btn.disabled = !check.checked;
+      btn.style.opacity = check.checked ? "1" : "0.5";
+    });
+
+    btn.addEventListener('click', () => {
+      localStorage.setItem("studyConsent", "true");
+      window.location.href = "index.html";
+    });
+  </script>
+</body>
+</html>

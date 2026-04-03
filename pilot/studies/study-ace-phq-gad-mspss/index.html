@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="gu">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Study · ACE PHQ GAD MSPSS</title>
+  <link rel="stylesheet" href="assets/shared.css" />
+  <link rel="stylesheet" href="../sociodem/sociodem.css" />
+  <script src="../assets/shared.js"></script>
+  <script src="../sociodem/sociodem.js"></script>
+</head>
+
+<body>
+
+<main class="page-main" style="max-width:700px; margin:auto;">
+
+  <!-- STEP TITLE -->
+  <h2 id="step-title">બાળપણના અનુભવો · ACE</h2>
+
+  <!-- STEP CONTAINER -->
+  <div id="step-container"></div>
+
+  <!-- NAVIGATION -->
+  <div style="display:flex; justify-content:space-between; margin-top:1.5rem;">
+    <button id="prevBtn" class="btn-ghost">પાછળ</button>
+    <button id="nextBtn" class="btn-primary">આગળ</button>
+  </div>
+
+</main>
+
+<script>
+    if (localStorage.getItem("studyConsent") !== "true") {
+      window.location.href = "studies/study-ace-phq-gad-mspss/consent.html";
+    }
+</script>
+
+<script>
+
+let step = 0;
+
+const steps = [
+  {
+    title: "બાળપણના અનુભવો · ACE",
+    hasNav: false,
+    content: `
+      <p>ACE એ 25 પ્રશ્નોની સ્ક્રીનિંગ છે જે બાળપણના પ્રતિકૂળ અનુભવો માપે છે.</p>
+      <button class="btn-primary" onclick="startScale('ACE')">સ્ક્રીનિંગ શરૂ કરો →</button>
+    `
+  },
+  {
+    title: "ડિપ્રેશન સ્ક્રીનિંગ · PHQ-9",
+    hasNav: false,
+    content: `
+      <p>PHQ-9 એ ૯ પ્રશ્નોની સ્ક્રીનિંગ છે જે ડિપ્રેશનના લક્ષણો માપે છે.</p>
+      <button class="btn-primary" onclick="startScale('PHQ9')">સ્ક્રીનિંગ શરૂ કરો →</button>
+    `
+  },
+  {
+    title: "ચિંતા સ્ક્રીનિંગ · GAD-7",
+    hasNav: false,
+    content: `
+      <p>GAD-7 એ ૭ પ્રશ્નોની સ્ક્રીનિંગ છે જે ચિંતાના લક્ષણો માપે છે.</p>
+      <button class="btn-primary" onclick="startScale('GAD7')">સ્ક્રીનિંગ શરૂ કરો →</button>
+    `
+  },
+  {
+    title: "સામાજિક આધાર · MSPSS",
+    hasNav: false,
+    content: `
+      <p>MSPSS એ ૧૨ પ્રશ્નોની સ્ક્રીનિંગ છે જે સામાજિક આધાર માપે છે.</p>
+      <button class="btn-primary" onclick="startScale('MSPSS')">સ્ક્રીનિંગ શરૂ કરો →</button>
+    `
+  },
+  {
+    title: "સામાજિક માહિતી · Sociodemographic",
+    hasNav: false,
+    content: `
+      <p>આ માહિતી સંશોધન હેતુ માટે છે.</p>
+      <div id="sociodem-container"></div>
+      <button class="btn-primary" id="sociodem-submit-btn" onclick="submitSociodem()" disabled>સબમિટ કરો →</button>
+    `
+  },
+  {
+    title: "પરિણામ · Results",
+    hasNav: false,
+    content: `
+      <p>તમે સફળતાપૂર્વક બધા સ્ટેપ્સ પૂર્ણ કર્યા છે. તમારો ડેટા સંશોધન માટે સ્ટોર થયો છે.</p>
+      <p>આભાર!</p>
+    `
+  }
+];
+
+function startScale(scale) {
+  const nextMap = {
+    ACE: 'PHQ9',
+    PHQ9: 'GAD7',
+    GAD7: 'MSPSS',
+    MSPSS: 'sociodem'
+  };
+  const nextScale = nextMap[scale];
+  const nextUrl = nextScale ? `index.html?completed=${scale.toLowerCase()}` : 'index.html?completed=mspss';
+  window.location.href = `../../scales_folder/${scale === 'ACE' ? 'WHO-ACE-IQ-BINARY' : scale}.html?study=1&next=${encodeURIComponent(nextUrl)}`;
+}
+
+function checkSociodemComplete() {
+  setTimeout(() => {
+    document.getElementById('sociodem-submit-btn').disabled = !SocioDem.isComplete();
+  }, 50);
+}
+
+function submitSociodem() {
+  const sdData = SocioDem.getData();
+  if (!sdData) return;
+
+  submitToSheets({
+    type: 'sociodemographic',
+    token: getToken(),
+    sociodemographic: sdData,
+    timestamp: new Date().toISOString()
+  });
+
+  step++;
+  renderStep();
+}
+
+function renderStep() {
+  document.getElementById("step-title").innerText = steps[step].title;
+  document.getElementById("step-container").innerHTML = steps[step].content;
+
+  const nav = document.querySelector('div[style*="display:flex"]');
+  nav.style.display = steps[step].hasNav ? 'flex' : 'none';
+
+  if (step === 4) { // Sociodemographic step
+    SocioDem.reset();
+    SocioDem.render('sociodem-container');
+    const container = document.getElementById('sociodem-container');
+    container.addEventListener('click', checkSociodemComplete);
+    container.addEventListener('input', checkSociodemComplete);
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const params = new URLSearchParams(window.location.search);
+  const completed = params.get('completed');
+  if (completed) {
+    const stepMap = {
+      'ace': 1, // PHQ
+      'phq': 2, // GAD
+      'gad': 3, // MSPSS
+      'mspss': 4, // sociodem
+      'sociodem': 5 // results
+    };
+    step = stepMap[completed.toLowerCase()] || 0;
+  }
+  renderStep();
+});
+
+document.getElementById("nextBtn").addEventListener("click", () => {
+  step++;
+  if (step >= steps.length) step = steps.length - 1;
+  renderStep();
+});
+
+document.getElementById("prevBtn").addEventListener("click", () => {
+  step--;
+  if (step < 0) step = 0;
+  renderStep();
+});
+
+</script>
+
+  if (step < steps.length - 1) {
+    step++;
+    renderStep();
+  } else {
+    alert("સબમિટ થયું!");
+  }
+});
+
+
+document.getElementById("prevBtn").addEventListener("click", () => {
+  if (step > 0) {
+    step--;
+    renderStep();
+  }
+});
+
+renderStep();
+
+</script>
+
+</body>
+</html>
