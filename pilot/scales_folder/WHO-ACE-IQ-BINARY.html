@@ -28,18 +28,15 @@
     <div class="card">
       <div class="card-label">આ મૂલ્યાંકન વિશે</div>
       <ul class="info-list">
-        <li><span class="dot"></span>ACE-IQ બાળપણ (૧૮ વર્ષ સુધી) દરમિયાન થયેલા પ્રતિકૂળ અનુભવો માપે છે.</li>
-        <li><span class="dot"></span>કુલ ૨૩ પ્રશ્નો છે — મોટા ભાગના હા/ના સ્વરૂપના છે.</li>
-        <li><span class="dot"></span>ભરવામાં સામાન્ય રીતે ૭ થી ૯ મિનિટ લાગે છે.</li>
-        <li><span class="dot"></span>તમારા જવાબો સંપૂર્ણ અનામી છે — કોઈ અંગત માહિતી સંગ્રહ થતી નથી.</li>
-        <li><span class="dot"></span>ભાગ લેવો સ્વૈચ્છિક છે. સબમિટ કરતાં પહેલાં ગમે ત્યારે બહાર નીકળી શકો.</li>
-        <li><span class="dot"></span>સબમિટ કર્યા બાદ ડેટા અનામી સ્વરૂપે સંશોધન માટે સ્ટોર થાય છે.</li>
+        <li><span class="dot"></span>ACE-IQ બાળપણના (૧૮ વર્ષ સુધી) મુશ્કેલ અનુભવ પર કેન્દ્રિત છે.</li>
+        <li><span class="dot"></span>કુલ ૨૩ સરળ હા/ના પ્રશ્નો; જવાબ આપવાંમાં  ~૭-૯ મિનિટ.</li>
+        <li><span class="dot"></span>જવાબો પૂરી રીતે ગોપનીય છે.</li>
       </ul>
     </div>
 
     <div class="notice notice-amber">
       <span class="notice-label">⚠ મહત્વની જાણ</span>
-      <p>આ પ્રશ્નાવલીમાં કેટલાક સંવેદનશીલ વિષયો છે — શારીરિક અને ભાવનાત્મક અનુભવો. જો કોઈ પ્રશ્ન અસ્વસ્થ કરે, તો બહાર નીકળી શકો છો. આ ક્લિનિકલ નિદાન નથી.</p>
+      <p>આ પ્રશ્નાવલીમાં કેટલાક સંવેદનશીલ સવાલો છે, જે તમને અસ્વસ્થ કરી શકે છે.જો કોઈ પ્રશ્ન અસ્વસ્થ કરે, તો તમે બહાર નીકળી શકો છો. આ ક્લિનિકલ નિદાન નથી.</p>
     </div>
 
     <button class="btn-primary" onclick="startScale()">સ્વ-મૂલ્યાંકન શરૂ કરો →</button>
@@ -88,39 +85,15 @@
       <div class="result-band-sub"   id="result-band-sub">—</div>
     </div>
 
-    <div class="card mt-2">
-      <div class="card-label">દુર્વ્યવહારના પ્રકાર · ACE Categories</div>
-      <p style="font-size:0.78rem;color:var(--text-muted);margin-bottom:0.5rem;">
-        દરેક વર્ગ માટે ૦ (નહીં) અથવા ૧ (હા) — કુલ ૧૨ વર્ગ સ્કોર થાય છે.
-      </p>
-      <div id="category-scores"></div>
-      <div class="divider"></div>
-      <div style="display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:11px;">
-        <span style="color:var(--text-muted);">કુલ ACE સ્કોર</span>
-        <span id="total-score-line" style="color:var(--text-primary);font-weight:500;"></span>
-      </div>
-    </div>
-
-    <div class="card mt-2">
-      <div class="card-label">અર્થઘટન · Interpretation</div>
-      <p id="result-interp" style="font-size:0.9rem;color:var(--text-secondary);line-height:1.75;"></p>
-    </div>
-
-    <div class="card mt-2">
-      <div class="card-label">પ્રશ્નવાર જવાબ · Item Breakdown</div>
-      <div id="breakdown-container"></div>
-    </div>
-
     <div class="notice notice-amber mt-2">
       <span class="notice-label">📋 યાદ રાખો</span>
       <p>ઉચ્ચ ACE સ્કોર એ જ્ઞાન માટે છે — તે નિદાન નથી. જો આ અનુભવો હજુ પણ તમને અસર કરતા હોય, તો ડૉક્ટર અથવા કાઉન્સેલર સાથે વાત કરવી ઉપકારક છે.</p>
     </div>
 
-    <div class="attribution">
+    <div class="attribution" style="font-size:0.65rem;color:var(--text-muted);line-height:1.35;">
       Translated into Gujarati from The Adverse Childhood Experiences International Questionnaire (ACE-IQ),
       Geneva, World Health Organization (WHO), 2011,
-      <a href="https://www.who.int/publications/m/item/adverse-childhood-experiences-international-questionnaire-(ace-iq"
-         target="_blank" rel="noopener">
+      <a href="https://www.who.int/publications/m/item/adverse-childhood-experiences-international-questionnaire-(ace-iq" target="_blank" rel="noopener">
         https://www.who.int/publications/m/item/adverse-childhood-experiences-international-questionnaire-(ace-iq
       </a>, accessed December 18, 2025.
       WHO is not responsible for the content or accuracy of this translation/adaptation.
