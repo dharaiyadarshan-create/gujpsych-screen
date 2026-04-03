@@ -144,7 +144,7 @@ function renderStep() {
 
   if (step === 4) { // Sociodemographic step
     SocioDem.reset();
-    SocioDem.render('sociodem-container');
+    SocioDem.render('sociodem-container', 'college');
     const container = document.getElementById('sociodem-container');
     container.addEventListener('click', checkSociodemComplete);
     container.addEventListener('input', checkSociodemComplete);

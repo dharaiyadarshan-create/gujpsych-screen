@@ -73,34 +73,7 @@
   <!-- ══════════════════════════
        SCREEN 3 — RESULTS
   ══════════════════════════ -->
-  <div class="screen" id="screen-results">
-
-    <span class="eyebrow">તમારું પરિણામ · Your Result</span>
-
-    <div class="result-top">
-      <div class="score-ring" id="result-ring">
-        <span class="score-num" id="result-score-num">—</span>
-        <span class="score-denom">/ ૮૪</span>
-      </div>
-      <div class="result-band-label" id="result-band-label">સ્કોર નોંધાયો</div>
-      <div class="result-band-sub" id="result-band-sub">Score recorded</div>
-    </div>
-
-    <div class="card mt-2">
-      <div class="card-label">પેટા-સ્કોર · Subscale Scores</div>
-      <div id="subscale-container"></div>
-    </div>
-
-    <div class="card">
-      <div class="card-label">પ્રશ્નવાર જવાબ · Item Breakdown</div>
-      <div id="breakdown-container"></div>
-      <div class="divider"></div>
-      <div style="display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:11px;">
-        <span style="color:var(--text-muted);">કુલ સ્કોર</span>
-        <span id="total-score-line" style="color:var(--text-primary);font-weight:500;"></span>
-      </div>
-    </div>
-
+  
     <div class="attribution">
       Zimet, G.D., Dahlem, N.W., Zimet, S.G. &amp; Farley, G.K. (1988) દ્વારા વિકસિત.
       ગુજરાતી અનુવાદ સંશોધન હેતુ માટે.
@@ -269,7 +242,7 @@
     if (isStudy) {
       window.location.href = nextUrl || "../sociodem/sociodem.html";
     } else {
-      afterScaleSubmit('mspss.html');
+      window.location.href = '../index.html';
     }
   }
 
