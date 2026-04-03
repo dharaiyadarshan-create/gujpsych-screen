@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="gu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>તારણ · Results Summary</title>
+    <link rel="stylesheet" href="../../assets/shared.css">
+    <style>
+        .result-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            background: #fff;
+        }
+        .score-row {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px dashed #ccc;
+            padding: 10px 0;
+        }
+        .score-val { font-weight: bold; color: #2c3e50; }
+        .interpretation { font-style: italic; color: #7f8c8d; }
+        @media print {
+            .no-print { display: none; }
+            body { background: white; }
+            .result-card { border: none; }
+        }
+    </style>
+</head>
+<body>
+
+<main class="page-main" style="max-width:600px; margin:auto; padding:20px;">
+    <h2 style="text-align:center;">સ્ક્રીનિંગ રિપોર્ટ (Summary)</h2>
+    <p style="text-align:center; color:#666;">તારીખ: <span id="current-date"></span></p>
+    <p style="text-align:center;">ટોકન ID: <b id="display-token"></b></p>
+
+    <div id="results-content">
+        </div>
+
+    <div class="no-print" style="margin-top:30px; text-align:center; display:flex; gap:10px; justify-content:center;">
+        <button class="btn-primary" onclick="window.print()">રિપોર્ટ પ્રિન્ટ કરો (PDF)</button>
+        <button class="btn-ghost" onclick="location.href='index.html'">ફરીથી શરૂ કરો</button>
+    </div>
+</main>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        document.getElementById('current-date').innerText = new Date().toLocaleDateString('gu-IN');
+        document.getElementById('display-token').innerText = localStorage.getItem('study_token') || 'N/A';
+
+        const resultsContainer = document.getElementById('results-content');
+        
+        // Define scales to display
+        const scales = [
+            { id: 'ACE', name: 'બાળપણના અનુભવો (ACE-IQ)', storage: 'ACE_result' },
+            { id: 'PHQ9', name: 'ડિપ્રેશન સ્ક્રીનિંગ (PHQ-9)', storage: 'PHQ9_result' },
+            { id: 'GAD7', name: 'ચિંતા સ્ક્રીનિંગ (GAD-7)', storage: 'GAD7_result' },
+            { id: 'MSPSS', name: 'સામાજિક આધાર (MSPSS)', storage: 'MSPSS_result' }
+        ];
+
+        let html = '';
+
+        scales.forEach(scale => {
+            const data = JSON.parse(localStorage.getItem(scale.storage) || 'null');
+            
+            if (data) {
+                html += `
+                <div class="result-card">
+                    <h3>${scale.name}</h3>
+                    <div class="score-row">
+                        <span>કુલ સ્કોર (Total Score):</span>
+                        <span class="score-val">${data.score}</span>
+                    </div>
+                    <div class="score-row">
+                        <span>તારણ (Interpretation):</span>
+                        <span class="interpretation">${data.band}</span>
+                    </div>
+                </div>`;
+            } else {
+                html += `
+                <div class="result-card" style="opacity:0.5;">
+                    <p>${scale.name}: માહિતી ઉપલબ્ધ નથી.</p>
+                </div>`;
+            }
+        });
+
+        resultsContainer.innerHTML = html;
+    });
+</script>
+</body>
+</html>

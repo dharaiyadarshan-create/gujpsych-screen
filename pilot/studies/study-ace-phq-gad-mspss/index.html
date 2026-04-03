@@ -8,20 +8,17 @@
   <link rel="stylesheet" href="../sociodem/sociodem.css" />
   <script src="../assets/shared.js"></script>
   <script src="../sociodem/sociodem.js"></script>
+  <script src="export.js"></script> 
 </head>
 
 <body>
+<main class="page-main" style="max-width:700px; margin:auto; padding: 20px;">
 
-<main class="page-main" style="max-width:700px; margin:auto;">
-
-  <!-- STEP TITLE -->
   <h2 id="step-title">બાળપણના અનુભવો · ACE</h2>
 
-  <!-- STEP CONTAINER -->
   <div id="step-container"></div>
 
-  <!-- NAVIGATION -->
-  <div style="display:flex; justify-content:space-between; margin-top:1.5rem;">
+  <div id="nav-container" style="display:none; justify-content:space-between; margin-top:1.5rem;">
     <button id="prevBtn" class="btn-ghost">પાછળ</button>
     <button id="nextBtn" class="btn-primary">આગળ</button>
   </div>
@@ -29,165 +26,131 @@
 </main>
 
 <script>
-    if (localStorage.getItem("studyConsent") !== "true") {
-      window.location.href = "studies/study-ace-phq-gad-mspss/consent.html";
-    }
-</script>
-
-<script>
-
-let step = 0;
-
-const steps = [
-  {
-    id: 'ace',
-    title: "બાળપણના પ્રતિકૂળ અનુભવો આંતરરાષ્ટ્રીય પ્રશ્નાવલી",
-    hasNav: false,
-    content: `
-      <p>WHO ACE IQ એ 25 પ્રશ્નોની સ્ક્રીનિંગ છે જે બાળપણના પ્રતિકૂળ અનુભવો માપે છે.</p>
-      <button class="btn-primary" onclick="startScale('ACE')">સ્ક્રીનિંગ શરૂ કરો →</button>
-    `
-  },
-  {
-    id: 'phq',
-    title: "ડિપ્રેશન સ્ક્રીનિંગ · PHQ-9",
-    hasNav: false,
-    content: `
-      <p>PHQ-9 એ ૯ પ્રશ્નોની સ્ક્રીનિંગ છે જે ડિપ્રેશનના લક્ષણો માપે છે.</p>
-      <button class="btn-primary" onclick="startScale('PHQ9')">સ્ક્રીનિંગ શરૂ કરો →</button>
-    `
-  },
-  {
-    id: 'gad',
-    title: "ચિંતા સ્ક્રીનિંગ · GAD-7",
-    hasNav: false,
-    content: `
-      <p>GAD-7 એ ૭ પ્રશ્નોની સ્ક્રીનિંગ છે જે ચિંતાના લક્ષણો માપે છે.</p>
-      <button class="btn-primary" onclick="startScale('GAD7')">સ્ક્રીનિંગ શરૂ કરો →</button>
-    `
-  },
-  {
-    id: 'mspss',
-    title: "સામાજિક આધાર · MSPSS",
-    hasNav: false,
-    content: `
-      <p>MSPSS એ ૧૨ પ્રશ્નોની સ્ક્રીનિંગ છે જે સામાજિક આધાર માપે છે.</p>
-      <button class="btn-primary" onclick="startScale('MSPSS')">સ્ક્રીનિંગ શરૂ કરો →</button>
-    `
-  },
-  {
-    id: 'sociodem',
-    title: "સામાજિક માહિતી · Sociodemographic",
-    hasNav: false,
-    content: `
-      <p>આ માહિતી સંશોધન હેતુ માટે છે.</p>
-      <div id="sociodem-container"></div>
-      <button class="btn-primary" id="sociodem-submit-btn" onclick="submitSociodem()" disabled>સબમિટ કરો →</button>
-    `
-  },
-  {
-    id: 'results',
-    title: "પરિણામ · Results",
-    hasNav: false,
-    content: `
-      <p>તમે સફળતાપૂર્વક બધા સ્ટેપ્સ પૂર્ણ કર્યા છે. તમારો ડેટા સંશોધન માટે સ્ટોર થયો છે.</p>
-      <p>આભાર!</p>
-    `
+  // 1. Consent Guard
+  if (localStorage.getItem("studyConsent") !== "true") {
+    window.location.href = "consent.html"; 
   }
-];
 
-function startScale(scale) {
-  const nextMap = {
-    ACE: 'phq',
-    PHQ9: 'gad',
-    GAD7: 'mspss',
-    MSPSS: 'sociodem'
-  };
-  const nextScale = nextMap[scale];
-  const nextUrl = nextScale ? `../studies/study-ace-phq-gad-mspss/index.html?next=${nextScale}` : '../studies/study-ace-phq-gad-mspss/result.html';
-  const scaleUrls = {
-    ACE: 'WHO-ACE-IQ-BINARY',
-    PHQ9: 'PHQ9',
-    GAD7: 'GAD7',
-    MSPSS: 'MSPSS'
-  };
-  const scaleUrl = scaleUrls[scale] || scale;
-  window.location.href = `../../scales_folder/${scaleUrl}.html?study=1&next=${encodeURIComponent(nextUrl)}`;
-}
+  let step = 0;
 
-function checkSociodemComplete() {
-  setTimeout(() => {
-    document.getElementById('sociodem-submit-btn').disabled = !SocioDem.isComplete();
-  }, 50);
-}
-
-function submitSociodem() {
-  const sdData = SocioDem.getData();
-  if (!sdData) return;
-
-  submitToSheets({
-    type: 'sociodemographic',
-    token: getToken(),
-    sociodemographic: sdData,
-    timestamp: new Date().toISOString()
-  });
-
-  window.location.href = 'result.html';
-}
-
-function renderStep() {
-  document.getElementById("step-title").innerText = steps[step].title;
-  document.getElementById("step-container").innerHTML = steps[step].content;
-
-  const nav = document.querySelector('div[style*="display:flex"]');
-  nav.style.display = steps[step].hasNav ? 'flex' : 'none';
-
-  if (step === 4) { // Sociodemographic step
-    SocioDem.reset();
-    SocioDem.render('sociodem-container', 'college');
-    const container = document.getElementById('sociodem-container');
-    container.addEventListener('click', checkSociodemComplete);
-    container.addEventListener('input', checkSociodemComplete);
-  }
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-  const params = new URLSearchParams(window.location.search);
-  const next = params.get('next');
-  if (next) {
-    const stepIndex = steps.findIndex(s => s.id === next);
-    if (stepIndex !== -1) {
-      step = stepIndex;
-      if (step >= 0 && step <= 3) { // scales: ace, phq, gad, mspss
-        const idToScale = {
-          'ace': 'ACE',
-          'phq': 'PHQ9',
-          'gad': 'GAD7',
-          'mspss': 'MSPSS'
-        };
-        startScale(idToScale[steps[step].id]);
-      } else {
-        renderStep();
-      }
+  const steps = [
+    {
+      id: 'ace',
+      title: "બાળપણના પ્રતિકૂળ અનુભવો આંતરરાષ્ટ્રીય પ્રશ્નાવલી",
+      hasNav: false,
+      content: `
+        <p>WHO ACE IQ એ 25 પ્રશ્નોની સ્ક્રીનિંગ છે જે બાળપણના પ્રતિકૂળ અનુભવો માપે છે.</p>
+        <button class="btn-primary" onclick="startScale('ACE')">સ્ક્રીનિંગ શરૂ કરો →</button>
+      `
+    },
+    {
+      id: 'phq',
+      title: "ડિપ્રેશન સ્ક્રીનિંગ · PHQ-9",
+      hasNav: false,
+      content: `
+        <p>PHQ-9 એ ૯ પ્રશ્નોની સ્ક્રીનિંગ છે જે ડિપ્રેશનના લક્ષણો માપે છે.</p>
+        <button class="btn-primary" onclick="startScale('PHQ9')">સ્ક્રીનિંગ શરૂ કરો →</button>
+      `
+    },
+    {
+      id: 'gad',
+      title: "ચિંતા સ્ક્રીનિંગ · GAD-7",
+      hasNav: false,
+      content: `
+        <p>GAD-7 એ ૭ પ્રશ્નોની સ્ક્રીનિંગ છે જે ચિંતાના લક્ષણો માપે છે.</p>
+        <button class="btn-primary" onclick="startScale('GAD7')">સ્ક્રીનિંગ શરૂ કરો →</button>
+      `
+    },
+    {
+      id: 'mspss',
+      title: "સામાજિક આધાર · MSPSS",
+      hasNav: false,
+      content: `
+        <p>MSPSS એ ૧૨ પ્રશ્નોની સ્ક્રીનિંગ છે જે સામાજિક આધાર માપે છે.</p>
+        <button class="btn-primary" onclick="startScale('MSPSS')">સ્ક્રીનિંગ શરૂ કરો →</button>
+      `
+    },
+    {
+      id: 'sociodem',
+      title: "સામાજિક માહિતી · Sociodemographic",
+      hasNav: false,
+      content: `
+        <p>આ માહિતી સંશોધન હેતુ માટે છે.</p>
+        <div id="sociodem-container"></div>
+        <button class="btn-primary" id="sociodem-submit-btn" onclick="submitSociodem()" disabled style="margin-top:20px;">સબમિટ કરો →</button>
+      `
+    },
+    {
+      id: 'results',
+      title: "પરિણામ · Results",
+      hasNav: false,
+      content: `
+        <p>તમે સફળતાપૂર્વક બધા સ્ટેપ્સ પૂર્ણ કર્યા છે. તમારો ડેટા સંશોધન માટે સ્ટોર થયો છે.</p>
+        <p>આભાર!</p>
+      `
     }
-  } else {
+  ];
+
+  // 2. Navigation logic
+  function startScale(scale) {
+    const nextMap = { ACE: 'phq', PHQ9: 'gad', GAD7: 'mspss', MSPSS: 'sociodem' };
+    const nextScale = nextMap[scale];
+    const currentPath = window.location.pathname;
+    const nextUrl = `${currentPath}?next=${nextScale}`;
+    
+    const scaleUrls = { ACE: 'WHO-ACE-IQ-BINARY', PHQ9: 'PHQ9', GAD7: 'GAD7', MSPSS: 'MSPSS' };
+    const targetFile = scaleUrls[scale] || scale;
+    
+    window.location.href = `../../scales_folder/${targetFile}.html?study=1&next=${encodeURIComponent(nextUrl)}`;
+  }
+
+  function checkSociodemComplete() {
+    const btn = document.getElementById('sociodem-submit-btn');
+    if (btn) btn.disabled = !SocioDem.isComplete();
+  }
+
+  // 3. DATA EXPORT LOGIC
+  async function submitSociodem() {
+    const sdData = SocioDem.getData();
+    if (!sdData) return;
+
+    // Use function from export.js
+    await uploadSocioDemData(getToken(), sdData);
+    
+    // Move to final result step
+    step = 5; 
     renderStep();
   }
-});
 
-document.getElementById("nextBtn").addEventListener("click", () => {
-  step++;
-  if (step >= steps.length) step = steps.length - 1;
-  renderStep();
-});
+  function renderStep() {
+    const currentStep = steps[step];
+    document.getElementById("step-title").innerText = currentStep.title;
+    document.getElementById("step-container").innerHTML = currentStep.content;
 
-document.getElementById("prevBtn").addEventListener("click", () => {
-  step--;
-  if (step < 0) step = 0;
-  renderStep();
-});
+    const nav = document.getElementById('nav-container');
+    nav.style.display = currentStep.hasNav ? 'flex' : 'none';
+
+    if (currentStep.id === 'sociodem') {
+      SocioDem.reset();
+      SocioDem.render('sociodem-container', 'college');
+      const container = document.getElementById('sociodem-container');
+      container.addEventListener('change', checkSociodemComplete);
+    }
+  }
+
+  // Initial Load
+  document.addEventListener('DOMContentLoaded', () => {
+    const params = new URLSearchParams(window.location.search);
+    const next = params.get('next');
+    if (next) {
+      const stepIndex = steps.findIndex(s => s.id === next);
+      if (stepIndex !== -1) {
+        step = stepIndex;
+      }
+    }
+    renderStep();
+  });
 
 </script>
-
 </body>
 </html>
