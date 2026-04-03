@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="gu">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="ઉપલબ્ધ મૂલ્યાંકન — GujPsych-Screen"/>
+  <title>મૂલ્યાંકન · GujPsych-Screen</title>
+  <link rel="stylesheet" href="assets/shared.css"/>
+  <style>
+    .scales-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0.75rem;
+      margin-top: 1.25rem;
+    }
+    .scale-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.25rem 1.4rem;
+      box-shadow: var(--shadow-sm);
+      transition: all var(--transition);
+      text-decoration: none;
+      display: block;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .scale-card:hover {
+      border-color: var(--accent-border);
+      box-shadow: 0 0 0 3px var(--accent-soft), var(--shadow-sm);
+      transform: translateY(-1px);
+    }
+    .scale-card-soon {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+    .scale-card-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 0.45rem;
+    }
+    .scale-card-name {
+      font-family: 'Crimson Pro', serif;
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      line-height: 1.3;
+    }
+    .scale-card-abbr {
+      font-family: 'DM Mono', monospace;
+      font-size: 9.5px;
+      color: var(--accent);
+      background: var(--accent-soft);
+      border: 1px solid var(--accent-border);
+      padding: 2px 7px;
+      border-radius: 4px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .scale-card-desc {
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: 0.75rem;
+    }
+    .scale-card-meta {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+    .scale-meta-tag {
+      font-family: 'DM Mono', monospace;
+      font-size: 9px;
+      color: var(--text-muted);
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      padding: 2px 7px;
+      border-radius: 4px;
+    }
+    .scale-card-arrow {
+      font-size: 0.82rem;
+      color: var(--accent);
+      font-family: 'DM Mono', monospace;
+      margin-left: auto;
+    }
+    .soon-badge {
+      font-family: 'DM Mono', monospace;
+      font-size: 9px;
+      color: var(--text-muted);
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+    .filter-bar {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 0.5rem;
+    }
+    .filter-btn {
+      font-family: 'DM Mono', monospace;
+      font-size: 9.5px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+    .filter-btn.active {
+      background: var(--accent-soft);
+      border-color: var(--accent-border);
+      color: var(--accent);
+    }
+    .scale-count {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+    }
+  </style>
+</head>
+<body>
+
+<div id="site-header"></div>
+
+<main class="page-main">
+
+  <span class="eyebrow">ઉપલબ્ધ મૂલ્યાંકન · Available Assessments</span>
+  <h1>મૂલ્યાંકન</h1>
+  <p class="lead">ગુજરાતી ભાષામાં માન્ય સ્ક્રીનિંગ સાધનો. સ્વૈચ્છિક અને અનામી.</p>
+
+  <div class="filter-bar">
+    <button class="filter-btn active" onclick="filterScales('all', this)">બધા</button>
+    <button class="filter-btn" onclick="filterScales('live', this)">ઉપલબ્ધ</button>
+    <button class="filter-btn" onclick="filterScales('soon', this)">ટૂંક સમયમાં</button>
+  </div>
+
+  <div class="scale-count" id="scale-count"></div>
+
+  <div class="scales-grid" id="scales-grid"></div>
+
+</main>
+
+<div id="site-footer"></div>
+
+<script src="assets/shared.js"></script>
+<script src="scales.js"></script>
+<script>
+  let currentFilter = 'all';
+
+  function renderScales(filter) {
+    const grid = document.getElementById('scales-grid');
+    const filtered = filter === 'all'
+      ? SCALES
+      : SCALES.filter(s => s.status === filter);
+
+    document.getElementById('scale-count').textContent =
+      `${filtered.length} મૂલ્યાંકન`;
+
+    grid.innerHTML = filtered.map(s => {
+      const isLive = s.status === 'live';
+      const tag    = `<span class="scale-card-abbr">${s.abbr}</span>`;
+      const meta   = `
+        ${s.items ? `<span class="scale-meta-tag">${s.items}</span>` : ''}
+        ${s.construct ? `<span class="scale-meta-tag">${s.construct}</span>` : ''}
+        ${s.time ? `<span class="scale-meta-tag">${s.time}</span>` : ''}
+        ${isLive
+          ? `<span class="scale-card-arrow">શરૂ કરો →</span>`
+          : `<span class="soon-badge">ટૂંક સમયમાં</span>`}
+      `;
+
+      if (isLive) {
+        return `
+          <a href="${s.file}" class="scale-card">
+            <div class="scale-card-top">
+              <div class="scale-card-name">${s.name}</div>${tag}
+            </div>
+            <div class="scale-card-desc">${s.desc}</div>
+            <div class="scale-card-meta">${meta}</div>
+          </a>`;
+      } else {
+        return `
+          <div class="scale-card scale-card-soon">
+            <div class="scale-card-top">
+              <div class="scale-card-name">${s.name}</div>${tag}
+            </div>
+            <div class="scale-card-desc">${s.desc}</div>
+            <div class="scale-card-meta">${meta}</div>
+          </div>`;
+      }
+    }).join('');
+  }
+
+  function filterScales(filter, btn) {
+    currentFilter = filter;
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderScales(filter);
+  }
+
+  // Initial render
+  renderScales('all');
+</script>
+</body>
+</html>

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="gu">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ઉપયોગ શરતો · Platform Consent</title>
+
+  <link rel="stylesheet" href="assets/shared.css">
+
+  <style>
+    .consent-container {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 2rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+    }
+
+    .consent-content {
+      font-size: 0.95rem;
+      line-height: 1.8;
+      color: var(--text-secondary);
+      margin-bottom: 2rem;
+    }
+
+    .consent-content h3 {
+      margin-top: 1.2rem;
+      color: var(--text-primary);
+    }
+
+    .consent-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .checkbox-group {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+
+<body>
+
+<div id="layout/site-header"></div>
+
+<main class="page-main">
+  <div class="consent-container">
+
+    <h2>પ્લેટફોર્મ ઉપયોગ સંમતિ</h2>
+    <p style="color:var(--text-muted); margin-bottom:1rem;">
+      Platform Use Consent · GujPsych-Screen
+    </p>
+
+    <div class="consent-content">
+
+      <h3>૧. પ્લેટફોર્મનો હેતુ</h3>
+      <p>
+        આ પ્લેટફોર્મ ગુજરાતી ભાષામાં માનસિક સ્વાસ્થ્ય અંગે જાગૃતિ, સ્વ-મૂલ્યાંકન અને સંશોધન માટે રચાયેલ છે.
+      </p>
+
+      <h3>૨. ક્લિનિકલ નિદાન નથી</h3>
+      <p>
+        અહીં આપવામાં આવેલા બધા સ્ક્રીનિંગ સાધનો માત્ર પ્રાથમિક માર્ગદર્શન માટે છે. આ ક્લિનિકલ નિદાન નથી અને ડૉક્ટરની સલાહનો વિકલ્પ નથી.
+      </p>
+
+      <h3>૩. ગોપનીયતા</h3>
+      <p>
+        કોઈ વ્યક્તિગત ઓળખ માહિતી (જેમ કે નામ, ફોન નંબર) એકત્રિત કરવામાં આવતી નથી. આપના જવાબો અનામી રીતે સંશોધન માટે ઉપયોગમાં લઈ શકાય છે.
+      </p>
+
+      <h3>૪. સ્વૈચ્છિક ઉપયોગ</h3>
+      <p>
+        આ પ્લેટફોર્મનો ઉપયોગ સંપૂર્ણપણે સ્વૈચ્છિક છે. તમે ગમે ત્યારે બહાર નીકળી શકો છો.
+      </p>
+
+      <h3>૫. તાત્કાલિક સહાય</h3>
+      <p>
+        જો તમને ગંભીર માનસિક તકલીફ હોય અથવા આત્મહત્યાના વિચારો આવી રહ્યા હોય, તો તરત જ નિષ્ણાંત ની મદદ લો. 
+        <br/>
+        <strong>📞 14416 (Tele-MANAS) · 24×7</strong>
+      </p>
+
+      <h3>૬. ડેટાનો ઉપયોગ (Use of Data)</h3>
+      <p>
+        આ પ્લેટફોર્મ પર આપેલ જવાબો અનામી રીતે સંશોધન, વૈજ્ઞાનિક વિશ્લેષણ અને પ્રકાશન માટે ઉપયોગમાં લઈ શકાય છે. 
+        કોઈપણ વ્યક્તિગત ઓળખ માહિતી એકત્રિત કરવામાં આવતી નથી અને કોઈપણ વ્યક્તિને ઓળખી શકાય તેવી માહિતી જાહેર કરવામાં આવશે નહીં.
+      </p>
+      <p style="margin-top:0.5rem;">
+        Responses provided on this platform may be used in anonymised form for scientific research, analysis, and academic publication. 
+        No personally identifiable information is collected or shared.
+      </p>
+
+    </div>
+
+    <div class="consent-actions">
+
+      <label class="checkbox-group">
+        <input type="checkbox" id="global-consent-check">
+        <span>
+          મેં ઉપરની માહિતી વાંચી છે અને હું આ પ્લેટફોર્મનો ઉપયોગ કરવા માટે સંમત છું.
+        </span>
+      </label>
+
+      <button id="btn-accept" class="btn-primary" style="width:100%; opacity:0.5;" disabled>
+        આગળ વધો · Continue
+      </button>
+
+      <a href="index.html" class="btn-ghost">
+        અસ્વીકાર કરો · Decline
+      </a>
+
+    </div>
+
+  </div>
+</main>
+
+<div id="site-footer"></div>
+
+<script src="assets/shared.js"></script>
+
+<script>
+  const check = document.getElementById('global-consent-check');
+  const btn = document.getElementById('btn-accept');
+
+  check.addEventListener('change', () => {
+    btn.disabled = !check.checked;
+    btn.style.opacity = check.checked ? "1" : "0.5";
+  });
+
+  btn.addEventListener('click', () => {
+    localStorage.setItem("globalConsent", "true");
+    window.location.href = "index.html";
+  });
+
+  // Optional: auto-redirect if already consented
+  if (localStorage.getItem("globalConsent") === "true") {
+    window.location.href = "index.html";
+  }
+</script>
+
+</body>
+</html>
