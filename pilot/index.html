@@ -449,24 +449,21 @@
     loadComponent('layout/site-header', 'layout/header.html');
     loadComponent('site-footer', 'layout/footer.html');
 
-    
-  
-// ✅ CONSENT ACTION FUNCTIONS (ADD THIS PART)
-window.acceptConsent = function () {
-  localStorage.setItem("userConsent", "true");
+    // ✅ CONSENT ACTION FUNCTIONS
+    window.acceptConsent = function () {
+      localStorage.setItem("userConsent", "true");
 
-  if (window.pendingRedirect) {
-    window.location.href = window.pendingRedirect;
-  } else {
-    window.location.href = "scales.html";
-  }
-};
+      if (window.pendingRedirect) {
+        window.location.href = window.pendingRedirect;
+      } else {
+        window.location.href = "scales.html";
+      }
+    };
 
-window.declineConsent = function () {
-  document.getElementById("consentModal").style.display = "none";
-};
-
-</script>
+    window.declineConsent = function () {
+      document.getElementById("consentModal").style.display = "none";
+    };
+  });
 </script>
 
 <!-- CONSENT MODAL -->
