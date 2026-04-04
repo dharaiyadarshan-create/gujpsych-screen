@@ -371,7 +371,7 @@ const SocioDem = (() => {
 
             btn.classList.add('sd-opt-sel');
 
-            // 🔥 STREAM → update course
+            // STREAM → update course
             if (field.id === 'stream') {
               responses.course = null;
               responses.course_other = null;
