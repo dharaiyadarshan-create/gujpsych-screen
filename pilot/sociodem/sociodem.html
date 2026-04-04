@@ -106,6 +106,55 @@
     window.location.href = decodeURIComponent(returnTo);
   }
 
+  //read param and redirect to sociodem with return param
+  function getQueryParam(name) {
+  const params = new URLSearchParams(window.location.search);
+  return params.get(name);
+}
+
+//when coming from index of ace-phq-gad-mspss, redirect to sociodem with return param set to current scale
+window.onload = function () {
+  const source = getQueryParam('from');
+
+  let fields = [];
+
+  if (source === 'studies/study-ace-phq-gad-mspss/index.html') {
+    fields = [
+      'age',
+      'gender',
+      'marital_status',
+      'education',
+      'occupation'
+    ];
+  }
+
+  SocioDem.render('sociodem-container', fields);
+};
+
+// return back after submission
+function submitSociodem() {
+  const data = SocioDem.getData();
+
+  if (!data) {
+    alert("ફોર્મ પૂર્ણ કરો ❗");
+    return;
+  }
+
+  const source = getQueryParam('from');
+
+  // Save data if needed
+  localStorage.setItem('sociodem', JSON.stringify(data));
+
+  // Redirect back
+  if (source === 'studies/study-ace-phq-gad-mspss/index') {
+    window.location.href = "studies/study-ace-phq-gad-mspss/index.html";
+  } else {
+    window.location.href = "index.html";
+  }
+}
+
+
+
 </script>
 </body>
 </html>

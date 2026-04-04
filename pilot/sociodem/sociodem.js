@@ -2,24 +2,55 @@
  * GujPsych-Screen (ગુજસાઇક-સ્ક્રીન)
  * sociodem.js — Sociodemographic Form Module
  *
- * Usage:
- *   SocioDem.render('container-id')             // uses 'generic' by default
- *   SocioDem.render('container-id', 'college')  // uses college variant
- *   SocioDem.isComplete() → boolean
- *   SocioDem.getData()    → object or null
- *   SocioDem.reset()
- * 
- * Form FIELDS:
- * GENERIC_FIELDS-age,gender,marital_status,residence
- * OCCUPATION_NON_STUDENT_FIELDS- from kupasswamy
- * EDUCATION_NON_STUDENT_FIELDS- list of education levels
- * COURSE_MAP- drop down to select education
- * COLLEGE_FIELDS- college name, type, stream, course, year of study
- * GUJARAT_DISTRICTS-district dropdown  
- * perinatal fields will be added in a later version, so not included here
- * caregiver fields will be added in a later version, so not included here
- * marital status in in general fields
- * 
+ * ─────────────────────────────────────────────
+ * USAGE
+ * ─────────────────────────────────────────────
+ * SocioDem.render('container-id')             // Default: generic form
+ * SocioDem.render('container-id', 'college')  // College-specific form
+ * sociodem.render('container-id', 'college', 'district) // college plus district  form 
+ * SocioDem.isComplete() → boolean             // Check if all required fields are filled
+ * SocioDem.getData()    → object | null       // Get validated form data
+ * SocioDem.reset()                            // Reset form state
+ *
+ * ─────────────────────────────────────────────
+ * FORM FIELD GROUPS
+ * ─────────────────────────────────────────────
+ *
+ * GENERIC_FIELDS
+ * → Basic demographic information:
+ *    - Age
+ *    - Gender
+ *    - Marital Status
+ *    - Residence
+ *
+ * EDUCATION_NON_STUDENT_FIELDS
+ * → Highest completed education level
+ *
+ * OCCUPATION_NON_STUDENT_FIELDS
+ * → Occupation categories (based on Kuppuswamy scale)
+ *
+ * COURSE_MAP
+ * → Stream-wise course options (used in dynamic course selection)
+ *
+ * COLLEGE_FIELDS
+ * → College-specific details:
+ *    - College Name
+ *    - District
+ *    - Type of College
+ *    - Stream
+ *    - Course (dynamic)
+ *    - Year of Study
+ *
+ * GUJARAT_DISTRICTS
+ * → List of districts used in dropdown selection
+ *
+ * ─────────────────────────────────────────────
+ * NOTES
+ * ─────────────────────────────────────────────
+ * - Marital status is included in GENERIC_FIELDS
+ * - Perinatal fields: planned for future versions
+ * - Caregiver fields: planned for future versions
+ *
  */
 
 const SocioDem = (() => {
@@ -518,4 +549,18 @@ const SocioDem = (() => {
 
   return { render, isComplete, getData, reset };
 
+  // if you are coming from ace-phq-gad-mspss study, show specific part of the form 
+  function getQueryParam(key) {
+  const url = new URL(window.location.href);
+  return url.searchParams.get(key);
+}
+window.onload = function () {
+  const source = getQueryParam('from');
+
+  if (source === 'ace-phq-gad-mspss') {
+    SocioDem.render('container-id', 'college', 'district');
+  } else {
+    SocioDem.render('sociodem-container', 'generic');
+  }
+};
 })();

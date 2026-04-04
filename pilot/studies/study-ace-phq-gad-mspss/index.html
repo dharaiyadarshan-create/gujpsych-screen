@@ -76,10 +76,10 @@
       hasNav: false,
       content: `
         <p>આ માહિતી સંશોધન હેતુ માટે છે.</p>
-        <div id="sociodem-container"></div>
-        <button class="btn-primary" id="sociodem-submit-btn" onclick="submitSociodem()" disabled style="margin-top:20px;">સબમિટ કરો →</button>
+        <button class="btn-primary" onclick="window.location.href='sociodem.html'"> સામાજિક માહિતી ભરો →</button>
       `
     },
+    window.location.href = "sociodem.html?from=studies/study-ace-phq-gad-mspss/index.html";
     {
       id: 'results',
       title: "પરિણામ · Results",
@@ -150,6 +150,8 @@
     }
     renderStep();
   });
+
+
 
 </script>
 </body>
