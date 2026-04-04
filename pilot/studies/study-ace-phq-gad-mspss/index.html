@@ -120,6 +120,14 @@
 
   function renderStep() {
     const currentStep = steps[step];
+
+    // Auto-navigate for scale steps — no intro button needed
+    const scaleSteps = { ace: 'ACE', phq: 'PHQ9', gad: 'GAD7', mspss: 'MSPSS' };
+    if (scaleSteps[currentStep.id]) {
+      startScale(scaleSteps[currentStep.id]);
+      return;
+    }
+
     document.getElementById("step-title").innerText = currentStep.title;
     document.getElementById("step-container").innerHTML = currentStep.content;
 
