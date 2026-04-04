@@ -43,7 +43,7 @@
 
     <div class="scale-actions mt-2">
       <button class="btn-ghost" id="back-btn" onclick="goBack()">← પાછળ</button>
-      <button class="btn-primary" id="sd-submit-btn" onclick="submitSocioDem()" disabled>
+      
         પરિણામ જુઓ →
       </button>
     </div>
@@ -57,7 +57,7 @@
   તમારા જવાબો ગુપ્ત અને અનામી છે.
 </p>
 
-<script src="sociodem.js"></script>
+<script src="sociodem_study_01.js"></script>
 <script>
 
   // ── READ URL PARAMS ────────────────────────────────────────────
@@ -113,25 +113,6 @@
   const params = new URLSearchParams(window.location.search);
   return params.get(name);
 }
-
-//when coming from index of ace-phq-gad-mspss, redirect to sociodem with return param set to current scale
-window.onload = function () {
-  const source = getQueryParam('from');
-
-  let fields = [];
-
-  if (source === 'studies/study-ace-phq-gad-mspss/index.html') {
-    fields = [
-      'age',
-      'gender',
-      'marital_status',
-      'education',
-      'occupation'
-    ];
-  }
-
-  SocioDem.render('sociodem-container', fields);
-};
 
 // return back after submission
 function submitSociodem() {
