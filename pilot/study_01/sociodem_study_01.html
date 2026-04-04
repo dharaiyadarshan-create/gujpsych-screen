@@ -23,17 +23,11 @@
     <span class="eyebrow">સામાજિક માહિતી · Sociodemographic</span>
     <h1>તમારા વિશે થોડી માહિતી</h1>
     <p class="lead">
-      આ માહિતી સંશોધન હેતુ માટે છે અને આ માહિતી ગોપનીય  રહે છે.
+      આ માહિતી સંશોધન હેતુ માટે છે અને આ માહિતી ગોપનીય રહે છે.
       તારાંકિત (<span style="color:var(--red);">*</span>) પ્રશ્નો ફરજિયાત છે.
     </p>
 
-    <div class="notice notice-accent">
-      <span class="notice-label">ℹ નોંધ</span>
-      <p>
-        આ માહિતી ફક્ત એક વાર ભરવાની છે. એક જ સત્ર (Session) માં બીજી પ્રશ્નાવલિ ભરો ત્યારે ફરીથી ભરવાની જરૂર નહીં.
-      </p>
-    </div>
-
+    
     <div id="sd-container"></div>
 
     <div class="notice notice-amber mt-2">
@@ -42,17 +36,22 @@
     </div>
 
     <div class="scale-actions mt-2">
-  <button class="btn-ghost" onclick="goBack()">← પાછળ</button>
+      <button class="btn-ghost" onclick="goBack()">← પાછળ</button>
+      <button class="btn-primary" id="submit-btn" onclick="handleSubmit()" disabled>
+        સબમિટ કરો (Submit)
+      </button>
+    </div>
 
-  <button class="btn-primary" id="submit-btn" onclick="handleSubmit()" disabled>
-    સબમિટ કરો (Submit)
-  </button>
+  </div>
 
-  <button class="btn-ghost" id="view-result-btn" onclick="goToResults()" disabled>
-    પરિણામ જુઓ →
-  </button>
-</div>
-
+  <!-- ══════════════════════════
+       SCREEN — SUBMITTING
+  ══════════════════════════ -->
+  <div class="screen" id="screen-submitting">
+    <div style="text-align:center; padding: 3rem 1rem;">
+      <div style="font-size:2.5rem; margin-bottom:1rem;">⏳</div>
+      <p style="font-size:1rem; color:var(--text-secondary);">ડેટા સેવ થઈ રહ્યો છે… / Saving your responses…</p>
+    </div>
   </div>
 
 </main>
@@ -62,93 +61,102 @@
   તમારા જવાબો ગુપ્ત અને અનામી છે.
 </p>
 
+<script src="../assets/shared.js"></script>
+<script src="export_study_01.js"></script>
 <script src="sociodem_study_01.js"></script>
 
-
 <script>
-
-const params   = new URLSearchParams(window.location.search);
-const returnTo = params.get('return') || 'index.html';
-
-document.addEventListener('DOMContentLoaded', () => {
-
-  SocioDem.reset();
-  SocioDem.render('sd-container');
-
-  const sd = document.getElementById('sd-container');
-
-  sd.addEventListener('click', updateButtons);
-  sd.addEventListener('input', updateButtons);
-
-  // Check if already submitted
-  if (localStorage.getItem('sociodem_submitted') === '1') {
-    lockAfterSubmit();
-  }
-});
-
-
-// ── BUTTON STATE CONTROL ─────────────────────
-function updateButtons() {
-  setTimeout(() => {
-    const isComplete = SocioDem.isComplete();
-    const isSubmitted = localStorage.getItem('sociodem_submitted') === '1';
-
-    document.getElementById('submit-btn').disabled = !isComplete || isSubmitted;
-    document.getElementById('view-result-btn').disabled = !isSubmitted;
-  }, 50);
-}
-
-
-// ── SUBMIT (IRREVERSIBLE) ───────────────────
-function handleSubmit() {
-  const data = SocioDem.getData();
-
-  if (!data) {
-    alert("ફોર્મ પૂર્ણ કરો ❗");
-    return;
+  // ── Guard: must have consent ──
+  if (sessionStorage.getItem('study_01_consent') !== 'true') {
+    window.location.href = 'consent.html';
   }
 
-  if (!confirm("શું તમે ખાતરી કરો છો? એકવાર સબમિટ કર્યા પછી ફેરફાર કરી શકાશે નહીં.")) {
-    return;
+  // ── Keys ──
+  const SUBMITTED_KEY = 'study_01_sociodem_submitted';
+  const DATA_KEY      = 'study_01_sociodem_data';
+
+  // ── Init ──
+  document.addEventListener('DOMContentLoaded', () => {
+    SocioDem.reset();
+    SocioDem.render('sd-container');
+
+    const sd = document.getElementById('sd-container');
+    sd.addEventListener('click', updateButtons);
+    sd.addEventListener('input', updateButtons);
+
+    // If already submitted this session, lock form
+    if (sessionStorage.getItem(SUBMITTED_KEY) === '1') {
+      lockAfterSubmit();
+    }
+  });
+
+  // ── Button state ──
+  function updateButtons() {
+    setTimeout(() => {
+      const isComplete  = SocioDem.isComplete();
+      const isSubmitted = sessionStorage.getItem(SUBMITTED_KEY) === '1';
+      document.getElementById('submit-btn').disabled = !isComplete || isSubmitted;
+    }, 50);
   }
 
-  // Save locally
-  localStorage.setItem('sociodem_data', JSON.stringify(data));
-  localStorage.setItem('sociodem_submitted', '1');
+  // ── Submit ──
+  async function handleSubmit() {
+    const data = SocioDem.getData();
 
-  // 🔥 Optional: send to backend here
-  // submitToSheets(...)
+    if (!data) {
+      alert('ફોર્મ પૂર્ણ કરો ❗');
+      return;
+    }
 
-  lockAfterSubmit();
-}
+    if (!confirm('શું તમે ખાતરી કરો છો? એકવાર સબમિટ કર્યા પછી ફેરફાર કરી શકાશે નહીં.')) {
+      return;
+    }
 
+    // Show submitting screen
+    showScreen('screen-submitting');
 
-// ── LOCK UI AFTER SUBMIT ────────────────────
-function lockAfterSubmit() {
-  document.getElementById('submit-btn').disabled = true;
-  document.getElementById('view-result-btn').disabled = false;
+    // Save to sessionStorage
+    sessionStorage.setItem(DATA_KEY, JSON.stringify(data));
+    sessionStorage.setItem(SUBMITTED_KEY, '1');
 
-  // Optional: disable form inputs
-  document.querySelectorAll('#sd-container input, #sd-container button, #sd-container select')
-    .forEach(el => el.disabled = true);
-}
+    // token 
 
+    const token = sessionStorage.getItem('study_token');
 
-// ── VIEW RESULT ─────────────────────────────
-function goToResults() {
-  window.location.href = "result_study_01.html";
-}
+    try {
+      await uploadSocioDemData(token, data);
+    } catch (err) {
+      console.error('Sociodem upload failed:', err);
+      // Continue anyway — don't block participant
+    }
 
+    // Mark complete and return to state machine
+    sessionStorage.setItem('study_01_sociodemographic', 'true');
+    window.location.href = 'index_study_01.html';
+  }
 
-// ── BACK ────────────────────────────────────
-function goBack() {
-  const base = decodeURIComponent(returnTo).split('?')[0];
-  window.location.href = base;
-}
+  // ── Lock UI after submit ──
+  function lockAfterSubmit() {
+    document.getElementById('submit-btn').disabled = true;
+    document.querySelectorAll('#sd-container input, #sd-container button, #sd-container select')
+      .forEach(el => el.disabled = true);
+  }
 
+  // ── Screen helper ──
+  function showScreen(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    const t = document.getElementById(id);
+    if (t) t.classList.add('active');
+    window.scrollTo(0, 0);
+  }
+
+  // ── Back ──
+  function goBack() {
+    window.location.href = 'index_study_01.html';
+  }
 </script>
 
 <div id="site-footer"></div>
-<script src="../assets/shared.js"></script>
+
 </body>
 </html>

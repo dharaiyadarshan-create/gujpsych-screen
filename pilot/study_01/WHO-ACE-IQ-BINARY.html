@@ -302,6 +302,11 @@
 
     const score      = getTotal();
     const band       = getBand(score);
+
+    // ← add these two lines
+    sessionStorage.setItem('result_score_ACE-IQ', score);
+    sessionStorage.setItem('result_band_ACE-IQ', band);
+
     const itemsArray = [...answers]; // 25 items
     const token      = sessionStorage.getItem('study_token');
 

@@ -23,3 +23,11 @@ function submitToSheets(data) {
 }
 
 
+// ── Token — generate once per session ──
+(function() {
+  if (!sessionStorage.getItem('study_token')) {
+    const token = 'gps_' + Math.random().toString(36).substring(2, 10);
+    sessionStorage.setItem('study_token', token);
+  }
+})();
+

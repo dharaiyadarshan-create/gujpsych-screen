@@ -228,8 +228,16 @@
 
     const score      = answers.reduce((s, v) => s + (v ?? 0), 0);
     const band       = getBand(score);
+
+    // ← add these two lines
+    sessionStorage.setItem('result_score_MSPSS', score);
+    sessionStorage.setItem('result_band_MSPSS', band);
+
     const subscores  = getSubscores();
     const itemsArray = [...answers]; // 12 items
+
+    // Get session token for export
+    
     const token      = sessionStorage.getItem('study_token');
 
     // Pack subscores into impairment field as JSON string

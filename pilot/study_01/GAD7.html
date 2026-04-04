@@ -230,7 +230,14 @@
 
     const score      = answers.reduce((s, v) => s + (v ?? 0), 0);
     const band       = getBand(score);
+
+    // ← add these two lines
+    sessionStorage.setItem('result_score_GAD-7', score);
+    sessionStorage.setItem('result_band_GAD-7', band);
+
     const itemsArray = [...answers, fiAnswer]; // 7 items + FI = 8
+
+    // for tokeen for the session 
     const token      = sessionStorage.getItem('study_token');
     const impairment = fiOptions[fiAnswer] ?? '';
 

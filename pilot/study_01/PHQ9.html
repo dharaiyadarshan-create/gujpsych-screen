@@ -232,7 +232,14 @@
 
     const score      = answers.reduce((s, v) => s + (v ?? 0), 0);
     const band       = getBand(score);
+
+    // ← add these two lines here
+    sessionStorage.setItem('result_score_PHQ-9', score);
+    sessionStorage.setItem('result_band_PHQ-9', band);
+
     const itemsArray = [...answers, fiAnswer]; // 9 items + FI = 10
+
+    // token for identifying participant/session
     const token      = sessionStorage.getItem('study_token');
     const impairment = fiOptions[fiAnswer] ?? '';
 
@@ -246,6 +253,7 @@
     sessionStorage.setItem('study_01_phq9', 'true');
     window.location.href = 'index_study_01.html';
   }
+  
 </script>
 
 <div id="site-footer"></div>

@@ -1,37 +1,130 @@
 <!DOCTYPE html>
 <html lang="gu">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>તારણ · Results Summary</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Gujarati:wght@400;500;700&family=Noto+Serif+Gujarati:wght@400;700&family=DM+Serif+Display&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="shared_study_01.css">
-    <style>
-        @media print {
-            #site-header, #site-footer, .footnote, .no-print { display: none; }
-            body { background: white; padding: 1rem; }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>તારણ · Results Summary</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Gujarati:wght@400;500;700&family=Noto+Serif+Gujarati:wght@400;700&family=DM+Serif+Display&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="shared_study_01.css">
+  <style>
+    .result-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1rem;
+    }
+    .result-card h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+      color: var(--text-primary);
+    }
+    .score-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.9rem;
+      margin-bottom: 0.4rem;
+    }
+    .score-num {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--accent);
+      font-family: 'DM Serif Display', serif;
+    }
+    .band-label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 99px;
+      background: var(--accent-lt, #D8EDE4);
+      color: var(--accent);
+    }
+    .band-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 0.75rem;
+      font-size: 0.82rem;
+    }
+    .band-table th {
+      text-align: left;
+      padding: 0.4rem 0.6rem;
+      background: var(--surface-2, #f5f5f5);
+      color: var(--text-muted);
+      font-weight: 500;
+      border-bottom: 1px solid var(--border);
+    }
+    .band-table td {
+      padding: 0.4rem 0.6rem;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+      line-height: 1.5;
+    }
+    .band-table tr.current-band td {
+      background: var(--accent-lt, #D8EDE4);
+      font-weight: 600;
+    }
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 1rem 0;
+    }
+    .disclaimer-card {
+      background: #FAFAF8;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1rem;
+      font-size: 0.85rem;
+      line-height: 1.8;
+      color: var(--text-secondary);
+    }
+    .disclaimer-card strong {
+      color: var(--text-primary);
+    }
+    @media print {
+      #site-header, #site-footer, .footnote, .no-print { display: none; }
+      body { background: white; padding: 1rem; }
+    }
+  </style>
 </head>
 <body>
 
 <div id="site-header"></div>
 
 <main class="page-main">
-    <div class="screen active">
-      <div style="text-align:center;">
-        <h2>સ્ક્રીનિંગ રિપોર્ટ</h2>
-        <p style="font-size:0.85rem; color:var(--text-soft); margin-top:0.25rem;">
-          તારીખ: <span id="current-date"></span> &nbsp;·&nbsp; ટોકન: <b id="display-token"></b>
-        </p>
-      </div>
+  <div class="screen active">
 
-      <div id="results-content"></div>
-
-      <div class="result-actions no-print">
-        <a class="btn-ghost" href="index_study_01.html">← ફરીથી શરૂ કરો</a>
-      </div>
+    <div style="text-align:center; margin-bottom:1.5rem;">
+      <h2>સ્ક્રીનિંગ સારાંશ · Screening Summary</h2>
+      <p style="font-size:0.82rem; color:var(--text-soft); margin-top:0.25rem;">
+        તારીખ: <span id="current-date"></span>
+      </p>
     </div>
+
+    <div class="notice notice-amber">
+      <span class="notice-label">⚠ મહત્વની જાણ</span>
+      <p>આ સ્ક્રીનિંગ સાધન છે — ક્લિનિકલ નિદાન નથી. નીચે આપેલ સ્કોર અને અર્થઘટન સામાન્ય માહિતી માટે છે. કોઈ પણ નિર્ણય માટે લાયકાતપ્રાપ્ત ડૉક્ટર અથવા માનસિક સ્વાસ્થ્ય વ્યાવસાયિકની સલાહ લો.</p>
+    </div>
+
+    <div id="results-content"></div>
+
+    <div class="disclaimer-card">
+      <strong>સ્વ-ઓળખ પ્રતિબંધ (Disclaimer)</strong><br>
+      આ પ્રશ્નાવલિઓ સ્ક્રીનિંગ હેતુ માટે છે. સ્કોર ઊંચો કે નીચો હોવો એ નિદાન નથી.
+      ઉચ્ચ સ્કોર ધરાવતી વ્યક્તિ સ્વસ્થ હોઈ શકે; નીચો સ્કોર ધરાવતી વ્યક્તિને
+      સહાયની જરૂર હોઈ શકે. માત્ર લાયકાતપ્રાપ્ત ચિકિત્સક જ નિદાન કરી શકે.<br><br>
+      <strong>This is a screening tool, not a clinical diagnosis.</strong>
+      Scores alone do not determine the presence or absence of any condition.
+      Please consult a qualified mental health professional for any clinical assessment.
+    </div>
+
+    <div class="result-actions no-print" style="margin-top:1rem;">
+      <a class="btn-ghost" href="index_study_01.html">← ફરીથી શરૂ કરો</a>
+    </div>
+
+  </div>
 </main>
 
 <p class="footnote">
@@ -40,138 +133,125 @@
 </p>
 
 <script>
-document.addEventListener('DOMContentLoaded', () => {
 
-  // ── HEADER DATA ─────────────────────────────
-  document.getElementById('current-date').innerText =
-    new Date().toLocaleDateString('gu-IN');
+  // ── Band interpretation tables ──────────────────────────────────
+  const BANDS = {
 
-  document.getElementById('display-token').innerText =
-    localStorage.getItem('study_token') || 'N/A';
+    'PHQ-9': {
+      label:   'PHQ-9 · ડિપ્રેશન સ્ક્રીનિંગ',
+      max:     27,
+      ranges: [
+        { band: 'Minimal',            range: '0–4',  gu: 'ઓછામાં ઓછો',      meaning: 'આ સ્કોર શ્રેણીમાં ડિપ્રેશનના લક્ષણો ખૂબ ઓછા અથવા ગેરહાજર હોય છે.' },
+        { band: 'Mild',               range: '5–9',  gu: 'હળવો',             meaning: 'આ શ્રેણીમાં હળવા ડિપ્રેટિવ લક્ષણો હોઈ શકે. સ્વ-સહાય અને જીવનશૈલી ફેરફાર ઉપકારક છે.' },
+        { band: 'Moderate',           range: '10–14',gu: 'મધ્યમ',            meaning: 'મધ્યમ ડિપ્રેટિવ લક્ષણો. ચિકિત્સા મૂલ્યાંકન ઉપકારક હોઈ શકે.' },
+        { band: 'Moderately Severe',  range: '15–19',gu: 'મધ્યમ-ઉચ્ચ',      meaning: 'આ શ્રેણીમાં ક્લિનિકલ ધ્યાન સૂચવ્યું છે. ડૉક્ટરની સલાહ લેવી ઉચિત છે.' },
+        { band: 'Severe',             range: '20–27',gu: 'ઉચ્ચ',             meaning: 'ઉચ્ચ સ્તરના લક્ષણો. ચિકિત્સા મૂલ્યાંકન આવશ્યક છે.' },
+      ]
+    },
 
-  const resultsContainer = document.getElementById('results-content');
+    'GAD-7': {
+      label:   'GAD-7 · ચિંતા સ્ક્રીનિંગ',
+      max:     21,
+      ranges: [
+        { band: 'Minimal', range: '0–4',  gu: 'ઓછામાં ઓછો', meaning: 'ચિંતાના લક્ષણો ખૂબ ઓછા અથવા ગેરહાજર.' },
+        { band: 'Mild',    range: '5–9',  gu: 'હળવો',        meaning: 'હળવા ચિંતાના લક્ષણો. સ્ટ્રેસ ઘટાડવાની પ્રવૃત્તિ ઉપકારક.' },
+        { band: 'Moderate',range: '10–14',gu: 'મધ્યમ',       meaning: 'મધ્યમ ચિંતા. ચિકિત્સા મૂલ્યાંકન ઉપકારક હોઈ શકે.' },
+        { band: 'Severe',  range: '15–21',gu: 'ઉચ્ચ',        meaning: 'ઉચ્ચ સ્તરના ચિંતાના લક્ષણો. ચિકિત્સા મૂલ્યાંકન આવશ્યક છે.' },
+      ]
+    },
 
-  // ── SCALES ──────────────────────────────────
-  const scales = [
-    { id: 'ACE', name: 'બાળપણના અનુભવો (ACE-IQ)', storage: 'ACE_result' },
-    { id: 'PHQ9', name: 'ડિપ્રેશન સ્ક્રીનિંગ (PHQ-9)', storage: 'PHQ9_result' },
-    { id: 'GAD7', name: 'ચિંતા સ્ક્રીનિંગ (GAD-7)', storage: 'GAD7_result' },
-    { id: 'MSPSS', name: 'સામાજિક આધાર (MSPSS)', storage: 'MSPSS_result' }
-  ];
+    'MSPSS': {
+      label:   'MSPSS · સામાજિક આધાર',
+      max:     84,
+      ranges: [
+        { band: 'Low Support',      range: '12–48', gu: 'ઓછો આધાર',   meaning: 'ઓછો સમજાયેલ સામાજિક આધાર. સામાન્ય રીતે ઓછા સ્કોરવાળી વ્યક્તિઓ વધુ એકલતા અનુભવે છે.' },
+        { band: 'Moderate Support', range: '49–68', gu: 'મધ્યમ આધાર', meaning: 'મધ્યમ સ્તરનો સામાજિક આધાર.' },
+        { band: 'High Support',     range: '69–84', gu: 'ઉચ્ચ આધાર',  meaning: 'ઉચ્ચ સ્તરનો સમજાયેલ સામાજિક આધાર.' },
+      ]
+    },
 
-  let html = '';
+    'ACE-IQ': {
+      label:   'ACE-IQ · બાળપણના પ્રતિકૂળ અનુભવો',
+      max:     12,
+      ranges: [
+        { band: 'No ACEs Recorded',        range: '0',    gu: 'કોઈ નહીં',  meaning: 'કોઈ પ્રતિકૂળ અનુભવ નોંધાયો નહીં.' },
+        { band: 'Low ACE Burden (1–3)',     range: '1–3',  gu: 'ઓછો',      meaning: 'ઓછી સંખ્યામાં પ્રતિકૂળ અનુભવ. સંશોધન દર્શાવે છે કે ACE સ્કોર અને ભવિષ્યના સ્વાસ્થ્ય વચ્ચે સ્નાતક સંબંધ છે.' },
+        { band: 'Moderate ACE Burden (4–6)',range: '4–6',  gu: 'મધ્યમ',    meaning: 'મધ્યમ સ્તરના પ્રતિકૂળ અનુભવ. સ્વાસ્થ્ય અને સંબંધ પર અસર શક્ય.' },
+        { band: 'High ACE Burden (7–12)',   range: '7–12', gu: 'ઉચ્ચ',     meaning: 'ઉચ્ચ સ્તરના ACE. સ્વાસ્થ્ય, માનસિક સ્વાસ્થ્ય, અને સંબંધ પર નોંધપાત્ર અસર સૂચવે છે.' },
+      ]
+    },
+  };
 
-  // ── BUILD RESULT CARDS ──────────────────────
-  scales.forEach(scale => {
-    const data = JSON.parse(localStorage.getItem(scale.storage) || 'null');
+  // ── Helpers ──────────────────────────────────────────────────────
+  function getStoredResult(scaleKey) {
+    const score = sessionStorage.getItem(`result_score_${scaleKey}`);
+    const band  = sessionStorage.getItem(`result_band_${scaleKey}`);
+    if (score === null) return null;
+    return { score: parseInt(score), band };
+  }
 
-    if (data) {
-      html += `
-      <div class="result-card">
-        <h3>${scale.name}</h3>
+  function buildScaleCard(scaleKey) {
+    const def    = BANDS[scaleKey];
+    const result = getStoredResult(scaleKey);
 
-        <div class="score-row">
-          <span>કુલ સ્કોર (Total Score):</span>
-          <span class="score-val">${data.score}</span>
-        </div>
-
-        <div class="score-row">
-          <span>તારણ (Interpretation):</span>
-          <span class="interpretation">${data.band}</span>
-        </div>
-
-        <div class="suggestion">
-          ${getSuggestion(scale.id, data.band)}
-        </div>
-
-      </div>`;
+    let scoreHtml = '';
+    if (result) {
+      scoreHtml = `
+        <div class="score-row" style="margin-bottom:0.75rem;">
+          <span style="font-size:0.85rem;color:var(--text-secondary);">સ્કોર / Score</span>
+          <div style="display:flex;align-items:center;gap:0.75rem;">
+            <span class="score-num">${result.score} <span style="font-size:0.9rem;font-weight:400;color:var(--text-muted);">/ ${def.max}</span></span>
+            <span class="band-label">${result.band}</span>
+          </div>
+        </div>`;
     } else {
-      html += `
-      <div class="result-card" style="opacity:0.5;">
-        <p>${scale.name}: માહિતી ઉપલબ્ધ નથી.</p>
-      </div>`;
+      scoreHtml = `<p style="font-size:0.82rem;color:var(--text-muted);margin-bottom:0.75rem;">સ્કોર ઉપલબ્ધ નથી / Score not available</p>`;
     }
+
+    const tableRows = def.ranges.map(r => {
+      const isCurrent = result && result.band === r.band;
+      return `
+        <tr class="${isCurrent ? 'current-band' : ''}">
+          <td>${r.range}</td>
+          <td>${r.gu} <span style="font-size:0.73rem;color:var(--text-muted);">(${r.band})</span></td>
+          <td>${r.meaning}</td>
+        </tr>`;
+    }).join('');
+
+    return `
+      <div class="result-card">
+        <h3>${def.label}</h3>
+        ${scoreHtml}
+        <table class="band-table">
+          <thead>
+            <tr>
+              <th>સ્કોર</th>
+              <th>સ્તર</th>
+              <th>સામાન્ય અર્થઘટન</th>
+            </tr>
+          </thead>
+          <tbody>${tableRows}</tbody>
+        </table>
+      </div>`;
+  }
+
+  // ── Init ─────────────────────────────────────────────────────────
+  document.addEventListener('DOMContentLoaded', () => {
+
+    document.getElementById('current-date').textContent =
+      new Date().toLocaleDateString('gu-IN');
+
+    const container = document.getElementById('results-content');
+
+    container.innerHTML =
+      buildScaleCard('ACE-IQ') +
+      buildScaleCard('PHQ-9')  +
+      buildScaleCard('GAD-7')  +
+      buildScaleCard('MSPSS');
   });
 
-  // ── ADD DISCLAIMER + HELP ───────────────────
-  html += `
-  <div class="result-card">
-
-    <h3>મહત્વપૂર્ણ નોંધ (Important Note)</h3>
-
-    <p>
-      આ સ્ક્રીનિંગ માત્ર પ્રાથમિક મૂલ્યાંકન માટે છે. આ કોઈપણ રીતે
-      <b>ચિકિત્સાકીય નિદાન (clinical diagnosis)</b> નથી.
-    </p>
-
-    <p>
-      જો તમને તમારા માનસિક સ્વાસ્થ્ય અંગે ચિંતા હોય, તો કૃપા કરીને
-      લાયકાતપ્રાપ્ત મનોવિજ્ઞાની અથવા ડૉક્ટરનો સંપર્ક કરો.
-    </p>
-
-    <hr>
-
-    <p>
-      વધુ માહિતી અને સહાય માટે કૃપા કરીને 
-      <b>Help Page</b> જુઓ.
-    </p>
-
-  </div>
-  `;
-
-  resultsContainer.innerHTML = html;
-
-});
-
-
-// ── SUGGESTION LOGIC ─────────────────────────
-function getSuggestion(scale, band) {
-
-  // Normalize
-  band = (band || '').toLowerCase();
-
-  if (scale === 'PHQ9' || scale === 'GAD7') {
-
-    if (band.includes('none'))
-      return 'તમારી હાલની સ્થિતિ સામાન્ય છે. સ્વસ્થ જીવનશૈલી જાળવો.';
-
-    if (band.includes('mild'))
-      return 'થોડી કાળજી લેવાની જરૂર છે. આરામ, વ્યાયામ અને વાતચીત મદદરૂપ થઈ શકે.';
-
-    if (band.includes('moderate'))
-      return 'મધ્યમ સ્તરની સમસ્યા દર્શાવે છે. વ્યાવસાયિક સલાહ લેવી ઉપયોગી રહેશે.';
-
-    if (band.includes('severe'))
-      return 'ઉચ્ચ સ્તરની સમસ્યા દર્શાવે છે. તાત્કાલિક વ્યાવસાયિક મદદ લેવી જરૂરી છે.';
-  }
-
-  if (scale === 'ACE') {
-
-    if (band.includes('low'))
-      return 'જોખમ ઓછું છે. સકારાત્મક સંબંધો અને સપોર્ટ જાળવો.';
-
-    if (band.includes('moderate'))
-      return 'કેટલાક જોખમકારક અનુભવો દર્શાવે છે. માનસિક સપોર્ટ લાભદાયક હોઈ શકે.';
-
-    if (band.includes('high'))
-      return 'ઉચ્ચ જોખમ દર્શાવે છે. નિષ્ણાતની સલાહ લેવી ખૂબ મહત્વપૂર્ણ છે.';
-  }
-
-  if (scale === 'MSPSS') {
-
-    if (band.includes('low'))
-      return 'સામાજિક આધાર ઓછો છે. મિત્રો/કુટુંબ સાથે જોડાવાનું પ્રયત્ન કરો.';
-
-    if (band.includes('medium'))
-      return 'મધ્યમ સપોર્ટ છે. સંબંધોને વધુ મજબૂત બનાવો.';
-
-    if (band.includes('high'))
-      return 'સારો સામાજિક આધાર છે. તેને જાળવી રાખો.';
-  }
-
-  return '';
-}
 </script>
+
 <div id="site-footer"></div>
 <script src="../assets/shared.js"></script>
 </body>
