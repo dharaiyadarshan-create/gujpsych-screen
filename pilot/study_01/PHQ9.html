@@ -17,6 +17,11 @@
   <!-- ══════════════════════════
        SCREEN 1 — CONSENT
   ══════════════════════════ -->
+  <script>
+    if (localStorage.getItem("studyConsent") !== "true") {
+      window.location.href = "consent.html";
+    }
+  </script>
   <div class="screen active" id="screen-consent">
 
     <span class="eyebrow">સ્વ-મૂલ્યાંકન · Self-Assessment</span>
