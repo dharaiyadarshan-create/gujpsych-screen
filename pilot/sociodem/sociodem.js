@@ -2,19 +2,24 @@
  * GujPsych-Screen (ગુજસાઇક-સ્ક્રીન)
  * sociodem.js — Sociodemographic Form Module
  *
- * FORM TYPES:
- *   'generic'    — default, suits most clinical scales
- *   'college'    — for college student studies (ACE-IQ etc.)
- *   'married'    — generic + marriage duration (coming soon)
- *   'caregiver'  — generic + caregiver-specific fields (coming soon)
- *   'perinatal'  — generic + pregnancy/postnatal fields (coming soon)
- *
  * Usage:
  *   SocioDem.render('container-id')             // uses 'generic' by default
  *   SocioDem.render('container-id', 'college')  // uses college variant
  *   SocioDem.isComplete() → boolean
  *   SocioDem.getData()    → object or null
  *   SocioDem.reset()
+ * 
+ * Form FIELDS:
+ * GENERIC_FIELDS-age,gender,marital_status,residence
+ * OCCUPATION_NON_STUDENT_FIELDS- from kupasswamy
+ * EDUCATION_NON_STUDENT_FIELDS- list of education levels
+ * COURSE_MAP- drop down to select education
+ * COLLEGE_FIELDS- college name, type, stream, course, year of study
+ * GUJARAT_DISTRICTS-district dropdown  
+ * perinatal fields will be added in a later version, so not included here
+ * caregiver fields will be added in a later version, so not included here
+ * marital status in in general fields
+ * 
  */
 
 const SocioDem = (() => {
@@ -145,7 +150,9 @@ const SocioDem = (() => {
         { label: 'ગ્રામ્ય (Rural)',          value: 2 },
         { label: 'અર્ધ-શહેરી (Semi-urban)', value: 3 },
       ]
-    },
+    }];
+
+    const EDUCATION_NON_STUDENT_FIELDS = [
 
     { section: 'B. શિક્ષણ અને વ્યવસાય · Education & Occupation' },
 
@@ -163,68 +170,29 @@ const SocioDem = (() => {
         { label: 'અનુસ્નાતક (Postgraduate)',       value: 7 },
         { label: 'પીએચ.ડી. (PhD)',                value: 8 },
       ]
-    },
+    },];
+
+    const OCCUPATION_NON_STUDENT_FIELDS = [
     {
       id: 'occupation', type: 'radio',
       label: 'વ્યવસાય (Occupation)', required: true,
       options: [
-        { label: 'વ્યાવસાયિક / ઉચ્ચ અધિકારી (Professional / Senior Official)', value: 1 },
-        { label: 'ટેક્નિશિયન / શિક્ષક / નર્સ (Technician / Teacher / Nurse)',    value: 2 },
-        { label: 'કચેરી કર્મચારી (Clerk / Office worker)',                      value: 3 },
-        { label: 'વેપાર (Skilled worker / Sales)',                               value: 4 },
+        { label: 'વ્યાવસાયિક / ઉચ્ચ અધિકારી (Professional / Senior Official)',     value: 1 },
+        { label: 'ટેક્નિશિયન / શિક્ષક / નર્સ (Technician / Teacher / Nurse)',        value: 2 },
+        { label: 'કચેરી કર્મચારી (Clerk / Office worker)',                          value: 3 },
+        { label: 'વેપાર (Skilled worker / Sales)',                                value: 4 },
         { label: 'મજૂર (Unskilled labour)',                                      value: 5 },
-        { label: 'કૃષિ (Agriculture)',                                           value: 6 },
-        { label: 'ગૃહિણી (Homemaker)',                                           value: 7 },
-        { label: 'વિદ્યાર્થી (Student)',                                         value: 8 },
+        { label: 'કૃષિ (Agriculture)',                                            value: 6 },
+        { label: 'ગૃહિણી (Homemaker)',                                          value: 7 },
+        { label: 'વિદ્યાર્થી (Student)',                                            value: 8 },
         { label: 'બેરોજગાર (Unemployed)',                                        value: 9 },
       ]
-    },
-
-  ];
+    }];
 
   // ── COLLEGE FIELDS ───────────────────────────────────────────────
   const COLLEGE_FIELDS = [
 
-    { section: 'A. સામાન્ય માહિતી · General' },
-
-    {
-      id: 'age', type: 'number',
-      label: 'ઉંમર (Age)',
-      sublabel: 'પૂર્ણ વર્ષોમાં · Completed years',
-      min: 18, max: 40, required: true
-    },
-    {
-      id: 'gender', type: 'radio',
-      label: 'લિંગ (Gender)', required: true,
-      options: [
-        { label: 'પુરુષ (Male)',    value: 1 },
-        { label: 'સ્ત્રી (Female)', value: 2 },
-        { label: 'અન્ય (Other)',    value: 3 },
-      ]
-    },
-    {
-      id: 'residence', type: 'radio',
-      label: 'વસવાટ (Residence)',
-      sublabel: 'વિદ્યાર્થી જ્યાં રહે છે · Where the student currently lives',
-      required: true,
-      options: [
-        { label: 'શહેરી (Urban)',           value: 1 },
-        { label: 'ગ્રામ્ય (Rural)',          value: 2 },
-        { label: 'અર્ધ-શહેરી (Semi-urban)', value: 3 },
-      ]
-    },
-    {
-      id: 'living_arrangement', type: 'radio',
-      label: 'રહેઠાણ વ્યવસ્થા (Living Arrangement)', required: true,
-      options: [
-        { label: 'હોસ્ટેલ (Hostel)',                    value: 1 },
-        { label: 'પરિવાર સાથે (With family)',            value: 2 },
-        { label: 'ભાડાની જગ્યા (Rented accommodation)', value: 3 },
-        { label: 'અન્ય (Other)',                         value: 4 },
-      ]
-    },
-
-    { section: 'B. કૉલેજ માહિતી · College Information' },
+    { section: 'A. કૉલેજ માહિતી · College Information' },
 
     {
       id: 'college_name', type: 'text',
@@ -250,7 +218,7 @@ const SocioDem = (() => {
       ]
     },
 
-    { section: 'C. અભ્યાસ · Course Details' },
+    { section: 'B. અભ્યાસ · Course Details' },
 
     {
       id: 'stream', type: 'radio',
@@ -281,9 +249,7 @@ const SocioDem = (() => {
         { label: 'ચોથું  વર્ષ (4th Year)', value: 4 },
         { label: 'પાંચમું  વર્ષ+ (5th Year+)', value: 5 },
       ]
-    },
-
-  ];
+    }];
 
   // ── INTERNAL STATE ───────────────────────────────────────────────
   let responses  = {};
@@ -291,9 +257,18 @@ const SocioDem = (() => {
 
   // ── FIELD RESOLVER ───────────────────────────────────────────────
   function getFields(type) {
-    if (type === 'college') return COLLEGE_FIELDS;
-    return GENERIC_FIELDS;
+  if (type === 'college') return COLLEGE_FIELDS;
+
+  if (type === 'education_occupation') {
+    return [
+      ...GENERIC_FIELDS,
+      ...EDUCATION_NON_STUDENT_FIELDS,
+      ...OCCUPATION_NON_STUDENT_FIELDS
+    ];
   }
+
+  return GENERIC_FIELDS;
+}
 
   // ── RENDER ───────────────────────────────────────────────────────
   function render(containerId, type) {
