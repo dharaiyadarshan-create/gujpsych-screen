@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="gu">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="સામાજિક માહિતી — GujPsych-Screen"/>
+  <title>સામાજિક માહિતી · GujPsych-Screen</title>
+  <link rel="stylesheet" href="../assets/shared.css"/>
+  <link rel="stylesheet" href="sociodem.css"/>
+  <script src="../assets/shared.js"></script>
+</head>
+<body>
+
+<div id="site-header"></div>
+
+<main class="page-main">
+
+  <!-- ══════════════════════════
+       SCREEN 1 — SOCIODEM FORM
+  ══════════════════════════ -->
+  <div class="screen active" id="screen-sociodem">
+
+    <span class="eyebrow">સામાજિક માહિતી · Sociodemographic</span>
+    <h1>તમારા વિશે થોડી માહિતી</h1>
+    <p class="lead">
+      આ માહિતી સંશોધન હેતુ માટે છે અને આ માહિતી ગોપનીય  રહે છે.
+      તારાંકિત (<span style="color:var(--red);">*</span>) પ્રશ્નો ફરજિયાત છે.
+    </p>
+
+    <div class="notice notice-accent">
+      <span class="notice-label">ℹ નોંધ</span>
+      <p>
+        આ માહિતી ફક્ત એક વાર ભરવાની છે. એક જ સત્ર (Session) માં બીજી પ્રશ્નાવલિ ભરો ત્યારે ફરીથી ભરવાની જરૂર નહીં.
+      </p>
+    </div>
+
+    <div id="sd-container"></div>
+
+    <div class="notice notice-amber mt-2">
+      <span class="notice-label">📋 નોંધ</span>
+      <p>આ ડેટા ફક્ત સંશોધન માટે ઉપયોગ થશે. કોઈ અંગત ઓળખ સ્ટોર થતી નથી.</p>
+    </div>
+
+    <div class="scale-actions mt-2">
+      <button class="btn-ghost" id="back-btn" onclick="goBack()">← પાછળ</button>
+      <button class="btn-primary" id="sd-submit-btn" onclick="submitSocioDem()" disabled>
+        પરિણામ જુઓ →
+      </button>
+    </div>
+
+  </div>
+
+</main>
+
+<div id="site-footer"></div>
+
+<script src="../assets/shared.js"></script>
+<script src="sociodem.js"></script>
+<script>
+
+  // ── READ URL PARAMS ────────────────────────────────────────────
+  // sociodem.html?return=phq9.html%3Fresults%3D1
+  const params   = new URLSearchParams(window.location.search);
+  const returnTo = params.get('return') || 'index.html';
+
+  // ── INIT ───────────────────────────────────────────────────────
+  document.addEventListener('DOMContentLoaded', () => {
+    SocioDem.reset();
+    SocioDem.render('sd-container');
+
+    const sd = document.getElementById('sd-container');
+    sd.addEventListener('click', checkComplete);
+    sd.addEventListener('input', checkComplete);
+  });
+
+  function checkComplete() {
+    setTimeout(() => {
+      document.getElementById('sd-submit-btn').disabled = !SocioDem.isComplete();
+    }, 50);
+  }
+
+  // ── BACK ───────────────────────────────────────────────────────
+  function goBack() {
+    // Decode return URL and strip ?results=1 to go back to scale
+    const base = decodeURIComponent(returnTo).split('?')[0];
+    window.location.href = base;
+  }
+
+  // ── SUBMIT ─────────────────────────────────────────────────────
+  function submitSocioDem() {
+    const sdData = SocioDem.getData();
+    if (!sdData) return;
+
+    const token = getToken();
+
+    submitToSheets({
+      type:            'sociodemographic',
+      token:           token,
+      sociodemographic: sdData,
+      timestamp:       new Date().toISOString()
+    });
+
+    markSocioDemDone();
+
+    // Redirect back to scale results page
+    window.location.href = decodeURIComponent(returnTo);
+  }
+
+  //read param and redirect to sociodem with return param
+  function getQueryParam(name) {
+  const params = new URLSearchParams(window.location.search);
+  return params.get(name);
+}
+
+//when coming from index of ace-phq-gad-mspss, redirect to sociodem with return param set to current scale
+window.onload = function () {
+  const source = getQueryParam('from');
+
+  let fields = [];
+
+  if (source === 'studies/study-ace-phq-gad-mspss/index.html') {
+    fields = [
+      'age',
+      'gender',
+      'marital_status',
+      'education',
+      'occupation'
+    ];
+  }
+
+  SocioDem.render('sociodem-container', fields);
+};
+
+// return back after submission
+function submitSociodem() {
+  const data = SocioDem.getData();
+
+  if (!data) {
+    alert("ફોર્મ પૂર્ણ કરો ❗");
+    return;
+  }
+
+  const source = getQueryParam('from');
+
+  // Save data if needed
+  localStorage.setItem('sociodem', JSON.stringify(data));
+
+  // Redirect back
+  if (source === 'studies/study-ace-phq-gad-mspss/index') {
+    window.location.href = "studies/study-ace-phq-gad-mspss/index.html";
+  } else {
+    window.location.href = "index.html";
+  }
+}
+
+
+
+</script>
+</body>
+</html>
