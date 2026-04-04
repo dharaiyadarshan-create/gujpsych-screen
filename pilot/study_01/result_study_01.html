@@ -41,50 +41,138 @@
 </p>
 
 <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        document.getElementById('current-date').innerText = new Date().toLocaleDateString('gu-IN');
-        document.getElementById('display-token').innerText = localStorage.getItem('study_token') || 'N/A';
+document.addEventListener('DOMContentLoaded', () => {
 
-        const resultsContainer = document.getElementById('results-content');
-        
-        // Define scales to display
-        const scales = [
-            { id: 'ACE', name: 'બાળપણના અનુભવો (ACE-IQ)', storage: 'ACE_result' },
-            { id: 'PHQ9', name: 'ડિપ્રેશન સ્ક્રીનિંગ (PHQ-9)', storage: 'PHQ9_result' },
-            { id: 'GAD7', name: 'ચિંતા સ્ક્રીનિંગ (GAD-7)', storage: 'GAD7_result' },
-            { id: 'MSPSS', name: 'સામાજિક આધાર (MSPSS)', storage: 'MSPSS_result' }
-        ];
+  // ── HEADER DATA ─────────────────────────────
+  document.getElementById('current-date').innerText =
+    new Date().toLocaleDateString('gu-IN');
 
-        let html = '';
+  document.getElementById('display-token').innerText =
+    localStorage.getItem('study_token') || 'N/A';
 
-        scales.forEach(scale => {
-            const data = JSON.parse(localStorage.getItem(scale.storage) || 'null');
-            
-            if (data) {
-                html += `
-                <div class="result-card">
-                    <h3>${scale.name}</h3>
-                    <div class="score-row">
-                        <span>કુલ સ્કોર (Total Score):</span>
-                        <span class="score-val">${data.score}</span>
-                    </div>
-                    <div class="score-row">
-                        <span>તારણ (Interpretation):</span>
-                        <span class="interpretation">${data.band}</span>
-                    </div>
-                </div>`;
-            } else {
-                html += `
-                <div class="result-card" style="opacity:0.5;">
-                    <p>${scale.name}: માહિતી ઉપલબ્ધ નથી.</p>
-                </div>`;
-            }
-        });
+  const resultsContainer = document.getElementById('results-content');
 
-        resultsContainer.innerHTML = html;
-    });
+  // ── SCALES ──────────────────────────────────
+  const scales = [
+    { id: 'ACE', name: 'બાળપણના અનુભવો (ACE-IQ)', storage: 'ACE_result' },
+    { id: 'PHQ9', name: 'ડિપ્રેશન સ્ક્રીનિંગ (PHQ-9)', storage: 'PHQ9_result' },
+    { id: 'GAD7', name: 'ચિંતા સ્ક્રીનિંગ (GAD-7)', storage: 'GAD7_result' },
+    { id: 'MSPSS', name: 'સામાજિક આધાર (MSPSS)', storage: 'MSPSS_result' }
+  ];
+
+  let html = '';
+
+  // ── BUILD RESULT CARDS ──────────────────────
+  scales.forEach(scale => {
+    const data = JSON.parse(localStorage.getItem(scale.storage) || 'null');
+
+    if (data) {
+      html += `
+      <div class="result-card">
+        <h3>${scale.name}</h3>
+
+        <div class="score-row">
+          <span>કુલ સ્કોર (Total Score):</span>
+          <span class="score-val">${data.score}</span>
+        </div>
+
+        <div class="score-row">
+          <span>તારણ (Interpretation):</span>
+          <span class="interpretation">${data.band}</span>
+        </div>
+
+        <div class="suggestion">
+          ${getSuggestion(scale.id, data.band)}
+        </div>
+
+      </div>`;
+    } else {
+      html += `
+      <div class="result-card" style="opacity:0.5;">
+        <p>${scale.name}: માહિતી ઉપલબ્ધ નથી.</p>
+      </div>`;
+    }
+  });
+
+  // ── ADD DISCLAIMER + HELP ───────────────────
+  html += `
+  <div class="result-card">
+
+    <h3>મહત્વપૂર્ણ નોંધ (Important Note)</h3>
+
+    <p>
+      આ સ્ક્રીનિંગ માત્ર પ્રાથમિક મૂલ્યાંકન માટે છે. આ કોઈપણ રીતે
+      <b>ચિકિત્સાકીય નિદાન (clinical diagnosis)</b> નથી.
+    </p>
+
+    <p>
+      જો તમને તમારા માનસિક સ્વાસ્થ્ય અંગે ચિંતા હોય, તો કૃપા કરીને
+      લાયકાતપ્રાપ્ત મનોવિજ્ઞાની અથવા ડૉક્ટરનો સંપર્ક કરો.
+    </p>
+
+    <hr>
+
+    <p>
+      વધુ માહિતી અને સહાય માટે કૃપા કરીને 
+      <b>Help Page</b> જુઓ.
+    </p>
+
+  </div>
+  `;
+
+  resultsContainer.innerHTML = html;
+
+});
+
+
+// ── SUGGESTION LOGIC ─────────────────────────
+function getSuggestion(scale, band) {
+
+  // Normalize
+  band = (band || '').toLowerCase();
+
+  if (scale === 'PHQ9' || scale === 'GAD7') {
+
+    if (band.includes('none'))
+      return 'તમારી હાલની સ્થિતિ સામાન્ય છે. સ્વસ્થ જીવનશૈલી જાળવો.';
+
+    if (band.includes('mild'))
+      return 'થોડી કાળજી લેવાની જરૂર છે. આરામ, વ્યાયામ અને વાતચીત મદદરૂપ થઈ શકે.';
+
+    if (band.includes('moderate'))
+      return 'મધ્યમ સ્તરની સમસ્યા દર્શાવે છે. વ્યાવસાયિક સલાહ લેવી ઉપયોગી રહેશે.';
+
+    if (band.includes('severe'))
+      return 'ઉચ્ચ સ્તરની સમસ્યા દર્શાવે છે. તાત્કાલિક વ્યાવસાયિક મદદ લેવી જરૂરી છે.';
+  }
+
+  if (scale === 'ACE') {
+
+    if (band.includes('low'))
+      return 'જોખમ ઓછું છે. સકારાત્મક સંબંધો અને સપોર્ટ જાળવો.';
+
+    if (band.includes('moderate'))
+      return 'કેટલાક જોખમકારક અનુભવો દર્શાવે છે. માનસિક સપોર્ટ લાભદાયક હોઈ શકે.';
+
+    if (band.includes('high'))
+      return 'ઉચ્ચ જોખમ દર્શાવે છે. નિષ્ણાતની સલાહ લેવી ખૂબ મહત્વપૂર્ણ છે.';
+  }
+
+  if (scale === 'MSPSS') {
+
+    if (band.includes('low'))
+      return 'સામાજિક આધાર ઓછો છે. મિત્રો/કુટુંબ સાથે જોડાવાનું પ્રયત્ન કરો.';
+
+    if (band.includes('medium'))
+      return 'મધ્યમ સપોર્ટ છે. સંબંધોને વધુ મજબૂત બનાવો.';
+
+    if (band.includes('high'))
+      return 'સારો સામાજિક આધાર છે. તેને જાળવી રાખો.';
+  }
+
+  return '';
+}
 </script>
-
 <div id="site-footer"></div>
 <script src="../assets/shared.js"></script>
 </body>

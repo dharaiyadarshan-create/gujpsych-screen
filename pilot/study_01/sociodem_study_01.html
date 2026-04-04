@@ -42,11 +42,16 @@
     </div>
 
     <div class="scale-actions mt-2">
-      <button class="btn-ghost" id="back-btn" onclick="goBack()">← પાછળ</button>
-      
-        પરિણામ જુઓ →
-      </button>
-    </div>
+  <button class="btn-ghost" onclick="goBack()">← પાછળ</button>
+
+  <button class="btn-primary" id="submit-btn" onclick="handleSubmit()" disabled>
+    સબમિટ કરો (Submit)
+  </button>
+
+  <button class="btn-ghost" id="view-result-btn" onclick="goToResults()" disabled>
+    પરિણામ જુઓ →
+  </button>
+</div>
 
   </div>
 
@@ -58,64 +63,44 @@
 </p>
 
 <script src="sociodem_study_01.js"></script>
+
+
 <script>
 
-  // ── READ URL PARAMS ────────────────────────────────────────────
-  // sociodem.html?return=phq9.html%3Fresults%3D1
-  const params   = new URLSearchParams(window.location.search);
-  const returnTo = params.get('return') || 'index.html';
+const params   = new URLSearchParams(window.location.search);
+const returnTo = params.get('return') || 'index.html';
 
-  // ── INIT ───────────────────────────────────────────────────────
-  document.addEventListener('DOMContentLoaded', () => {
-    SocioDem.reset();
-    SocioDem.render('sd-container');
+document.addEventListener('DOMContentLoaded', () => {
 
-    const sd = document.getElementById('sd-container');
-    sd.addEventListener('click', checkComplete);
-    sd.addEventListener('input', checkComplete);
-  });
+  SocioDem.reset();
+  SocioDem.render('sd-container');
 
-  function checkComplete() {
-    setTimeout(() => {
-      document.getElementById('sd-submit-btn').disabled = !SocioDem.isComplete();
-    }, 50);
+  const sd = document.getElementById('sd-container');
+
+  sd.addEventListener('click', updateButtons);
+  sd.addEventListener('input', updateButtons);
+
+  // Check if already submitted
+  if (localStorage.getItem('sociodem_submitted') === '1') {
+    lockAfterSubmit();
   }
+});
 
-  // ── BACK ───────────────────────────────────────────────────────
-  function goBack() {
-    // Decode return URL and strip ?results=1 to go back to scale
-    const base = decodeURIComponent(returnTo).split('?')[0];
-    window.location.href = base;
-  }
 
-  // ── SUBMIT ─────────────────────────────────────────────────────
-  function submitSocioDem() {
-    const sdData = SocioDem.getData();
-    if (!sdData) return;
+// ── BUTTON STATE CONTROL ─────────────────────
+function updateButtons() {
+  setTimeout(() => {
+    const isComplete = SocioDem.isComplete();
+    const isSubmitted = localStorage.getItem('sociodem_submitted') === '1';
 
-    const token = getToken();
-
-    submitToSheets({
-      type:            'sociodemographic',
-      token:           token,
-      sociodemographic: sdData,
-      timestamp:       new Date().toISOString()
-    });
-
-    markSocioDemDone();
-
-    // Redirect back to scale results page
-    window.location.href = decodeURIComponent(returnTo);
-  }
-
-  //read param and redirect to sociodem with return param
-  function getQueryParam(name) {
-  const params = new URLSearchParams(window.location.search);
-  return params.get(name);
+    document.getElementById('submit-btn').disabled = !isComplete || isSubmitted;
+    document.getElementById('view-result-btn').disabled = !isSubmitted;
+  }, 50);
 }
 
-// return back after submission
-function submitSociodem() {
+
+// ── SUBMIT (IRREVERSIBLE) ───────────────────
+function handleSubmit() {
   const data = SocioDem.getData();
 
   if (!data) {
@@ -123,20 +108,43 @@ function submitSociodem() {
     return;
   }
 
-  const source = getQueryParam('from');
-
-  // Save data if needed
-  sessionStorage.setItem('sociodem', JSON.stringify(data));
-
-  // Redirect back
-  if (source === 'studies/study-ace-phq-gad-mspss/index') {
-    window.location.href = "studies/study-ace-phq-gad-mspss/index.html";
-  } else {
-    window.location.href = "index.html";
+  if (!confirm("શું તમે ખાતરી કરો છો? એકવાર સબમિટ કર્યા પછી ફેરફાર કરી શકાશે નહીં.")) {
+    return;
   }
+
+  // Save locally
+  localStorage.setItem('sociodem_data', JSON.stringify(data));
+  localStorage.setItem('sociodem_submitted', '1');
+
+  // 🔥 Optional: send to backend here
+  // submitToSheets(...)
+
+  lockAfterSubmit();
 }
 
 
+// ── LOCK UI AFTER SUBMIT ────────────────────
+function lockAfterSubmit() {
+  document.getElementById('submit-btn').disabled = true;
+  document.getElementById('view-result-btn').disabled = false;
+
+  // Optional: disable form inputs
+  document.querySelectorAll('#sd-container input, #sd-container button, #sd-container select')
+    .forEach(el => el.disabled = true);
+}
+
+
+// ── VIEW RESULT ─────────────────────────────
+function goToResults() {
+  window.location.href = "result_study_01.html";
+}
+
+
+// ── BACK ────────────────────────────────────
+function goBack() {
+  const base = decodeURIComponent(returnTo).split('?')[0];
+  window.location.href = base;
+}
 
 </script>
 
