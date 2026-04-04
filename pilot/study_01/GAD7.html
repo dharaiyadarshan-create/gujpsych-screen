@@ -130,27 +130,23 @@
   function afterScale() {
     const totalScore = answers.reduce((acc, val) => acc + val, 0);
     
-    const params = new URLSearchParams(window.location.search);
-    const isStudy = params.get('study') === '1';
-    const nextUrl = params.get('next');
-    
-    if (isStudy) {
-      // Submit to sheets
-      submitToSheets({
-        type: 'scale',
-        scale: 'GAD-7',
-        answers: answers,
-        totalScore: totalScore,
-        timestamp: new Date().toISOString()
-      });
-      // Redirect to next
-      window.location.href = nextUrl || "../sociodem/sociodem.html";
+    submitToSheets({
+      type: 'scale',
+      scale: 'GAD-7',
+      answers: answers,
+      totalScore: totalScore,
+      timestamp: new Date().toISOString()
+    });
+
+    const returnTo = sessionStorage.getItem('return_to');
+    const returnStudy = sessionStorage.getItem('return_study');
+
+    if (returnTo && returnStudy) {
+      sessionStorage.setItem(`${returnStudy}_gad7`, 'true');
+      window.location.href = returnTo;
     } else {
-      // Save to sessionStorage so sociodem.html can access it
       sessionStorage.setItem('temp_score', totalScore);
       sessionStorage.setItem('last_scale', 'GAD-7');
-      
-      // Move to the sociodemographic page
       window.location.href = "../sociodem/sociodem.html";
     }
   }

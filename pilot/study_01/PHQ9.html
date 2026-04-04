@@ -238,27 +238,23 @@
   function afterScale() {
     const score = answers.reduce((s, v) => s + (v || 0), 0);
     
-    const params = new URLSearchParams(window.location.search);
-    const isStudy = params.get('study') === '1';
-    const nextUrl = params.get('next');
-    
-    if (isStudy) {
-      // Submit to sheets
-      submitToSheets({
-        type: 'scale',
-        scale: 'PHQ-9',
-        answers: answers,
-        totalScore: score,
-        timestamp: new Date().toISOString()
-      });
-      // Redirect to next
-      window.location.href = nextUrl || "../sociodem/sociodem.html";
+    submitToSheets({
+      type: 'scale',
+      scale: 'PHQ-9',
+      answers: answers,
+      totalScore: score,
+      timestamp: new Date().toISOString()
+    });
+
+    const returnTo = sessionStorage.getItem('return_to');
+    const returnStudy = sessionStorage.getItem('return_study');
+
+    if (returnTo && returnStudy) {
+      sessionStorage.setItem(`${returnStudy}_phq9`, 'true');
+      window.location.href = returnTo;
     } else {
-      // Save data so sociodem.html can find it
       sessionStorage.setItem('temp_score', score);
       sessionStorage.setItem('last_scale', 'PHQ-9');
-      
-      // Move to sociodem folder
       window.location.href = '../sociodem/sociodem.html';
     }
   }
