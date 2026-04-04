@@ -255,7 +255,7 @@
 </head>
 <body>
 
-<div id="layout/site-header"></div>
+<div id="site-header"></div>
 
 <main class="page-main">
 
@@ -446,10 +446,6 @@
 
   // --- B. INITIALIZE PAGE ---
   document.addEventListener('DOMContentLoaded', () => {
-    // These IDs must match your <div> tags exactly
-    loadComponent('layout/site-header', 'layout/header.html');
-    loadComponent('site-footer', 'layout/footer.html');
-
     // ✅ CONSENT ACTION FUNCTIONS
     window.acceptConsent = function () {
       localStorage.setItem("userConsent", "true");
