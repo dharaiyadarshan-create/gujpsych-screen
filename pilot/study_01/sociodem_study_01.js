@@ -5,9 +5,7 @@
  * ─────────────────────────────────────────────
  * USAGE
  * ─────────────────────────────────────────────
- * SocioDem.render('container-id')             // Default: generic form
- * SocioDem.render('container-id', 'college')  // College-specific form
- * sociodem.render('container-id', 'college', 'district) // college plus district  form 
+ * socioDem.render('container-id', 'college', 'district') // college plus district  form 
  * SocioDem.isComplete() → boolean             // Check if all required fields are filled
  * SocioDem.getData()    → object | null       // Get validated form data
  * SocioDem.reset()                            // Reset form state
@@ -22,13 +20,7 @@
  *    - Gender
  *    - Marital Status
  *    - Residence
- *
- * EDUCATION_NON_STUDENT_FIELDS
- * → Highest completed education level
- *
- * OCCUPATION_NON_STUDENT_FIELDS
- * → Occupation categories (based on Kuppuswamy scale)
- *
+ * 
  * COURSE_MAP
  * → Stream-wise course options (used in dynamic course selection)
  *
@@ -48,12 +40,50 @@
  * NOTES
  * ─────────────────────────────────────────────
  * - Marital status is included in GENERIC_FIELDS
- * - Perinatal fields: planned for future versions
- * - Caregiver fields: planned for future versions
  *
  */
 
 const SocioDem = (() => {
+
+  // ── GENERIC FIELDS ───────────────────────────────────────────────
+  const GENERIC_FIELDS = [
+
+    { section: 'A. સામાન્ય માહિતી · General' },
+
+    {
+      id: 'age', type: 'number',
+      label: 'ઉંમર (Age)',
+      sublabel: 'પૂર્ણ વર્ષોમાં · Completed years',
+      min: 18, max: 70, required: true
+    },
+    {
+      id: 'gender', type: 'radio',
+      label: 'લિંગ (Gender)', required: true,
+      options: [
+        { label: 'પુરુષ (Male)',    value: 1 },
+        { label: 'સ્ત્રી (Female)', value: 2 },
+        { label: 'અન્ય (Other)',    value: 3 },
+      ]
+    },
+    {
+      id: 'marital_status', type: 'radio',
+      label: 'વૈવાહિક સ્થિતિ (Marital Status)', required: true,
+      options: [
+        { label: 'અવિવાહિત (Unmarried)',          value: 1 },
+        { label: 'વિવાહિત (Married)',              value: 2 },
+        { label: 'છૂટાછેડા (Divorced/Separated)', value: 3 },
+        { label: 'વિધવા / વિધુર (Widowed)',        value: 4 },
+      ]
+    },
+    {
+      id: 'residence', type: 'radio',
+      label: 'વસવાટ (Residence)', required: true,
+      options: [
+        { label: 'શહેરી (Urban)',           value: 1 },
+        { label: 'ગ્રામ્ય (Rural)',          value: 2 },
+        { label: 'અર્ધ-શહેરી (Semi-urban)', value: 3 },
+      ]
+   }];
 
   // ── COURSE MAP (stream → courses) ────────────────────────────────
   const COURSE_MAP = {
@@ -142,84 +172,7 @@ const SocioDem = (() => {
     'વડોદરા (Vadodara)',
     'વલસાડ (Valsad)',
   ];
-
-  // ── GENERIC FIELDS ───────────────────────────────────────────────
-  const GENERIC_FIELDS = [
-
-    { section: 'A. સામાન્ય માહિતી · General' },
-
-    {
-      id: 'age', type: 'number',
-      label: 'ઉંમર (Age)',
-      sublabel: 'પૂર્ણ વર્ષોમાં · Completed years',
-      min: 18, max: 70, required: true
-    },
-    {
-      id: 'gender', type: 'radio',
-      label: 'લિંગ (Gender)', required: true,
-      options: [
-        { label: 'પુરુષ (Male)',    value: 1 },
-        { label: 'સ્ત્રી (Female)', value: 2 },
-        { label: 'અન્ય (Other)',    value: 3 },
-      ]
-    },
-    {
-      id: 'marital_status', type: 'radio',
-      label: 'વૈવાહિક સ્થિતિ (Marital Status)', required: true,
-      options: [
-        { label: 'અવિવાહિત (Unmarried)',          value: 1 },
-        { label: 'વિવાહિત (Married)',              value: 2 },
-        { label: 'છૂટાછેડા (Divorced/Separated)', value: 3 },
-        { label: 'વિધવા / વિધુર (Widowed)',        value: 4 },
-      ]
-    },
-    {
-      id: 'residence', type: 'radio',
-      label: 'વસવાટ (Residence)', required: true,
-      options: [
-        { label: 'શહેરી (Urban)',           value: 1 },
-        { label: 'ગ્રામ્ય (Rural)',          value: 2 },
-        { label: 'અર્ધ-શહેરી (Semi-urban)', value: 3 },
-      ]
-    }];
-
-    const EDUCATION_NON_STUDENT_FIELDS = [
-
-    { section: 'B. શિક્ષણ અને વ્યવસાય · Education & Occupation' },
-
-    {
-      id: 'education', type: 'radio',
-      label: 'શિક્ષણ (Education)',
-      sublabel: 'સર્વોચ્ચ પૂર્ણ · Highest completed', required: true,
-      options: [
-        { label: 'નિરક્ષર / પ્રાથમિક ધો. ૧–૪',  value: 1 },
-        { label: 'માધ્યમિક ધો. ૫–૭',             value: 2 },
-        { label: 'હાઈસ્કૂલ ધો. ૮–૧૦',            value: 3 },
-        { label: 'ધો. ૧૨ (Higher Secondary)',      value: 4 },
-        { label: 'ડિપ્લોમા / ૧૨ પછીનું',          value: 5 },
-        { label: 'સ્નાતક (Graduate)',              value: 6 },
-        { label: 'અનુસ્નાતક (Postgraduate)',       value: 7 },
-        { label: 'પીએચ.ડી. (PhD)',                value: 8 },
-      ]
-    },];
-
-    const OCCUPATION_NON_STUDENT_FIELDS = [
-    {
-      id: 'occupation', type: 'radio',
-      label: 'વ્યવસાય (Occupation)', required: true,
-      options: [
-        { label: 'વ્યાવસાયિક / ઉચ્ચ અધિકારી (Professional / Senior Official)',     value: 1 },
-        { label: 'ટેક્નિશિયન / શિક્ષક / નર્સ (Technician / Teacher / Nurse)',        value: 2 },
-        { label: 'કચેરી કર્મચારી (Clerk / Office worker)',                          value: 3 },
-        { label: 'વેપાર (Skilled worker / Sales)',                                value: 4 },
-        { label: 'મજૂર (Unskilled labour)',                                      value: 5 },
-        { label: 'કૃષિ (Agriculture)',                                            value: 6 },
-        { label: 'ગૃહિણી (Homemaker)',                                          value: 7 },
-        { label: 'વિદ્યાર્થી (Student)',                                            value: 8 },
-        { label: 'બેરોજગાર (Unemployed)',                                        value: 9 },
-      ]
-    }];
-
+   
   // ── COLLEGE FIELDS ───────────────────────────────────────────────
   const COLLEGE_FIELDS = [
 
@@ -287,39 +240,30 @@ const SocioDem = (() => {
   let activeType = 'generic';
 
   // ── FIELD RESOLVER ───────────────────────────────────────────────
-  function getFields(type) {
-    if (type === 'college') return COLLEGE_FIELDS;
+  function getFields() {
+  return [
+    ...GENERIC_FIELDS,
+    ...COLLEGE_FIELDS
+    
+  ];
+}
+ // ── RENDER ─────────────────────────────────────
+  function render(containerId) {
 
-    // Study 01: generic demographics + full college info (incl. district)
-    if (type === 'college_district') {
-      return [...GENERIC_FIELDS, ...COLLEGE_FIELDS];
-    }
-
-    if (type === 'education_occupation') {
-      return [
-        ...GENERIC_FIELDS,
-        ...EDUCATION_NON_STUDENT_FIELDS,
-        ...OCCUPATION_NON_STUDENT_FIELDS
-      ];
-    }
-
-    return GENERIC_FIELDS;
-  }
-
-  // ── RENDER ───────────────────────────────────────────────────────
-  // render(containerId, 'college', 'district') → GENERIC + COLLEGE fields (Study 01)
-  function render(containerId, type, extra) {
-    if (type === 'college' && extra === 'district') {
-      activeType = 'college_district';
-    } else {
-      activeType = type || 'generic';
-    }
     const container = document.getElementById(containerId);
-    if (!container) return;
+
+    if (!container) {
+      console.error(`Container "${containerId}" not found`);
+      return;
+    }
+
     container.innerHTML = '';
-    const fields = getFields(activeType);
+
+    const fields = getFields();
 
     fields.forEach(field => {
+
+      // SECTION
       if (field.section) {
         const sec = document.createElement('div');
         sec.className = 'sd-section';
@@ -332,13 +276,15 @@ const SocioDem = (() => {
       wrapper.className = 'sd-field';
       wrapper.id = `sd-wrap-${field.id}`;
 
-      // Label
-      const labelEl = document.createElement('div');
-      labelEl.className = 'sd-label';
-      labelEl.innerHTML = field.label +
+      // LABEL
+      const label = document.createElement('div');
+      label.className = 'sd-label';
+      label.innerHTML =
+        field.label +
         (field.required ? ' <span class="sd-required">*</span>' : '');
-      wrapper.appendChild(labelEl);
+      wrapper.appendChild(label);
 
+      // SUBLABEL
       if (field.sublabel) {
         const sub = document.createElement('div');
         sub.className = 'sd-sublabel';
@@ -346,48 +292,51 @@ const SocioDem = (() => {
         wrapper.appendChild(sub);
       }
 
-      // ── NUMBER INPUT ──────────────────────────────────────────
+      // NUMBER
       if (field.type === 'number') {
         const input = document.createElement('input');
-        input.type        = 'number';
-        input.className   = 'sd-input';
-        input.min         = field.min || 0;
-        input.max         = field.max || 999;
+        input.type = 'number';
+        input.className = 'sd-input';
         input.placeholder = `${field.min}–${field.max}`;
-        input.value       = responses[field.id] ?? '';
-        input.oninput     = () => {
+        input.value = responses[field.id] ?? '';
+
+        input.oninput = () => {
           responses[field.id] = input.value ? Number(input.value) : null;
         };
+
         wrapper.appendChild(input);
       }
 
-      // ── TEXT INPUT ────────────────────────────────────────────
+      // TEXT
       if (field.type === 'text') {
         const input = document.createElement('input');
-        input.type        = 'text';
-        input.className   = 'sd-input sd-input-text';
+        input.type = 'text';
+        input.className = 'sd-input';
         input.placeholder = field.placeholder || '';
-        input.value       = responses[field.id] ?? '';
-        input.oninput     = () => {
+        input.value = responses[field.id] ?? '';
+
+        input.oninput = () => {
           responses[field.id] = input.value.trim() || null;
         };
+
         wrapper.appendChild(input);
       }
 
-      // ── DROPDOWN ──────────────────────────────────────────────
+      // DROPDOWN (District)
       if (field.type === 'dropdown') {
         const select = document.createElement('select');
         select.className = 'sd-select';
+
         const placeholder = document.createElement('option');
-        placeholder.value    = '';
-        placeholder.textContent = '— જિલ્લો પસંદ કરો / Select district —';
+        placeholder.value = '';
+        placeholder.textContent = 'Select district';
         placeholder.disabled = true;
         placeholder.selected = !responses[field.id];
         select.appendChild(placeholder);
 
         field.options.forEach(opt => {
           const option = document.createElement('option');
-          option.value       = opt;
+          option.value = opt;
           option.textContent = opt;
           if (responses[field.id] === opt) option.selected = true;
           select.appendChild(option);
@@ -396,45 +345,54 @@ const SocioDem = (() => {
         select.onchange = () => {
           responses[field.id] = select.value || null;
         };
+
         wrapper.appendChild(select);
       }
 
-      // ── RADIO ─────────────────────────────────────────────────
+      // RADIO
       if (field.type === 'radio') {
-        const optWrap = document.createElement('div');
-        optWrap.className = 'sd-options';
+        const wrap = document.createElement('div');
+        wrap.className = 'sd-options';
+
         field.options.forEach(opt => {
           const btn = document.createElement('button');
-          btn.type      = 'button';
-          btn.className = 'sd-opt' +
+          btn.type = 'button';
+          btn.className =
+            'sd-opt' +
             (responses[field.id] === opt.value ? ' sd-opt-sel' : '');
+
           btn.textContent = opt.label;
+
           btn.onclick = () => {
             responses[field.id] = opt.value;
-            optWrap.querySelectorAll('.sd-opt')
+
+            wrap.querySelectorAll('.sd-opt')
               .forEach(b => b.classList.remove('sd-opt-sel'));
+
             btn.classList.add('sd-opt-sel');
 
-            // If stream changed, re-render course selector
+            // 🔥 STREAM → update course
             if (field.id === 'stream') {
-              responses['course']       = null;
-              responses['course_other'] = null;
-              renderCourseField(container);
+              responses.course = null;
+              responses.course_other = null;
+              renderCourse(container);
             }
           };
-          optWrap.appendChild(btn);
+
+          wrap.appendChild(btn);
         });
-        wrapper.appendChild(optWrap);
+
+        wrapper.appendChild(wrap);
       }
 
-      // ── COURSE SELECT (two-level, rendered dynamically) ───────
+      // COURSE (dynamic)
       if (field.type === 'course_select') {
         wrapper.id = 'sd-wrap-course';
-        // Hide until stream is selected
-        if (!responses['stream']) {
+
+        if (!responses.stream) {
           wrapper.style.display = 'none';
         } else {
-          buildCourseOptions(wrapper);
+          buildCourse(wrapper);
         }
       }
 
@@ -442,120 +400,89 @@ const SocioDem = (() => {
     });
   }
 
-  // ── COURSE FIELD BUILDER ─────────────────────────────────────────
-  function buildCourseOptions(wrapper) {
-    const streamVal = responses['stream'];
-    const courses   = COURSE_MAP[streamVal] || [];
+  // ── COURSE BUILDER ──────────────────────────────
+  function buildCourse(wrapper) {
+    const courses = COURSE_MAP[responses.stream] || [];
 
-    // Remove previous options if re-rendering
-    const existing = wrapper.querySelector('.sd-options');
-    const existingOther = wrapper.querySelector('.sd-other-wrap');
-    if (existing)     existing.remove();
-    if (existingOther) existingOther.remove();
+    wrapper.innerHTML = wrapper.innerHTML.split('</div>')[0] + '</div>';
 
-    const labelEl = wrapper.querySelector('.sd-label');
-    if (labelEl) {
-      // Re-show wrapper
-      wrapper.style.display = '';
-    }
-
-    const optWrap = document.createElement('div');
-    optWrap.className = 'sd-options';
+    const wrap = document.createElement('div');
+    wrap.className = 'sd-options';
 
     courses.forEach(opt => {
       const btn = document.createElement('button');
-      btn.type      = 'button';
-      btn.className = 'sd-opt' +
-        (responses['course'] === opt.value ? ' sd-opt-sel' : '');
+      btn.type = 'button';
+      btn.className =
+        'sd-opt' +
+        (responses.course === opt.value ? ' sd-opt-sel' : '');
+
       btn.textContent = opt.label;
+
       btn.onclick = () => {
-        responses['course'] = opt.value;
-        optWrap.querySelectorAll('.sd-opt')
+        responses.course = opt.value;
+
+        wrap.querySelectorAll('.sd-opt')
           .forEach(b => b.classList.remove('sd-opt-sel'));
+
         btn.classList.add('sd-opt-sel');
 
-        // Show/hide free text for Other
-        const otherWrap = wrapper.querySelector('.sd-other-wrap');
-        if (otherWrap) {
-          otherWrap.style.display = opt.value === '__other__' ? '' : 'none';
-          if (opt.value !== '__other__') responses['course_other'] = null;
-        }
+        renderCourse(wrapper);
       };
-      optWrap.appendChild(btn);
+
+      wrap.appendChild(btn);
     });
 
-    wrapper.appendChild(optWrap);
+    wrapper.appendChild(wrap);
 
-    // Other free text box (hidden until "Other" selected)
-    const otherWrap = document.createElement('div');
-    otherWrap.className = 'sd-other-wrap';
-    otherWrap.style.display = responses['course'] === '__other__' ? '' : 'none';
-    otherWrap.style.marginTop = '0.6rem';
+    // OTHER INPUT
+    if (responses.course === '__other__') {
+      const input = document.createElement('input');
+      input.className = 'sd-input';
+      input.placeholder = 'Type course';
 
-    const otherInput = document.createElement('input');
-    otherInput.type        = 'text';
-    otherInput.className   = 'sd-input sd-input-text';
-    otherInput.placeholder = 'અભ્યાસક્રમ લખો · Type course name';
-    otherInput.value       = responses['course_other'] ?? '';
-    otherInput.oninput     = () => {
-      responses['course_other'] = otherInput.value.trim() || null;
-    };
-    otherWrap.appendChild(otherInput);
-    wrapper.appendChild(otherWrap);
+      input.value = responses.course_other || '';
+
+      input.oninput = () => {
+        responses.course_other = input.value.trim();
+      };
+
+      wrapper.appendChild(input);
+    }
+
+    wrapper.style.display = '';
   }
 
-  // Re-renders only the course field after stream changes
-  function renderCourseField(container) {
-    const courseWrap = container.querySelector('#sd-wrap-course');
-    if (courseWrap) buildCourseOptions(courseWrap);
+  function renderCourse(container) {
+    const el = container.querySelector('#sd-wrap-course');
+    if (el) buildCourse(el);
   }
 
-  // ── VALIDATION ───────────────────────────────────────────────────
+  // ── VALIDATION ─────────────────────────────────
   function isComplete() {
-    const fields = getFields(activeType);
-    return fields
+    return getFields()
       .filter(f => f.required && !f.section)
       .every(f => {
         if (f.type === 'course_select') {
-          // Must have a course selected
-          if (!responses['course']) return false;
-          // If "Other" selected, must have free text
-          if (responses['course'] === '__other__') {
-            return responses['course_other'] &&
-                   responses['course_other'].trim() !== '';
+          if (!responses.course) return false;
+          if (responses.course === '__other__') {
+            return responses.course_other;
           }
           return true;
         }
-        const v = responses[f.id];
-        return v !== null && v !== undefined && v !== '';
+        return responses[f.id];
       });
   }
 
-  // ── GET DATA ─────────────────────────────────────────────────────
+  // ── DATA ───────────────────────────────────────
   function getData() {
     if (!isComplete()) return null;
-
-    const data = { ...responses };
-
-    // Resolve course display value for storage
-    if (activeType === 'college' || activeType === 'college_district') {
-      if (data.course === '__other__') {
-        data.course_label = data.course_other || 'Other';
-      } else {
-        const streamCourses = COURSE_MAP[data.stream] || [];
-        const found = streamCourses.find(c => c.value === data.course);
-        data.course_label = found ? found.label : data.course;
-      }
-    }
-
-    return data;
+    return { ...responses };
   }
 
-  // ── RESET ────────────────────────────────────────────────────────
   function reset() {
-    responses  = {};
-    activeType = 'generic';
+    responses = {};
   }
 
   return { render, isComplete, getData, reset };
+
 })();
