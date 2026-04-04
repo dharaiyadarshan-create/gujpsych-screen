@@ -288,22 +288,32 @@ const SocioDem = (() => {
 
   // ── FIELD RESOLVER ───────────────────────────────────────────────
   function getFields(type) {
-  if (type === 'college') return COLLEGE_FIELDS;
+    if (type === 'college') return COLLEGE_FIELDS;
 
-  if (type === 'education_occupation') {
-    return [
-      ...GENERIC_FIELDS,
-      ...EDUCATION_NON_STUDENT_FIELDS,
-      ...OCCUPATION_NON_STUDENT_FIELDS
-    ];
+    // Study 01: generic demographics + full college info (incl. district)
+    if (type === 'college_district') {
+      return [...GENERIC_FIELDS, ...COLLEGE_FIELDS];
+    }
+
+    if (type === 'education_occupation') {
+      return [
+        ...GENERIC_FIELDS,
+        ...EDUCATION_NON_STUDENT_FIELDS,
+        ...OCCUPATION_NON_STUDENT_FIELDS
+      ];
+    }
+
+    return GENERIC_FIELDS;
   }
 
-  return GENERIC_FIELDS;
-}
-
   // ── RENDER ───────────────────────────────────────────────────────
-  function render(containerId, type) {
-    activeType = type || 'generic';
+  // render(containerId, 'college', 'district') → GENERIC + COLLEGE fields (Study 01)
+  function render(containerId, type, extra) {
+    if (type === 'college' && extra === 'district') {
+      activeType = 'college_district';
+    } else {
+      activeType = type || 'generic';
+    }
     const container = document.getElementById(containerId);
     if (!container) return;
     container.innerHTML = '';
@@ -528,7 +538,7 @@ const SocioDem = (() => {
     const data = { ...responses };
 
     // Resolve course display value for storage
-    if (activeType === 'college') {
+    if (activeType === 'college' || activeType === 'college_district') {
       if (data.course === '__other__') {
         data.course_label = data.course_other || 'Other';
       } else {
@@ -548,19 +558,4 @@ const SocioDem = (() => {
   }
 
   return { render, isComplete, getData, reset };
-
-  // if you are coming from ace-phq-gad-mspss study, show specific part of the form 
-  function getQueryParam(key) {
-  const url = new URL(window.location.href);
-  return url.searchParams.get(key);
-}
-window.onload = function () {
-  const source = getQueryParam('from');
-
-  if (source === 'ace-phq-gad-mspss') {
-    SocioDem.render('container-id', 'college', 'district');
-  } else {
-    SocioDem.render('sociodem-container', 'generic');
-  }
-};
 })();
