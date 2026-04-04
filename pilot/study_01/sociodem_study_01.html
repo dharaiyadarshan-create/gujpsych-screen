@@ -143,7 +143,7 @@ function submitSociodem() {
   const source = getQueryParam('from');
 
   // Save data if needed
-  localStorage.setItem('sociodem', JSON.stringify(data));
+  sessionStorage.setItem('sociodem', JSON.stringify(data));
 
   // Redirect back
   if (source === 'studies/study-ace-phq-gad-mspss/index') {
