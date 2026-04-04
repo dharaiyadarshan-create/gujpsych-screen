@@ -476,12 +476,12 @@ function afterScale() {
     timestamp:  new Date().toISOString()
   });
 
-  const params = new URLSearchParams(window.location.search);
-  const isStudy = params.get('study') === '1';
-  const nextUrl = params.get('next');
+  const returnTo = sessionStorage.getItem('return_to');
+  const returnStudy = sessionStorage.getItem('return_study');
 
-  if (isStudy) {
-    window.location.href = nextUrl || "PHQ9.html";
+  if (returnTo && returnStudy) {
+    sessionStorage.setItem(`${returnStudy}_who_ace_iq`, 'true');
+    window.location.href = returnTo;
   } else {
     afterScaleSubmit('who-ace-iq-binary.html');
   }
