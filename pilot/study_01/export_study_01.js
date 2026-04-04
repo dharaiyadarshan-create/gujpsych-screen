@@ -1,5 +1,5 @@
 // pilot/export.js
-const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxr_n1Buw3LRQuof-dapqjlFjwnZqB6o63fIjhpPnUE-ZuzEFMtE7umnzDIkbNTCAGL/exec";
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyH-Y7HO-q2VwTG0N6DxBqEJ10GwrvgJoc4pnGXeqU_V3or1jG4OmDs3GxQt8qTYVTk/exec";
 
 /**
  * Sends Scale data (PHQ-9, GAD-7, ACE-IQ, etc.)
@@ -37,7 +37,7 @@ async function sendToGoogle(payload) {
         await fetch(APPS_SCRIPT_URL, {
             method: "POST",
             mode: "no-cors", 
-            header: { "Content-Type": "application/json" },
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify(payload)
         });
         console.log("Data sent to Google successfully.");
