@@ -4,20 +4,29 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Study · ACE PHQ GAD MSPSS</title>
-  <link rel="stylesheet" href="assets/shared.css" />
-  <link rel="stylesheet" href="../sociodem/sociodem.css" />
-  <script src="../assets/shared.js"></script>
-  <script src="../sociodem/sociodem.js"></script>
-  <script src="export.js"></script> 
+  <link rel="stylesheet" href="../../assets/shared.css" />
+  <link rel="stylesheet" href="../../sociodem/sociodem.css" />
+  <script src="../../assets/shared.js"></script>
+  <script src="../../sociodem/sociodem.js"></script>
+  <script src="export.js"></script>
 </head>
 
 <body>
 
+<div id="site-header"></div>
+
+<main class="page-main">
+  <h2 id="step-title"></h2>
+  <div id="step-container"></div>
+  <div id="nav-container" style="display:none; gap:1rem; margin-top:1rem;"></div>
+</main>
+
+<div id="site-footer"></div>
 
 <script>
   // 1. Consent Guard
   if (localStorage.getItem("studyConsent") !== "true") {
-    window.location.href = "consent.html"; 
+    window.location.href = "consent.html";
   }
 
   let step = 0;
@@ -65,7 +74,8 @@
       hasNav: false,
       content: `
         <p>આ માહિતી સંશોધન હેતુ માટે છે.</p>
-        <button class="btn-primary" onclick="window.location.href='sociodem.html'"> સામાજિક માહિતી ભરો →</button>
+        <div id="sociodem-container"></div>
+        <button id="sociodem-submit-btn" class="btn-primary" onclick="submitSociodem()" disabled>સબમિટ કરો →</button>
       `
     },
     {
@@ -85,10 +95,10 @@
     const nextScale = nextMap[scale];
     const currentPath = window.location.pathname;
     const nextUrl = `${currentPath}?next=${nextScale}`;
-    
+
     const scaleUrls = { ACE: 'WHO-ACE-IQ-BINARY', PHQ9: 'PHQ9', GAD7: 'GAD7', MSPSS: 'MSPSS' };
     const targetFile = scaleUrls[scale] || scale;
-    
+
     window.location.href = `../../scales_folder/${targetFile}.html?study=1&next=${encodeURIComponent(nextUrl)}`;
   }
 
@@ -102,11 +112,9 @@
     const sdData = SocioDem.getData();
     if (!sdData) return;
 
-    // Use function from export.js
     await uploadSocioDemData(getToken(), sdData);
-    
-    // Move to final result step
-    step = 5; 
+
+    step = 5;
     renderStep();
   }
 
@@ -138,9 +146,6 @@
     }
     renderStep();
   });
-
-
-
 </script>
 </body>
 </html>
