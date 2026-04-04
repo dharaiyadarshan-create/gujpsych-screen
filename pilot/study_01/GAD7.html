@@ -45,15 +45,19 @@
 
   </div>
 
+  //progress bar (initially empty, will fill as user answers questions)
+
+  <div class="progress-wrap" id="progress-wrap" style="display:none;">
+  <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+  <div class="progress-text" id="progress-text">૦ / 8</div>
+</div>
+
   <!-- ══════════════════════════
        SCREEN 2 — SCALE
   ══════════════════════════ -->
   <div class="screen" id="screen-scale">
 
-    <div class="progress-wrap">
-      <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
-      <div class="progress-text" id="progress-text">૦ / ૮</div>
-    </div>
+    
 
     <div class="instruction-band">
       <strong>સૂચના:</strong> છેલ્લા <strong>બે અઠવાડિયા</strong>માં નીચે દર્શાવેલ સમસ્યાઓ દ્વારા આપ કેટલી વાર હેરાન થયા છો?
@@ -132,12 +136,17 @@
     ).join('');
   }
 
+    // ── Show screen by ID ──
   function showScreen(id) {
-    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-    const t = document.getElementById(id);
-    if (t) t.classList.add('active');
-    window.scrollTo(0, 0);
-  }
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  const t = document.getElementById(id);
+  if (t) t.classList.add('active');
+  window.scrollTo(0, 0);
+
+  // Show progress bar only during scale screen
+  const pw = document.getElementById('progress-wrap');
+  if (pw) pw.style.display = id === 'screen-scale' ? 'block' : 'none';
+}
 
   function getBand(score) {
     if (score <= 4)  return 'Minimal';
