@@ -4,15 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>સંમતિ પત્રક · Consent Form</title>
-  <link rel="stylesheet" href="../assets/shared.css">
-  <style>
-    .consent-container { max-width: 800px; margin: 2rem auto; padding: 2rem; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); }
-    .pis-content { height: 400px; overflow-y: scroll; border: 1px solid var(--border); padding: 1.5rem; background: #fdfdfd; margin-bottom: 2rem; font-size: 0.95rem; line-height: 1.8; }
-    .consent-actions { display: flex; flex-direction: column; align-items: center; gap: 1rem; }
-    .checkbox-group { display: flex; align-items: flex-start; gap: 10px; cursor: pointer; }
-  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Gujarati:wght@400;500;700&family=Noto+Serif+Gujarati:wght@400;700&family=DM+Serif+Display&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="shared_study_01.css">
 </head>
 <body>
+
   <div id="site-header"></div>
 
   <main class="page-main">
@@ -43,6 +39,11 @@
     </div>
   </main>
 
+  <p class="footnote">
+    Your responses are anonymous and confidential.<br>
+    તમારા જવાબો ગુપ્ત અને અનામી છે.
+  </p>
+
   <script>
     const check = document.getElementById('consent-check');
     const btn   = document.getElementById('btn-proceed');
@@ -59,5 +60,8 @@
       window.location.href = 'index_study_01.html';
     });
   </script>
+
+<div id="site-footer"></div>
+<script src="../assets/shared.js"></script>
 </body>
 </html>

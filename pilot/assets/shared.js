@@ -82,7 +82,7 @@ function loadComponents() {
   const footerEl = document.getElementById('site-footer');
 
   // Detect if we are inside a subfolder (e.g. scales_folder/, sociodem/, studies/)
-  const subfolderNames = ['scales_folder', 'studies', 'sociodem', 'layout'];
+  const subfolderNames = ['scales_folder', 'studies', 'sociodem', 'layout', 'study_01'];
   const pathParts = window.location.pathname.split('/').filter(s => s !== '');
   const parentDir = pathParts.length >= 2 ? pathParts[pathParts.length - 2] : '';
   const inSubfolder = subfolderNames.includes(parentDir);
