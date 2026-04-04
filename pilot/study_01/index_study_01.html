@@ -8,6 +8,13 @@
 
   <link rel="stylesheet" href="shared_study_01.css" />
 </head>
+
+// ── Guard: no consent = back to pilot home ──
+if (sessionStorage.getItem('study_01_consent') !== 'true') {
+  window.location.href = '../index.html';
+}
+
+
 <body>
 
   <div id="site-header"></div>
