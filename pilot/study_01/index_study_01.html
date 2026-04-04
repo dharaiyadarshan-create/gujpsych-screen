@@ -11,10 +11,7 @@
 
 <body>
 
-  // ── Guard: no consent = back to pilot home ──
-if (sessionStorage.getItem('study_01_consent') !== 'true') {
-  window.location.href = '../index.html';
-}
+  
   <div id="site-header"></div>
 
   <div class="study-card">
@@ -64,6 +61,12 @@ if (sessionStorage.getItem('study_01_consent') !== 'true') {
   </p>
 
 <script>
+
+  // ── Guard: no consent = back to pilot home ──
+  if (sessionStorage.getItem('study_01_consent') !== 'true') {
+  window.location.href = '../index.html';
+  }
+
   // ─────────────────────────────────────────────
   // STUDY 01 — Scale sequence definition
   // Add / remove / reorder entries here only.
