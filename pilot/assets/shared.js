@@ -81,10 +81,11 @@ function loadComponents() {
   const headerEl = document.getElementById('site-header');
   const footerEl = document.getElementById('site-footer');
 
-  // Detect if we are inside a subfolder (e.g. scales_folder/, sociodem/)
-  const inSubfolder = window.location.pathname.split('/').length > 2 &&
-                      !window.location.pathname.endsWith('/') &&
-                      window.location.pathname.split('/').slice(-2)[0] !== '';
+  // Detect if we are inside a subfolder (e.g. scales_folder/, sociodem/, studies/)
+  const subfolderNames = ['scales_folder', 'studies', 'sociodem', 'layout'];
+  const pathParts = window.location.pathname.split('/').filter(s => s !== '');
+  const parentDir = pathParts.length >= 2 ? pathParts[pathParts.length - 2] : '';
+  const inSubfolder = subfolderNames.includes(parentDir);
   const base = inSubfolder ? '../layout/' : 'layout/';
 
   if (headerEl) {
