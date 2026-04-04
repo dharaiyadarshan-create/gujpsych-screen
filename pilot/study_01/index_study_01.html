@@ -3,119 +3,474 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Study 01 · ACE PHQ GAD MSPSS</title>
-  <link rel="stylesheet" href="../assets/shared.css" />
-  <link rel="stylesheet" href="../sociodem/sociodem.css" />
-  <script src="../assets/shared.js"></script>
-  <script src="sociodem_study_01.js"></script>
-  <script src="export_study_01.js"></script>
-</head>
+  <title>GujPsych Screen – Study 01</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Gujarati:wght@400;500;700&family=Noto+Serif+Gujarati:wght@400;700&family=DM+Serif+Display&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
 
+  <style>
+    /* ── Design tokens ── */
+    :root {
+      --bg:         #F7F4EF;
+      --surface:    #FFFFFF;
+      --border:     #E2DDD6;
+      --text:       #1C1A17;
+      --text-soft:  #6B6560;
+      --accent:     #2D6A4F;
+      --accent-lt:  #D8EDE4;
+      --warn:       #B5451B;
+      --done:       #2D6A4F;
+      --pending:    #A89F96;
+      --radius:     12px;
+      --shadow:     0 2px 16px rgba(0,0,0,0.07);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', 'Noto Sans Gujarati', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem 1rem 4rem;
+    }
+
+    /* ── Header ── */
+    header {
+      width: 100%;
+      max-width: 680px;
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .logo-mark {
+      width: 44px; height: 44px;
+      background: var(--accent);
+      border-radius: 10px;
+      display: grid; place-items: center;
+      color: white;
+      font-size: 1.25rem;
+      font-family: 'DM Serif Display', serif;
+      flex-shrink: 0;
+    }
+    .site-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.4rem;
+      color: var(--text);
+      line-height: 1.1;
+    }
+    .site-subtitle {
+      font-size: 0.78rem;
+      color: var(--text-soft);
+      margin-top: 2px;
+      font-weight: 300;
+    }
+
+    /* ── Study card ── */
+    .study-card {
+      width: 100%;
+      max-width: 680px;
+      background: var(--surface);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .study-card-header {
+      background: var(--accent);
+      color: white;
+      padding: 1.5rem 2rem;
+    }
+    .study-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      opacity: 0.75;
+      margin-bottom: 0.4rem;
+    }
+    .study-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.6rem;
+      line-height: 1.2;
+    }
+    .study-title-gu {
+      font-family: 'Noto Serif Gujarati', serif;
+      font-size: 1rem;
+      opacity: 0.85;
+      margin-top: 0.3rem;
+    }
+
+    /* ── Progress bar ── */
+    .progress-wrap {
+      padding: 1.25rem 2rem;
+      border-bottom: 1px solid var(--border);
+      background: #FAFAF8;
+    }
+    .progress-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.78rem;
+      color: var(--text-soft);
+      margin-bottom: 0.6rem;
+    }
+    .progress-bar-bg {
+      height: 6px;
+      background: var(--border);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      background: var(--accent);
+      border-radius: 99px;
+      transition: width 0.5s ease;
+    }
+
+    /* ── Steps list ── */
+    .steps {
+      padding: 1.5rem 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .step {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.9rem 1rem;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      transition: all 0.2s ease;
+      cursor: default;
+    }
+
+    .step.done {
+      background: var(--accent-lt);
+      border-color: #A8D5C1;
+    }
+    .step.active {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(45,106,79,0.12);
+      cursor: pointer;
+    }
+    .step.active:hover {
+      background: #F0FAF5;
+    }
+    .step.locked {
+      opacity: 0.45;
+    }
+
+    .step-icon {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      display: grid; place-items: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+      font-weight: 500;
+    }
+    .step.done   .step-icon { background: var(--done);    color: white; }
+    .step.active .step-icon { background: var(--accent);  color: white; }
+    .step.locked .step-icon { background: var(--border);  color: var(--pending); }
+
+    .step-body { flex: 1; }
+    .step-name {
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: var(--text);
+    }
+    .step-name-gu {
+      font-family: 'Noto Sans Gujarati', sans-serif;
+      font-size: 0.78rem;
+      color: var(--text-soft);
+      margin-top: 1px;
+    }
+    .step-tag {
+      font-size: 0.68rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 2px 8px;
+      border-radius: 99px;
+      font-weight: 500;
+    }
+    .step.done   .step-tag { background: var(--done);   color: white; }
+    .step.active .step-tag { background: var(--accent); color: white; }
+    .step.locked .step-tag { background: var(--border); color: var(--pending); }
+
+    /* ── CTA button ── */
+    .cta-wrap {
+      padding: 0 2rem 2rem;
+    }
+    .btn-proceed {
+      width: 100%;
+      padding: 0.95rem 1.5rem;
+      background: var(--accent);
+      color: white;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1rem;
+      font-weight: 500;
+      border: none;
+      border-radius: var(--radius);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      transition: background 0.2s, transform 0.1s;
+    }
+    .btn-proceed:hover  { background: #245c43; }
+    .btn-proceed:active { transform: scale(0.98); }
+    .btn-proceed:disabled {
+      background: var(--border);
+      color: var(--pending);
+      cursor: not-allowed;
+    }
+
+    /* ── Complete state ── */
+    .complete-banner {
+      display: none;
+      margin: 0 2rem 2rem;
+      padding: 1.2rem 1.5rem;
+      background: var(--accent-lt);
+      border: 1px solid #A8D5C1;
+      border-radius: var(--radius);
+      text-align: center;
+    }
+    .complete-banner .icon { font-size: 2rem; margin-bottom: 0.4rem; }
+    .complete-banner p {
+      font-size: 0.9rem;
+      color: var(--done);
+      font-weight: 500;
+    }
+    .complete-banner p.gu {
+      font-family: 'Noto Sans Gujarati', sans-serif;
+      font-size: 0.82rem;
+      color: var(--text-soft);
+      font-weight: 400;
+      margin-top: 3px;
+    }
+
+    /* ── Footer note ── */
+    .footnote {
+      max-width: 680px;
+      width: 100%;
+      margin-top: 1.5rem;
+      font-size: 0.75rem;
+      color: var(--text-soft);
+      text-align: center;
+      line-height: 1.6;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 480px) {
+      .study-card-header { padding: 1.25rem 1.25rem; }
+      .progress-wrap, .steps { padding-left: 1.25rem; padding-right: 1.25rem; }
+      .cta-wrap { padding: 0 1.25rem 1.5rem; }
+      .complete-banner { margin: 0 1.25rem 1.5rem; }
+      .study-title { font-size: 1.3rem; }
+    }
+  </style>
+</head>
 <body>
 
-<div id="site-header"></div>
+  <header>
+    <div class="logo-mark">ગ</div>
+    <div>
+      <div class="site-title">GujPsych Screen</div>
+      <div class="site-subtitle">Anonymous Psychiatric Screening </div>
+    </div>
+  </header>
 
-<main class="page-main">
-  <h2 id="step-title"></h2>
-  <div id="step-container"></div>
-  <div id="nav-container" style="display:none; gap:1rem; margin-top:1rem;"></div>
-</main>
+  <div class="study-card">
 
-<div id="site-footer"></div>
+    <div class="study-card-header">
+      <div class="study-label">Study 01</div>
+      <div class="study-title">Childhood, Mood &amp; Social Support</div>
+      <div class="study-title-gu">બાળપણ અને માનસિક સ્વાસ્થ્ય</div>
+    </div>
+
+    <div class="progress-wrap">
+      <div class="progress-meta">
+        <span id="progress-label">પ્રગતિ / Progress</span>
+        <span id="progress-count">0 / 5 completed</span>
+      </div>
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill" id="progress-fill" style="width: 0%"></div>
+      </div>
+    </div>
+
+    <div class="steps" id="steps-list">
+      <!-- Rendered by JS -->
+    </div>
+
+    <div class="complete-banner" id="complete-banner">
+      <div class="icon">✓</div>
+      <p>All sections completed. Thank you!</p>
+      <p class="gu">બધા વિભાગો પૂર્ણ થયા. આભાર!</p>
+    </div>
+
+    <div class="cta-wrap" id="cta-wrap">
+      <button class="btn-proceed" id="btn-proceed" onclick="proceed()">
+        <span id="btn-label">આગળ વધો / Proceed</span>
+        <span>→</span>
+      </button>
+    </div>
+
+  </div>
+
+  <p class="footnote">
+    Your responses are anonymous and confidential.<br>
+    તમારા જવાબો ગુપ્ત અને અનામી છે.
+  </p>
 
 <script>
-  // 1. Consent Guard
-  if (localStorage.getItem("studyConsent") !== "true") {
-    window.location.href = "consent.html";
-  }
+  // ─────────────────────────────────────────────
+  // STUDY 01 — Scale sequence definition
+  // Add / remove / reorder entries here only.
+  // ─────────────────────────────────────────────
+  const STUDY_ID = 'study_01';
 
-  let step = 0;
-
-  const steps = [
-    { id: 'ace',     title: "બાળપણના પ્રતિકૂળ અનુભવો આંતરરાષ્ટ્રીય પ્રશ્નાવલી" },
-    { id: 'phq',     title: "ડિપ્રેશન સ્ક્રીનિંગ · PHQ-9" },
-    { id: 'gad',     title: "ચિંતા સ્ક્રીનિંગ · GAD-7" },
-    { id: 'mspss',   title: "સામાજિક આધાર · MSPSS" },
+  const STEPS = [
     {
-      id: 'sociodem',
-      title: "સામાજિક માહિતી · Sociodemographic",
-      content: `
-        <p>આ માહિતી સંશોધન હેતુ માટે છે.</p>
-        <div id="sociodem-container"></div>
-        <button id="sociodem-submit-btn" class="btn-primary" onclick="submitSociodem()" disabled style="margin-top:1rem;">સબમિટ કરો →</button>
-      `
+      key:    'consent',
+      name:   'Informed Consent',
+      nameGu: 'સ્વૈચ્છિક સંમતિ',
+      page:   'consent.html',
+      icon:   '📋',
     },
     {
-      id: 'results',
-      title: "આભાર · Thank You",
-      content: `
-        <p>તમે સફળતાપૂર્વક બધા સ્ટેપ્સ પૂર્ણ કર્યા છે. તમારો ડેટા સંશોધન માટે સ્ટોર થયો છે.</p>
-        <p>આભાર!</p>
-      `
+      key:    'who_ace_iq',
+      name:   'WHO ACE-IQ',
+      nameGu: 'બાળપણ પ્રતિકૂળ અનુભવ',
+      page:   'WHO-ACE-IQ-BINARY.html',
+      icon:   '🧩',
+    },
+    {
+      key:    'phq9',
+      name:   'PHQ-9',
+      nameGu: 'ડિપ્રેશન સ્ક્રીન',
+      page:   'PHQ-9.html',
+      icon:   '🧠',
+    },
+    {
+      key:    'gad7',
+      name:   'GAD-7',
+      nameGu: 'ચિંતા સ્ક્રીન',
+      page:   'GAD-7.html',
+      icon:   '💭',
+    },
+    {
+      key:    'mspss',
+      name:   'MSPSS',
+      nameGu: 'સામાજિક સહાય સ્ક્રીન',
+      page:   'MSPSS.html',
+      icon:   '🤝',
+    },
+    {
+      key:    'sociodemographic',
+      name:   'Sociodemographic Info',
+      nameGu: 'સામાજિક-વ્યક્તિગત માહિતી',
+      page:   'sociodem_study_01.html',
+      icon:   '👤',
     },
   ];
 
-  // Scale steps → local study_01 files
-  const scaleFiles = {
-    ACE:   'WHO-ACE-IQ-BINARY.html',
-    PHQ9:  'PHQ9.html',
-    GAD7:  'GAD7.html',
-    MSPSS: 'MSPSS.html',
-  };
-
-  const scaleStepMap = { ace: 'ACE', phq: 'PHQ9', gad: 'GAD7', mspss: 'MSPSS' };
-
-  const nextStepMap = { ACE: 'phq', PHQ9: 'gad', GAD7: 'mspss', MSPSS: 'sociodem' };
-
-  function startScale(scale) {
-    const currentPath = window.location.pathname;
-    const nextUrl     = `${currentPath}?next=${nextStepMap[scale]}`;
-    window.location.href = `${scaleFiles[scale]}?study=1&next=${encodeURIComponent(nextUrl)}`;
+  // ─────────────────────────────────────────────
+  // State helpers — sessionStorage keyed by study
+  // ─────────────────────────────────────────────
+  function isComplete(key) {
+    return sessionStorage.getItem(`${STUDY_ID}_${key}`) === 'true';
   }
 
-  function checkSociodemComplete() {
-    const btn = document.getElementById('sociodem-submit-btn');
-    if (btn) btn.disabled = !SocioDem.isComplete();
+  function getNextStep() {
+    return STEPS.find(s => !isComplete(s.key)) || null;
   }
 
-  async function submitSociodem() {
-    const sdData = SocioDem.getData();
-    if (!sdData) return;
-    await uploadSocioDemData(getToken(), sdData);
-    step = steps.findIndex(s => s.id === 'results');
-    renderStep();
+  function countComplete() {
+    return STEPS.filter(s => isComplete(s.key)).length;
   }
 
-  function renderStep() {
-    const currentStep = steps[step];
+  // ─────────────────────────────────────────────
+  // Render
+  // ─────────────────────────────────────────────
+  function render() {
+    const list       = document.getElementById('steps-list');
+    const fill       = document.getElementById('progress-fill');
+    const countEl    = document.getElementById('progress-count');
+    const btnProceed = document.getElementById('btn-proceed');
+    const btnLabel   = document.getElementById('btn-label');
+    const banner     = document.getElementById('complete-banner');
+    const ctaWrap    = document.getElementById('cta-wrap');
 
-    // Auto-navigate for scale steps
-    if (scaleStepMap[currentStep.id]) {
-      startScale(scaleStepMap[currentStep.id]);
-      return;
+    const done  = countComplete();
+    const total = STEPS.length;
+    const next  = getNextStep();
+    const pct   = Math.round((done / total) * 100);
+
+    // Progress
+    fill.style.width   = pct + '%';
+    countEl.textContent = `${done} / ${total} completed`;
+
+    // Steps
+    list.innerHTML = '';
+    STEPS.forEach((step, i) => {
+      const stepDone   = isComplete(step.key);
+      const isNext     = next && next.key === step.key;
+      const isLocked   = !stepDone && !isNext;
+
+      const cls = stepDone ? 'done' : isNext ? 'active' : 'locked';
+      const tag = stepDone ? 'Done ✓' : isNext ? 'Next →' : 'Locked';
+      const iconContent = stepDone ? '✓' : (i + 1);
+
+      const div = document.createElement('div');
+      div.className = `step ${cls}`;
+      if (isNext) div.onclick = proceed;
+
+      div.innerHTML = `
+        <div class="step-icon">${iconContent}</div>
+        <div class="step-body">
+          <div class="step-name">${step.name}</div>
+          <div class="step-name-gu">${step.nameGu}</div>
+        </div>
+        <span class="step-tag">${tag}</span>
+      `;
+      list.appendChild(div);
+    });
+
+    // CTA / complete state
+    if (!next) {
+      banner.style.display  = 'block';
+      ctaWrap.style.display = 'none';
+    } else {
+      banner.style.display  = 'none';
+      ctaWrap.style.display = 'block';
+      btnLabel.textContent  = `Proceed to ${next.name}`;
     }
-
-    document.getElementById("step-title").innerText = currentStep.title;
-    document.getElementById("step-container").innerHTML = currentStep.content || '';
-
-    document.getElementById('nav-container').style.display = 'none';
-
-    if (currentStep.id === 'sociodem') {
-      SocioDem.reset();
-      SocioDem.render('sociodem-container', 'college', 'district');
-      document.getElementById('sociodem-container')
-        .addEventListener('change', checkSociodemComplete);
-    }
   }
 
-  document.addEventListener('DOMContentLoaded', () => {
-    const next = new URLSearchParams(window.location.search).get('next');
-    if (next) {
-      const idx = steps.findIndex(s => s.id === next);
-      if (idx !== -1) step = idx;
-    }
-    renderStep();
-  });
+  // ─────────────────────────────────────────────
+  // Navigation
+  // ─────────────────────────────────────────────
+  function proceed() {
+    const next = getNextStep();
+    if (!next) return;
+
+    // Tell the target page to return here on completion
+    sessionStorage.setItem('return_to', `index_study_01.html`);
+    sessionStorage.setItem('return_study', STUDY_ID);
+
+    window.location.href = next.page;
+  }
+
+  // ─────────────────────────────────────────────
+  // Init — mark origin so scale pages know to return
+  // ─────────────────────────────────────────────
+  sessionStorage.setItem('origin', STUDY_ID);
+  render();
 </script>
 </body>
 </html>
