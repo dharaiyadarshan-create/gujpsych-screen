@@ -15,14 +15,9 @@
 <main class="page-main">
 
   <!-- ══════════════════════════
-       SCREEN 1 — CONSENT
+       SCREEN 1 — INTRO
   ══════════════════════════ -->
-  <script>
-    if (localStorage.getItem("studyConsent") !== "true") {
-      window.location.href = "consent.html";
-    }
-  </script>
-  <div class="screen active" id="screen-consent">
+  <div class="screen active" id="screen-intro">
 
     <span class="eyebrow">સ્વ-મૂલ્યાંકન · Self-Assessment</span>
     <h1>દર્દીના સ્વાસ્થ્ય માટે પ્રશ્નાવલી – ૯</h1>
@@ -35,7 +30,6 @@
         <li><span class="dot"></span>ભરવામાં સામાન્ય રીતે ૩ થી ૫ મિનિટ લાગે છે.</li>
         <li><span class="dot"></span>તમારા જવાબો સંપૂર્ણ અનામી છે — કોઈ અંગત માહિતી સંગ્રહ થતી નથી.</li>
         <li><span class="dot"></span>ભાગ લેવો સ્વૈચ્છિક છે. સબમિટ કરતાં પહેલાં ગમે ત્યારે બહાર નીકળી શકો.</li>
-        <li><span class="dot"></span>સબમિટ કર્યા બાદ ડેટા અનામી સ્વરૂપે સંશોધન માટે સ્ટોર થાય છે.</li>
       </ul>
     </div>
 
@@ -46,7 +40,7 @@
 
     <button class="btn-primary" onclick="startScale()">સ્વ-મૂલ્યાંકન શરૂ કરો →</button>
     <div class="mt-2">
-      <a href="../index.html" class="btn-ghost" style="width:100%;">← પાછળ જાઓ</a>
+      <a href="index_study_01.html" class="btn-ghost" style="width:100%;">← પાછળ જાઓ</a>
     </div>
 
   </div>
@@ -68,58 +62,21 @@
     <div id="questions-container"></div>
 
     <div class="scale-actions">
-      <button class="btn-ghost" onclick="showScreen('screen-consent')">← પાછળ</button>
-      <button class="btn-primary" id="submit-btn" onclick="afterScale()" disabled>આગળ વધો →</button>
+      <button class="btn-ghost" onclick="showScreen('screen-intro')">← પાછળ</button>
+      <button class="btn-primary" id="submit-btn" onclick="submitScale()" disabled>સબમિટ કરો →</button>
     </div>
 
   </div>
 
   <!-- ══════════════════════════
-       SCREEN 3 — RESULTS
+       SCREEN 3 — SUBMITTING
   ══════════════════════════ -->
-      
-    <div id="crisis-box" style="display:none;" class="notice notice-red mt-2">
-      <span class="notice-label">🆘 તાત્કાલિક સહાય</span>
-      <p>જો તમને પોતાને નુકસાન પહોંચાડવાના વિચારો આવી રહ્યા હોય, તો iCall પર સંપર્ક કરો: <strong>9152987821</strong>. તમે એકલા નથી.</p>
+  <div class="screen" id="screen-submitting">
+    <div style="text-align:center; padding: 3rem 1rem;">
+      <div style="font-size:2.5rem; margin-bottom:1rem;">⏳</div>
+      <p style="font-size:1rem; color:var(--text-secondary);">ડેટા સેવ થઈ રહ્યો છે… / Saving your responses…</p>
     </div>
-
-    <div class="card mt-2">
-      <div class="card-label">અર્થઘટન · Interpretation</div>
-      <p id="result-interp" style="font-size:0.9rem; color:var(--text-secondary); line-height:1.75;"></p>
-    </div>
-
-    <div id="fi-result-card" class="card">
-      <div class="card-label">કાર્યક્ષમતા પર અસર · Functional Impact</div>
-      <p id="fi-result-text" style="font-size:0.9rem; color:var(--text-secondary);"></p>
-    </div>
-
-    <div class="card">
-      <div class="card-label">પ્રશ્નવાર જવાબ · Item Breakdown</div>
-      <div id="breakdown-container"></div>
-      <div class="divider"></div>
-      <div style="display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:11px;">
-        <span style="color:var(--text-muted);">કુલ સ્કોર</span>
-        <span id="total-score-line" style="color:var(--text-primary);font-weight:500;"></span>
-      </div>
-    </div>
-
-    <div class="notice notice-amber">
-      <span class="notice-label">📋 યાદ રાખો</span>
-      <p>ઉચ્ચ સ્કોર આવ્યો હોય તો ડૉક્ટર અથવા મનોચિકિત્સક પાસે જવું આવશ્યક છે.</p>
-    </div>
-
-    <div class="attribution">
-      Drs. Robert L. Spitzer, Janet B.W. Williams, Kurt Kroenke અને સહયોગીઓ દ્વારા Pfizer Inc થી શૈક્ષણિક અનુદાનની સહાયતાથી વિકસિત.
-      અનુવાદ, પ્રકાશિત અથવા વિતરણ કરવા અનુમતિની આવશ્યકતા નથી.
-    </div>
-
-    <div class="result-actions">
-      <button class="btn-primary" onclick="startScale()">ફરીથી ભરો</button>
-      <a href="../index.html" class="btn-ghost">← મુખ્ય પૃષ્ઠ</a>
-    </div>
-
   </div>
-
 
 </main>
 
@@ -128,12 +85,20 @@
   તમારા જવાબો ગુપ્ત અને અનામી છે.
 </p>
 
+<script src="../assets/shared.js"></script>
+<script src="export_study_01.js"></script>
+
 <script>
-  // 1. DATA DEFINITIONS
+  // ── Guard: must have consent ──
+  if (sessionStorage.getItem('study_01_consent') !== 'true') {
+    window.location.href = 'consent.html';
+  }
+
+  // ── Data definitions ──
   const questions = [
     "પ્રવૃત્તિ કરવામાં ઓછો રસ અથવા ઓછો આનંદ",
     "હતાશા, ઊદાસી અથવા નિરાશા લાગવી",
-    "ઊંઘ ન આવવી, વચ્ચે ઊંઘ ઉડી જવી, વધારે ઊંઘ આવવી",
+    "ઊંઘ ન આવવી, વચ્ચે ઊંઘ ઉડી જાવી, વધારે ઊંઘ આવવી",
     "થાક અથવા અશક્તિ લાગવી",
     "ભૂખ ઓછી કે વધારે લાગવી",
     "તમને તમારા વિષે ખરાબ લાગે અથવા તમે નિષ્ફળ ગયા છો અથવા તમે તમારી અથવા તમારા સ્વજનોની અપેક્ષા સંતોષી નથી",
@@ -143,35 +108,50 @@
   ];
 
   const phqOptions = [
-    { label: "જરા પણ નહી", score: 0 },
-    { label: "કેટલાય દિવસો", score: 1 },
+    { label: "જરા પણ નહી",           score: 0 },
+    { label: "કેટલાય દિવસો",          score: 1 },
     { label: "અધાથી વધારે દિવસોમાં", score: 2 },
-    { label: "લગભગ રોજ", score: 3 }
+    { label: "લગભગ રોજ",             score: 3 }
   ];
 
-  const fiOptions = ["કોઈ તકલીફ નથી", "થોડીક તકલીફ", "વધારે તકલીફ", "બહુ જ વધારે તકલીફ"];
+  const fiOptions = [
+    "કોઈ તકલીફ નથી",
+    "થોડીક તકલીફ",
+    "વધારે તકલીફ",
+    "બહુ જ વધારે તકલીફ"
+  ];
 
-  // 2. STATE MANAGEMENT
-  let answers = new Array(questions.length).fill(null);
+  const TOTAL_QUESTIONS = questions.length + 1; // 9 + 1 FI
+
+  // ── State ──
+  let answers  = new Array(questions.length).fill(null);
   let fiAnswer = null;
-  const TOTAL_QUESTIONS = questions.length + 1; // 9 questions + 1 functional impairment
 
-  // 3. UI FUNCTIONS (The "Engine")
+  // ── Helpers ──
   function toGu(num) {
-    const guChars = ['૦','૧','૨','૩','૪','૫','૬','૭','૮','૯'];
-    return num.toString().split('').map(d => guChars[parseInt(d)] || d).join('');
+    return num.toString().split('').map(d =>
+      ['૦','૧','૨','૩','૪','૫','૬','૭','૮','૯'][parseInt(d)] ?? d
+    ).join('');
   }
 
   function showScreen(id) {
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-    const target = document.getElementById(id);
-    if(target) target.classList.add('active');
-    window.scrollTo(0,0);
+    const t = document.getElementById(id);
+    if (t) t.classList.add('active');
+    window.scrollTo(0, 0);
   }
 
-  // THIS IS THE BUTTON FUNCTION THAT IS CURRENTLY "NOT WORKING"
+  function getBand(score) {
+    if (score <= 4)  return 'Minimal';
+    if (score <= 9)  return 'Mild';
+    if (score <= 14) return 'Moderate';
+    if (score <= 19) return 'Moderately Severe';
+    return 'Severe';
+  }
+
+  // ── Scale ──
   function startScale() {
-    answers = new Array(questions.length).fill(null);
+    answers  = new Array(questions.length).fill(null);
     fiAnswer = null;
     renderQuestions();
     showScreen('screen-scale');
@@ -179,18 +159,18 @@
 
   function renderQuestions() {
     const container = document.getElementById('questions-container');
-    if(!container) return;
-    
+    if (!container) return;
+
     let html = '';
-    // Render the 9 main questions
+
     questions.forEach((q, i) => {
       html += `
         <div class="q-card ${answers[i] !== null ? 'answered' : ''}">
-          <div class="q-num">પ્રશ્ન ${toGu(i+1)} / ${toGu(TOTAL_QUESTIONS)}</div>
+          <div class="q-num">પ્રશ્ન ${toGu(i + 1)} / ${toGu(TOTAL_QUESTIONS)}</div>
           <div class="q-text">${q}</div>
           <div class="options-grid">
             ${phqOptions.map(opt => `
-              <button class="opt-btn ${answers[i] === opt.score ? 'selected' : ''}" 
+              <button class="opt-btn ${answers[i] === opt.score ? 'selected' : ''}"
                       onclick="selectPHQ(${i}, ${opt.score})">
                 ${opt.label}
               </button>
@@ -199,20 +179,21 @@
         </div>`;
     });
 
-    // Render the final functional impairment question
+    // Functional impairment
     html += `
       <div class="q-card ${fiAnswer !== null ? 'answered' : ''}">
         <div class="q-num">પ્રશ્ન ${toGu(TOTAL_QUESTIONS)} / ${toGu(TOTAL_QUESTIONS)}</div>
         <div class="q-text">જો આવી કોઈ સમસ્યા પર નિશાન લગાવ્યો હોય, તો તમારા કાર્યમાં, ઘરની દેખરેખમાં અથવા વ્યક્તિઓ સાથે મેળ-જોળ રાખવામાં કેટલી તકલીફ થઈ?</div>
         <div class="options-grid">
           ${fiOptions.map((opt, idx) => `
-            <button class="opt-btn ${fiAnswer === idx ? 'selected' : ''}" onclick="selectFI(${idx})">
+            <button class="opt-btn ${fiAnswer === idx ? 'selected' : ''}"
+                    onclick="selectFI(${idx})">
               ${opt}
             </button>
           `).join('')}
         </div>
       </div>`;
-      
+
     container.innerHTML = html;
     updateProgress();
   }
@@ -229,43 +210,37 @@
 
   function updateProgress() {
     const done = answers.filter(a => a !== null).length + (fiAnswer !== null ? 1 : 0);
-    const progress = (done / TOTAL_QUESTIONS) * 100;
     const fill = document.getElementById('progress-fill');
-    const txt = document.getElementById('progress-text');
-    const btn = document.getElementById('submit-btn');
-    
-    if(fill) fill.style.width = progress + '%';
-    if(txt) txt.textContent = `${toGu(done)} / ${toGu(TOTAL_QUESTIONS)}`;
-    if(btn) btn.disabled = (done < TOTAL_QUESTIONS);
+    const txt  = document.getElementById('progress-text');
+    const btn  = document.getElementById('submit-btn');
+    if (fill) fill.style.width = `${(done / TOTAL_QUESTIONS) * 100}%`;
+    if (txt)  txt.textContent  = `${toGu(done)} / ${toGu(TOTAL_QUESTIONS)}`;
+    if (btn)  btn.disabled     = done < TOTAL_QUESTIONS;
   }
 
-  // 4. THE REDIRECTION (Your Goal)
-  function afterScale() {
-    const score = answers.reduce((s, v) => s + (v || 0), 0);
-    
-    submitToSheets({
-      type: 'scale',
-      scale: 'PHQ-9',
-      answers: answers,
-      totalScore: score,
-      timestamp: new Date().toISOString()
-    });
+  // ── Submit ──
+  async function submitScale() {
+    showScreen('screen-submitting');
 
-    const returnTo = sessionStorage.getItem('return_to');
-    const returnStudy = sessionStorage.getItem('return_study');
+    const score      = answers.reduce((s, v) => s + (v ?? 0), 0);
+    const band       = getBand(score);
+    const itemsArray = [...answers, fiAnswer]; // 9 items + FI = 10
+    const token      = sessionStorage.getItem('study_token');
+    const impairment = fiOptions[fiAnswer] ?? '';
 
-    if (returnTo && returnStudy) {
-      sessionStorage.setItem(`${returnStudy}_phq9`, 'true');
-      window.location.href = returnTo;
-    } else {
-      sessionStorage.setItem('temp_score', score);
-      sessionStorage.setItem('last_scale', 'PHQ-9');
-      window.location.href = '../sociodem/sociodem.html';
+    try {
+      await uploadScaleData(token, 'PHQ-9', score, band, itemsArray, impairment);
+    } catch (err) {
+      console.error('PHQ-9 upload failed:', err);
+      // Continue anyway — don't block participant
     }
+
+    sessionStorage.setItem('study_01_phq9', 'true');
+    window.location.href = 'index_study_01.html';
   }
 </script>
 
 <div id="site-footer"></div>
-<script src="../assets/shared.js"></script>
+
 </body>
 </html>

@@ -15,9 +15,9 @@
 <main class="page-main">
 
   <!-- ══════════════════════════
-       SCREEN 1 — CONSENT
+       SCREEN 1 — INTRO
   ══════════════════════════ -->
-  <div class="screen active" id="screen-consent">
+  <div class="screen active" id="screen-intro">
 
     <span class="eyebrow">સ્વ-મૂલ્યાંકન · Self-Assessment</span>
     <h1>બહુઆયામી સમજાયેલ સામાજિક આધાર માપ</h1>
@@ -30,7 +30,6 @@
         <li><span class="dot"></span>ભરવામાં સામાન્ય રીતે ૩ થી ૫ મિનિટ લાગે છે.</li>
         <li><span class="dot"></span>તમારા જવાબો સંપૂર્ણ અનામી છે — કોઈ અંગત માહિતી સંગ્રહ થતી નથી.</li>
         <li><span class="dot"></span>ભાગ લેવો સ્વૈચ્છિક છે. સબમિટ કરતાં પહેલાં ગમે ત્યારે બહાર નીકળી શકો.</li>
-        <li><span class="dot"></span>સબમિટ કર્યા બાદ ડેટા અનામી સ્વરૂપે સંશોધન માટે સ્ટોર થાય છે.</li>
       </ul>
     </div>
 
@@ -41,7 +40,7 @@
 
     <button class="btn-primary" onclick="startScale()">સ્વ-મૂલ્યાંકન શરૂ કરો →</button>
     <div class="mt-2">
-      <a href="../index.html" class="btn-ghost" style="width:100%;">← પાછળ જાઓ</a>
+      <a href="index_study_01.html" class="btn-ghost" style="width:100%;">← પાછળ જાઓ</a>
     </div>
 
   </div>
@@ -63,26 +62,20 @@
     <div id="questions-container"></div>
 
     <div class="scale-actions">
-      <button class="btn-ghost" onclick="showScreen('screen-consent')">← પાછળ</button>
-      <button class="btn-primary" id="submit-btn" onclick="afterScale()" disabled>આગળ વધો →</button>
+      <button class="btn-ghost" onclick="showScreen('screen-intro')">← પાછળ</button>
+      <button class="btn-primary" id="submit-btn" onclick="submitScale()" disabled>સબમિટ કરો →</button>
     </div>
 
   </div>
 
   <!-- ══════════════════════════
-       SCREEN 3 — RESULTS
+       SCREEN 3 — SUBMITTING
   ══════════════════════════ -->
-  
-    <div class="attribution">
-      Zimet, G.D., Dahlem, N.W., Zimet, S.G. &amp; Farley, G.K. (1988) દ્વારા વિકસિત.
-      ગુજરાતી અનુવાદ સંશોધન હેતુ માટે.
+  <div class="screen" id="screen-submitting">
+    <div style="text-align:center; padding: 3rem 1rem;">
+      <div style="font-size:2.5rem; margin-bottom:1rem;">⏳</div>
+      <p style="font-size:1rem; color:var(--text-secondary);">ડેટા સેવ થઈ રહ્યો છે… / Saving your responses…</p>
     </div>
-
-    <div class="result-actions">
-      <button class="btn-primary" onclick="startScale()">ફરીથી ભરો</button>
-      <a href="../studies/study-ace-phq-gad-mspss/index.html" class="btn-ghost">← મુખ્ય પૃષ્ઠ</a>
-    </div>
-
   </div>
 
 </main>
@@ -92,64 +85,87 @@
   તમારા જવાબો ગુપ્ત અને અનામી છે.
 </p>
 
-<script>
+<script src="../assets/shared.js"></script>
+<script src="export_study_01.js"></script>
 
-  // ── MSPSS DATA ─────────────────────────────────────────────────
+<script>
+  // ── Guard: must have consent ──
+  if (sessionStorage.getItem('study_01_consent') !== 'true') {
+    window.location.href = 'consent.html';
+  }
+
+  // ── Data definitions ──
   // Subscale key: SO = Special Other, FA = Family, FR = Friends
   const questions = [
-    { text: "જ્યારે મને જરૂર હોય છે, ત્યારે મારી આસપાસ કોઈ ખાસ વ્યક્તિ હોય છે.", sub: 'SO' },
-    { text: "કોઈ ખાસ વ્યક્તિ છે જેની સાથે હું મારા સુખ-દુઃખ વહેંચી શકું છું.", sub: 'SO' },
-    { text: "મારો પરિવાર (કુટુંબ) ખરેખર મને મદદ કરવાનો પ્રયત્ન કરે છે.", sub: 'FA' },
-    { text: "મને મારા પરિવાર (કુટુંબ) તરફથી જરૂરી લાગણી સભર મદદ અને ટેકો મળે છે.", sub: 'FA' },
-    { text: "એક ખાસ વ્યક્તિ છે જે મને માનસિક રીતે સહારો આપે છે.", sub: 'SO' },
-    { text: "મારા મિત્રો ખરેખર મને મદદ કરવાનો પ્રયાસ કરે છે.", sub: 'FR' },
-    { text: "જ્યારે સમસ્યાઓ આવે છે, ત્યારે હું મારા મિત્રો પર આધાર રાખી શકું છું.", sub: 'FR' },
-    { text: "હું મારી સમસ્યાઓ વિશે મારા કુટુંબ સાથે વાત કરી શકું છું.", sub: 'FA' },
-    { text: "મારી પાસે એવા મિત્રો છે જેમની સાથે હું મારા સુખ-દુઃખ વહેંચી શકું છું.", sub: 'FR' },
-    { text: "મારા જીવનમાં એવી કોઈ ખાસ વ્યક્તિ છે, જે હું કેવી લાગણીઓ અનુભવું છું તેની કાળજી રાખે છે.", sub: 'SO' },
-    { text: "મારો પરિવાર (કુટુંબ) મને નિર્ણયો લેવામાં મદદ કરવા તૈયાર હોય છે.", sub: 'FA' },
-    { text: "હું મારા મિત્રો સાથે મારી સમસ્યાઓ વિશે વાત કરી શકું છું.", sub: 'FR' }
+    { text: "જ્યારે મને જરૂર હોય છે, ત્યારે મારી આસપાસ કોઈ ખાસ વ્યક્તિ હોય છે.",                          sub: 'SO' },
+    { text: "કોઈ ખાસ વ્યક્તિ છે જેની સાથે હું મારા સુખ-દુઃખ વહેંચી શકું છું.",                              sub: 'SO' },
+    { text: "મારો પરિવાર (કુટુંબ) ખરેખર મને મદદ કરવાનો પ્રયત્ન કરે છે.",                                    sub: 'FA' },
+    { text: "મને મારા પરિવાર (કુટુંબ) તરફથી જરૂરી લાગણી સભર મદદ અને ટેકો મળે છે.",                         sub: 'FA' },
+    { text: "એક ખાસ વ્યક્તિ છે જે મને માનસિક રીતે સહારો આપે છે.",                                          sub: 'SO' },
+    { text: "મારા મિત્રો ખરેખર મને મદદ કરવાનો પ્રયાસ કરે છે.",                                              sub: 'FR' },
+    { text: "જ્યારે સમસ્યાઓ આવે છે, ત્યારે હું મારા મિત્રો પર આધાર રાખી શકું છું.",                         sub: 'FR' },
+    { text: "હું મારી સમસ્યાઓ વિશે મારા કુટુંબ સાથે વાત કરી શકું છું.",                                     sub: 'FA' },
+    { text: "મારી પાસે એવા મિત્રો છે જેમની સાથે હું મારા સુખ-દુઃખ વહેંચી શકું છું.",                        sub: 'FR' },
+    { text: "મારા જીવનમાં એવી કોઈ ખાસ વ્યક્તિ છે, જે હું કેવી લાગણીઓ અનુભવું છું તેની કાળજી રાખે છે.",    sub: 'SO' },
+    { text: "મારો પરિવાર (કુટુંબ) મને નિર્ણયો લેવામાં મદદ કરવા તૈયાર હોય છે.",                             sub: 'FA' },
+    { text: "હું મારા મિત્રો સાથે મારી સમસ્યાઓ વિશે વાત કરી શકું છું.",                                     sub: 'FR' }
   ];
 
   const mspssOptions = [
-    { label: "બિલકુલ અસહમત",    score: 1 },
-    { label: "અસહમત",           score: 2 },
-    { label: "થોડા અસહમત",      score: 3 },
-    { label: "તટસ્થ",            score: 4 },
-    { label: "થોડું સહમત",       score: 5 },
-    { label: "સહમત",            score: 6 },
-    { label: "બિલકુલ સહમત",     score: 7 }
+    { label: "બિલકુલ અસહમત", score: 1 },
+    { label: "અસહમત",        score: 2 },
+    { label: "થોડા અસહમત",   score: 3 },
+    { label: "તટસ્થ",         score: 4 },
+    { label: "થોડું સહમત",    score: 5 },
+    { label: "સહમત",         score: 6 },
+    { label: "બિલકુલ સહમત",  score: 7 }
   ];
 
-  const subscaleLabels = {
-    SO: { gu: 'ખાસ વ્યક્તિ', en: 'Special Other' },
-    FA: { gu: 'પરિવાર',      en: 'Family'         },
-    FR: { gu: 'મિત્રો',      en: 'Friends'        }
-  };
+  const TOTAL = questions.length; // 12
 
-  // ── STATE ──────────────────────────────────────────────────────
-  let answers = new Array(questions.length).fill(null);
-  const TOTAL = questions.length;
+  // ── State ──
+  let answers = new Array(TOTAL).fill(null);
 
-  // ── ON LOAD — check if returning from sociodem ─────────────────
-  document.addEventListener('DOMContentLoaded', () => {
-    const params = new URLSearchParams(window.location.search);
-    if (params.get('results') === '1') {
-      const saved = sessionStorage.getItem('gps_mspss_state');
-      if (saved) {
-        const state = JSON.parse(saved);
-        answers = state.answers;
-        renderResults();
-        showScreen('screen-results');
-      } else {
-        showScreen('screen-consent');
-      }
-    }
-  });
+  // ── Helpers ──
+  function toGu(num) {
+    return num.toString().split('').map(d =>
+      ['૦','૧','૨','૩','૪','૫','૬','૭','૮','૯'][parseInt(d)] ?? d
+    ).join('');
+  }
 
-  // ── RENDER QUESTIONS ───────────────────────────────────────────
+  function showScreen(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    const t = document.getElementById(id);
+    if (t) t.classList.add('active');
+    window.scrollTo(0, 0);
+  }
+
+  function getBand(score) {
+    // Mean item score (total / 12) banding
+    const mean = score / TOTAL;
+    if (mean <= 2.9) return 'Low Support';
+    if (mean <= 5.0) return 'Moderate Support';
+    return 'High Support';
+  }
+
+  function getSubscores() {
+    const scores = { SO: 0, FA: 0, FR: 0 };
+    questions.forEach((q, i) => {
+      if (answers[i] !== null) scores[q.sub] += answers[i];
+    });
+    return scores;
+  }
+
+  // ── Scale ──
+  function startScale() {
+    answers = new Array(TOTAL).fill(null);
+    renderQuestions();
+    showScreen('screen-scale');
+  }
+
   function renderQuestions() {
     const c = document.getElementById('questions-container');
+    if (!c) return;
     c.innerHTML = '';
 
     questions.forEach((q, i) => {
@@ -157,17 +173,18 @@
       card.className = 'q-card' + (answers[i] !== null ? ' answered' : '');
       card.id = `qc-${i}`;
       card.innerHTML = `
-        <div class="q-num">વિધાન ${toGu(i+1)} / ${toGu(TOTAL)}</div>
+        <div class="q-num">વિધાન ${toGu(i + 1)} / ${toGu(TOTAL)}</div>
         <div class="q-text">${q.text}</div>
         <div class="options-grid" id="og-${i}"></div>
       `;
       c.appendChild(card);
+
       const grid = card.querySelector(`#og-${i}`);
       mspssOptions.forEach(opt => {
         const btn = document.createElement('button');
         btn.className = 'opt-btn' + (answers[i] === opt.score ? ' selected' : '');
-        btn.innerHTML = `<span class="opt-pip">${answers[i] === opt.score ? '✓' : ''}</span>${opt.label}`;
-        btn.onclick = () => selectMSPSS(i, opt.score, grid);
+        btn.textContent = opt.label;
+        btn.onclick = () => selectMSPSS(i, opt.score, grid, card);
         grid.appendChild(btn);
       });
     });
@@ -175,127 +192,56 @@
     updateProgress();
   }
 
-  function selectMSPSS(i, score, grid) {
+  function selectMSPSS(i, score, grid, card) {
     answers[i] = score;
     grid.querySelectorAll('.opt-btn').forEach((b, idx) => {
-      const sel = mspssOptions[idx].score === score;
-      b.classList.toggle('selected', sel);
-      b.querySelector('.opt-pip').textContent = sel ? '✓' : '';
+      b.classList.toggle('selected', mspssOptions[idx].score === score);
     });
-    document.getElementById(`qc-${i}`).classList.add('answered');
+    card.classList.add('answered');
     updateProgress();
   }
 
   function updateProgress() {
     const done = answers.filter(a => a !== null).length;
-    document.getElementById('progress-fill').style.width = (done / TOTAL * 100) + '%';
-    document.getElementById('progress-text').textContent = `${toGu(done)} / ${toGu(TOTAL)}`;
-    document.getElementById('submit-btn').disabled = !answers.every(a => a !== null);
+    const fill = document.getElementById('progress-fill');
+    const txt  = document.getElementById('progress-text');
+    const btn  = document.getElementById('submit-btn');
+    if (fill) fill.style.width = `${(done / TOTAL) * 100}%`;
+    if (txt)  txt.textContent  = `${toGu(done)} / ${toGu(TOTAL)}`;
+    if (btn)  btn.disabled     = done < TOTAL;
   }
 
-  // ── SCORING ────────────────────────────────────────────────────
-  function getTotal() {
-    return answers.reduce((s, v) => s + (v || 0), 0);
-  }
+  // ── Submit ──
+  async function submitScale() {
+    showScreen('screen-submitting');
 
-  function getSubscores() {
-    const scores = { SO: 0, FA: 0, FR: 0 };
-    const counts = { SO: 0, FA: 0, FR: 0 };
-    questions.forEach((q, i) => {
-      if (answers[i] !== null) {
-        scores[q.sub] += answers[i];
-        counts[q.sub]++;
-      }
-    });
-    return { scores, counts };
-  }
+    const score      = answers.reduce((s, v) => s + (v ?? 0), 0);
+    const band       = getBand(score);
+    const subscores  = getSubscores();
+    const itemsArray = [...answers]; // 12 items
+    const token      = sessionStorage.getItem('study_token');
 
-  // ── NAVIGATION ─────────────────────────────────────────────────
-  function startScale() {
-    answers = new Array(questions.length).fill(null);
-    sessionStorage.removeItem('gps_mspss_state');
-    renderQuestions();
-    showScreen('screen-scale');
-  }
-
-  function afterScale() {
-    const total = getTotal();
-    const { scores } = getSubscores();
-
-    sessionStorage.setItem('gps_mspss_state', JSON.stringify({ answers }));
-
-    submitToSheets({
-      type:      'scale',
-      scale:     'MSPSS',
-      token:     getToken(),
-      score:     total,
-      so_score:  scores.SO,
-      fa_score:  scores.FA,
-      fr_score:  scores.FR,
-      items:     answers,
-      timestamp: new Date().toISOString()
+    // Pack subscores into impairment field as JSON string
+    // (reuses existing export API without schema change)
+    const impairment = JSON.stringify({
+      SO: subscores.SO,
+      FA: subscores.FA,
+      FR: subscores.FR
     });
 
-    const returnTo = sessionStorage.getItem('return_to');
-    const returnStudy = sessionStorage.getItem('return_study');
-
-    if (returnTo && returnStudy) {
-      sessionStorage.setItem(`${returnStudy}_mspss`, 'true');
-      window.location.href = returnTo;
-    } else {
-      window.location.href = '../index.html';
+    try {
+      await uploadScaleData(token, 'MSPSS', score, band, itemsArray, impairment);
+    } catch (err) {
+      console.error('MSPSS upload failed:', err);
+      // Continue anyway — don't block participant
     }
+
+    sessionStorage.setItem('study_01_mspss', 'true');
+    window.location.href = 'index_study_01.html';
   }
-
-  // ── RENDER RESULTS ─────────────────────────────────────────────
-  function renderResults() {
-    const total = getTotal();
-    const { scores } = getSubscores();
-
-    // Score ring — neutral styling (no severity bands)
-    const ring = document.getElementById('result-ring');
-    ring.style.borderColor = 'var(--accent)';
-    ring.style.background  = 'var(--accent-soft)';
-
-    const num = document.getElementById('result-score-num');
-    num.textContent = toGu(total);
-    num.style.color = 'var(--accent)';
-
-    document.getElementById('total-score-line').textContent = `${toGu(total)} / ૮૪`;
-
-    // Subscale scores
-    const sc = document.getElementById('subscale-container');
-    sc.innerHTML = '';
-    ['SO', 'FA', 'FR'].forEach(key => {
-      const row = document.createElement('div');
-      row.className = 'breakdown-row';
-      row.innerHTML = `
-        <div class="breakdown-q">
-          ${subscaleLabels[key].gu}
-          <span style="font-size:10px;color:var(--text-muted);margin-left:4px;">${subscaleLabels[key].en}</span>
-        </div>
-        <div class="breakdown-val">${scores[key]} / 28</div>
-      `;
-      sc.appendChild(row);
-    });
-
-    // Item breakdown
-    const bc = document.getElementById('breakdown-container');
-    bc.innerHTML = '';
-    questions.forEach((q, i) => {
-      const row = document.createElement('div');
-      row.className = 'breakdown-row';
-      row.innerHTML = `
-        <div class="breakdown-q">${toGu(i+1)}. ${q.text}</div>
-        <div class="breakdown-val">${answers[i]}</div>
-      `;
-      bc.appendChild(row);
-    });
-  }
-
 </script>
 
 <div id="site-footer"></div>
-<script src="../assets/shared.js"></script>
+
 </body>
 </html>

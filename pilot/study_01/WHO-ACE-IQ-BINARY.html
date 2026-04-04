@@ -14,12 +14,10 @@
 
 <main class="page-main">
 
-  <script>
-    if (localStorage.getItem("studyConsent") !== "true") {
-      window.location.href = "consent.html";
-    }
-  </script>
-  <div class="screen active" id="screen-consent">
+  <!-- ══════════════════════════
+       SCREEN 1 — INTRO
+  ══════════════════════════ -->
+  <div class="screen active" id="screen-intro">
 
     <span class="eyebrow">સ્વ-મૂલ્યાંકન · Self-Assessment</span>
     <h1>બાળપણના પ્રતિકૂળ અનુભવો આંતરરાષ્ટ્રીય પ્રશ્નાવલી</h1>
@@ -29,19 +27,20 @@
       <div class="card-label">આ મૂલ્યાંકન વિશે</div>
       <ul class="info-list">
         <li><span class="dot"></span>ACE-IQ બાળપણના (૧૮ વર્ષ સુધી) મુશ્કેલ અનુભવ પર કેન્દ્રિત છે.</li>
-        <li><span class="dot"></span>કુલ ૨૩ સરળ હા/ના પ્રશ્નો; જવાબ આપવાંમાં  ~૭-૯ મિનિટ.</li>
+        <li><span class="dot"></span>કુલ ૨૩ સરળ હા/ના પ્રશ્નો; જવાબ આપવાંમાં ~૭-૯ મિનિટ.</li>
         <li><span class="dot"></span>જવાબો પૂરી રીતે ગોપનીય છે.</li>
+        <li><span class="dot"></span>ભાગ લેવો સ્વૈચ્છિક છે. ગમે ત્યારે બહાર નીકળી શકો.</li>
       </ul>
     </div>
 
     <div class="notice notice-amber">
       <span class="notice-label">⚠ મહત્વની જાણ</span>
-      <p>આ પ્રશ્નાવલીમાં કેટલાક સંવેદનશીલ સવાલો છે, જે તમને અસ્વસ્થ કરી શકે છે.જો કોઈ પ્રશ્ન અસ્વસ્થ કરે, તો તમે બહાર નીકળી શકો છો. આ ક્લિનિકલ નિદાન નથી.</p>
+      <p>આ પ્રશ્નાવલીમાં કેટલાક સંવેદનશીલ સવાલો છે, જે તમને અસ્વસ્થ કરી શકે છે. જો કોઈ પ્રશ્ન અસ્વસ્થ કરે, તો તમે બહાર નીકળી શકો છો. આ ક્લિનિકલ નિદાન નથી.</p>
     </div>
 
     <button class="btn-primary" onclick="startScale()">સ્વ-મૂલ્યાંકન શરૂ કરો →</button>
     <div class="mt-2">
-      <a href="../index.html" class="btn-ghost" style="width:100%;">← પાછળ જાઓ</a>
+      <a href="index_study_01.html" class="btn-ghost" style="width:100%;">← પાછળ જાઓ</a>
     </div>
 
   </div>
@@ -63,531 +62,262 @@
     <div id="questions-container"></div>
 
     <div class="scale-actions">
-      <button id="submit-btn" class="btn-primary" onclick="afterScale()" disabled>સબમિટ કરો →</button>
-      <button class="btn-ghost" onclick="showScreen('index_study_01.html')">← પાછળ</button>
+      <button class="btn-ghost" onclick="showScreen('screen-intro')">← પાછળ</button>
+      <button id="submit-btn" class="btn-primary" onclick="submitScale()" disabled>સબમિટ કરો →</button>
     </div>
 
   </div>
 
   <!-- ══════════════════════════
-       SCREEN 3 — RESULTS
+       SCREEN 3 — SUBMITTING
   ══════════════════════════ -->
- 
-    <div class="attribution" style="font-size:0.65rem;color:var(--text-muted);line-height:1.35;">
-      Translated into Gujarati from The Adverse Childhood Experiences International Questionnaire (ACE-IQ),
-      Geneva, World Health Organization (WHO), 2011,
-      <a href="https://www.who.int/publications/m/item/adverse-childhood-experiences-international-questionnaire-(ace-iq" target="_blank" rel="noopener">
-        https://www.who.int/publications/m/item/adverse-childhood-experiences-international-questionnaire-(ace-iq
-      </a>, accessed December 18, 2025.
-      WHO is not responsible for the content or accuracy of this translation/adaptation.
-      In the event of any inconsistency between the English and the Gujarati translation,
-      the original English version shall be the binding and authentic version.
+  <div class="screen" id="screen-submitting">
+    <div style="text-align:center; padding: 3rem 1rem;">
+      <div style="font-size:2.5rem; margin-bottom:1rem;">⏳</div>
+      <p style="font-size:1rem; color:var(--text-secondary);">ડેટા સેવ થઈ રહ્યો છે… / Saving your responses…</p>
     </div>
-
-    <div class="result-actions">
-      <button class="btn-primary" onclick="startScale()">ફરીથી ભરો</button>
-      <a href="../index.html" class="btn-ghost">← મુખ્ય પૃષ્ઠ</a>
-    </div>
-
   </div>
 
 </main>
 
 <p class="footnote">
-  Your responses are anonymous and confidential.<br>
-  તમારા જવાબો ગુપ્ત અને અનામી છે.
+  Translated into Gujarati from The Adverse Childhood Experiences International Questionnaire (ACE-IQ),
+  Geneva, World Health Organization (WHO), 2011. WHO is not responsible for the content or accuracy of
+  this translation. In the event of any inconsistency, the original English version shall be binding.<br><br>
+  Your responses are anonymous and confidential · તમારા જવાબો ગુપ્ત અને અનામી છે.
 </p>
 
+<script src="../assets/shared.js"></script>
+<script src="export_study_01.js"></script>
+
 <script>
+  // ── Guard: must have consent ──
+  if (sessionStorage.getItem('study_01_consent') !== 'true') {
+    window.location.href = 'consent.html';
+  }
 
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// ACE-IQ SCORING RULES
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// Total: 12 categories scored
-// Each category: 0 or 1 — any single affirmative = 1
-// Removed: Q18–21 (A5–A8 - sexual abuse questions)
-// Removed: V2 (disabled item), V3 (ternary bullying frequency)
-// Reverse scored: Q1 (P1), Q2 (P2) — ના = affirmative for neglect
-// Max score = 12
-//
-// Category map (1-based Q numbers → category number):
-//  Cat 1  Emotional neglect          Q1(R), Q2(R)
-//  Cat 2  Physical neglect           Q3, Q4, Q5
-//  Cat 3  Household substance use    Q6
-//  Cat 4  Household mental illness   Q7
-//  Cat 5  Incarcerated member        Q8
-//  Cat 6  One/no parent              Q9
-//  Cat 7  Parental separation        Q10  [note: Q9=F4, Q10=F5]
-//  Cat 7  Violence against HH member Q11, Q12, Q13  [F6,F7,F8]
-//         (categories renumber — see table below)
-//
-// Actual categories per scoring table provided:
-//  1  Emotional neglect          items: 0,1       (P1R,P2R)
-//  2  Physical neglect           items: 2,3,4     (P3,P4,P5)
-//  3  Household substance use    items: 5         (F1)
-//  4  Household mental illness   items: 6         (F2)
-//  5  Incarcerated member        items: 7         (F3)
-//  6  One or no parent           items: 8         (F4)
-//  7  Violence against HH member items: 9,10,11  (F5 note: F5=parental death→cat6b, F6,F7,F8)
-//     Re-checking source table:
-//     Q9=F4 → cat 6 (one/no parent)
-//     Q10=F5 → cat 6 also (parental sep/divorce) — same cat as Q9
-//     Q11=F6, Q12=F7, Q13=F8 → cat 7 (violence against HH member)
-//  8  Emotional abuse            items: 13,14     (A1,A2)
-//  9  Physical abuse             items: 15,16     (A3,A4)
-// 10  Bullying                   items: 17        (V1 only)
-// 11  Community violence         items: 18,19,20  (V4,V5,V6)
-// 12  War/collective trauma      items: 21,22,23,24 (V7–V10)
-//
-// Final scored categories = 12 (sexual abuse removed)
-// Total items = 23 (31 original minus 4 sexual abuse A5-A8, minus 2 V2-V3, minus 1 Q10 parental death duplicate)
-// Total answerable items = 23 (all items are now answerable, no disabled items)
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // ITEM DEFINITIONS
+  // type: 'binary' → હા(1) / ના(0)
+  // reverse: true  → ના(0) = affirmative for category
+  // cat: category number (1–12)
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  const allItems = [
+    // ── A. Parenting ──
+    { q:1,  code:'P1', reverse:true,  cat:1,
+      gu:'શું તમારા માતા-પિતા/વાલીઓ તમારી સમસ્યાઓ અને ચિંતાઓ સમજતા હતા?' },
+    { q:2,  code:'P2', reverse:true,  cat:1,
+      gu:'શું તમારા માતા-પિતા/વાલીઓને ખરેખર ખબર હતી કે તમે તમારા ખાલી સમયમાં (જ્યારે તમે શાળાએ કે કામ પર ન હોવ ત્યારે) શું કરી રહ્યા છો?' },
+    { q:3,  code:'P3', reverse:false, cat:2,
+      gu:'શું એવું થતું હતું કે સરળતાથી આપી શકતા હોવા છતાં, તમારા માતા-પિતા/વાલીઓ, તમને પૂરતો ખોરાક આપતા નહોતા?' },
+    { q:4,  code:'P4', reverse:false, cat:2,
+      gu:'શું ક્યારેય એવું થતું હતું કે તમારા માતા-પિતા/વાલીઓ દારૂ કે અન્ય નશાકારક/માદક પદાર્થના એટલા બધા નશામાં હતા કે તમારી સંભાળ રાખી શકે તેમ નહોતા?' },
+    { q:5,  code:'P5', reverse:false, cat:2,
+      gu:'શું ક્યારેય એવું થતું હતું કે શાળા (ભણતર) ઉપલબ્ધ હોવા છતાં, તમારા માતા-પિતા/વાલીઓએ તમને શાળાએ મોકલ્યા નહોતા?' },
+    { q:6,  code:'F1', reverse:false, cat:3,
+      gu:'શું તમે ઘરના એવા કોઈ સભ્ય સાથે રહેતા હતા જે દારૂનું વ્યસન અથવા બીજા કોઈ નશાકારક (માદક) પદાર્થ કે દવાઓનો દુરુપયોગ (સેવન) કરતા હતા?' },
+    { q:7,  code:'F2', reverse:false, cat:4,
+      gu:'શું તમે ઘરના એવા કોઈ સભ્ય સાથે રહેતા હતા જેને ઉદાસી રોગ (ડિપ્રેશન), માનસિક રીતે બીમાર કે આત્મહત્યાના પ્રયાસ કરતો હતો?' },
+    { q:8,  code:'F3', reverse:false, cat:5,
+      gu:'શું તમે ઘરના એવા કોઈ સભ્ય સાથે રહેતા હતા જેને ક્યારેય જેલ કે કેદમાં મોકલવામાં આવ્યો હોય?' },
+    { q:9,  code:'F4', reverse:false, cat:6,
+      gu:'શું તમારા માતા-પિતા ક્યારેય અલગ (છૂટા) થયા હતા કે તેમણે છૂટાછેડા લીધા હતા?' },
+    { q:10, code:'F5', reverse:false, cat:6,
+      gu:'શું તમારા માતા, પિતા કે વાલીનું મૃત્યુ થયું હતું?' },
 
-// ── ITEM DEFINITIONS ──────────────────────────────────────────
-// type: 'binary'   → હા(1) / ના(0)
-// type: 'ternary'  → હા(1) / ના(0) / ખબર નથી(0)
-// type: 'disabled' → shown greyed, not answered, not scored
-// type: 'unscored' → answered but not counted in category score
-// reverse: true    → ના = affirmative (score 1 for category)
-// cat: category number (1–13), null if not scored
+    // ── B. Domestic violence witness ──
+    { q:11, code:'F6', reverse:false, cat:7,
+      gu:'શું તમે તમારા ઘરમાં ક્યારેય એવું જોયું કે સાંભળ્યું હતું કે જેમાં તમારા માતા-પિતા કે ઘરના કોઈ સભ્ય પર બૂમ-બરાડા પાડવામાં આવ્યા હોય, ગાળાગાળી કરવામાં આવી હોય અથવા તેમને અપમાનિત કરીને નીચું દેખાડવામાં આવ્યું હોય?' },
+    { q:12, code:'F7', reverse:false, cat:7,
+      gu:'શું તમે તમારા ઘરમાં ક્યારેય એવું જોયું કે સાંભળ્યું હતું કે જેમાં તમારા માતા-પિતા કે ઘરના કોઈ સભ્યને થપ્પડ મારવામાં આવી હોય, લાત મારવામાં આવી હોય, મુક્કા મારવામાં આવ્યા હોય કે માર મારવામાં આવ્યો હોય?' },
+    { q:13, code:'F8', reverse:false, cat:7,
+      gu:'શું તમે તમારા ઘરમાં ક્યારેય એવું જોયું કે સાંભળ્યું હતું કે જેમાં તમારા માતા-પિતા કે ઘરના કોઈ સભ્યને કોઈ વસ્તુ, જેમ કે લાકડી (ધોકો), બોટલ, છરી, ચાબુક વગેરેથી મારવામાં આવ્યો હોય કે ઈજા પહોંચાડવામાં આવી હોય?' },
 
-const allItems = [
-  // ── Section A: Parenting ──────────────────────────────────
-  { q:1,  code:'P1', type:'binary',   reverse:true,  cat:1,
-    gu:'શું તમારા માતા-પિતા/વાલીઓ તમારી સમસ્યાઓ અને ચિંતાઓ સમજતા હતા?' },
-  { q:2,  code:'P2', type:'binary',   reverse:true,  cat:1,
-    gu:'શું તમારા માતા-પિતા/વાલીઓને ખરેખર ખબર હતી કે તમે તમારા ખાલી સમયમાં (જ્યારે તમે શાળાએ કે કામ પર ન હોવ ત્યારે) શું કરી રહ્યા છો?' },
-  { q:3,  code:'P3', type:'binary',   reverse:false, cat:2,
-    gu:'શું એવું થતું હતું કે સરળતાથી આપી શકતા હોવા છતાં, તમારા માતા-પિતા/વાલીઓ, તમને પૂરતો ખોરાક આપતા નહોતા?' },
-  { q:4,  code:'P4', type:'binary',   reverse:false, cat:2,
-    gu:'શું ક્યારેય એવું થતું હતું કે તમારા માતા-પિતા/વાલીઓ દારૂ કે અન્ય નશાકારક/માદક પદાર્થના એટલા બધા નશામાં હતા કે તમારી સંભાળ રાખી શકે તેમ નહોતા?' },
-  { q:5,  code:'P5', type:'binary',   reverse:false, cat:2,
-    gu:'શું ક્યારેય એવું થતું હતું કે શાળા (ભણતર) ઉપલબ્ધ હોવા છતાં, તમારા માતા-પિતા/વાલીઓએ તમને શાળાએ મોકલ્યા નહોતા?' },
-  { q:6,  code:'F1', type:'binary',   reverse:false, cat:3,
-    gu:'શું તમે ઘરના એવા કોઈ સભ્ય સાથે રહેતા હતા જે દારૂનું વ્યસન અથવા બીજા કોઈ નશાકારક (માદક) પદાર્થ કે દવાઓનો દુરુપયોગ (સેવન) કરતા હતા?' },
-  { q:7,  code:'F2', type:'binary',   reverse:false, cat:4,
-    gu:'શું તમે ઘરના એવા કોઈ સભ્ય સાથે રહેતા હતા જેને ઉદાસી રોગ (ડિપ્રેશન), માનસિક રીતે બીમાર કે આત્મહત્યાના પ્રયાસ કરતો હતો?' },
-  { q:8,  code:'F3', type:'binary',   reverse:false, cat:5,
-    gu:'શું તમે ઘરના એવા કોઈ સભ્ય સાથે રહેતા હતા જેને ક્યારેય જેલ કે કેદમાં મોકલવામાં આવ્યો હોય?' },
-  { q:9,  code:'F4', type:'binary',   reverse:false, cat:6,
-    gu:'શું તમારા માતા-પિતા ક્યારેય અલગ (છૂટા) થયા હતા કે તેમણે છૂટાછેડા લીધા હતા?' },
-  { q:10, code:'F5', type:'binary',   reverse:false, cat:6,
-    gu:'શું તમારા માતા, પિતા કે વાલીનું મૃત્યુ થયું હતું?' },
+    // ── C. Abuse ──
+    { q:14, code:'A1', reverse:false, cat:8,
+      gu:'શું તમારા માતા-પિતા, વાલી કે ઘરના અન્ય સભ્યએ ક્યારેય તમારા પર બૂમો પાડી હતી, ચીસો પાડી હતી કે તમને ગાળો બોલી હતી, અપમાનિત કર્યા હતા કે ઉતારી પાડ્યા હતા?' },
+    { q:15, code:'A2', reverse:false, cat:8,
+      gu:'શું તમારા માતા-પિતા, વાલી કે ઘરના અન્ય સભ્યએ ક્યારેય તમને છોડી દેવાની કે ઘરમાંથી કાઢી મૂકવાની ધમકી આપી હતી કે ખરેખર તેમ કર્યું હતું?' },
+    { q:16, code:'A3', reverse:false, cat:9,
+      gu:'શું તમારા માતા-પિતા, વાલી કે ઘરના અન્ય સભ્યએ તમને ધબ્બો માર્યો હતો, થપ્પડ મારી હતી, લાત મારી હતી, મુક્કા માર્યા હતા કે માર માર્યો હતો?' },
+    { q:17, code:'A4', reverse:false, cat:9,
+      gu:'શું તમારા માતા-પિતા, વાલી કે ઘરના અન્ય સભ્યએ ક્યારેય તમને કોઈ વસ્તુ, જેમ કે લાકડી, બોટલ, છરી, ચાબુક વગેરેથી માર્યા હતા કે કાપ્યા હતા?' },
 
-  // ── Section B: Domestic violence witness ─────────────────
-  { q:11, code:'F6', type:'binary',   reverse:false, cat:7,
-    gu:'શું તમે તમારા ઘરમાં ક્યારેય એવું જોયું કે સાંભળ્યું હતું કે જેમાં તમારા માતા-પિતા કે ઘરના કોઈ સભ્ય પર બૂમ-બરાડા પાડવામાં આવ્યા હોય, ગાળાગાળી કરવામાં આવી હોય અથવા તેમને અપમાનિત કરીને નીચું દેખાડવામાં આવ્યું હોય?' },
-  { q:12, code:'F7', type:'binary',   reverse:false, cat:7,
-    gu:'શું તમે તમારા ઘરમાં ક્યારેય એવું જોયું કે સાંભળ્યું હતું કે જેમાં તમારા માતા-પિતા કે ઘરના કોઈ સભ્યને થપ્પડ મારવામાં આવી હોય, લાત મારવામાં આવી હોય, મુક્કા મારવામાં આવ્યા હોય કે માર મારવામાં આવ્યો હોય?' },
-  { q:13, code:'F8', type:'binary',   reverse:false, cat:7,
-    gu:'શું તમે તમારા ઘરમાં ક્યારેય એવું જોયું કે સાંભળ્યું હતું કે જેમાં તમારા માતા-પિતા કે ઘરના કોઈ સભ્યને કોઈ વસ્તુ, જેમ કે લાકડી (ધોકો), બોટલ, છરી, ચાબુક વગેરેથી મારવામાં આવ્યો હોય કે ઈજા પહોંચાડવામાં આવી હોય?' },
+    // ── D. Peers ──
+    { q:18, code:'V1', reverse:false, cat:10,
+      gu:'શું તમને ક્યારેય ધમકાવવામાં આવ્યા હતા / અણગમતી રીતે હેરાન કરવામાં આવ્યા હતા?' },
 
-  // ── Section C: Abuse ──────────────────────────────────────
-  { q:14, code:'A1', type:'binary',   reverse:false, cat:8,
-    gu:'શું તમારા માતા-પિતા, વાલી કે ઘરના અન્ય સભ્યએ ક્યારેય તમારા પર બૂમો પાડી હતી, ચીસો પાડી હતી કે તમને ગાળો બોલી હતી, અપમાનિત કર્યા હતા કે ઉતારી પાડ્યા હતા?' },
-  { q:15, code:'A2', type:'binary',   reverse:false, cat:8,
-    gu:'શું તમારા માતા-પિતા, વાલી કે ઘરના અન્ય સભ્યએ ક્યારેય તમને છોડી દેવાની કે ઘરમાંથી કાઢી મૂકવાની ધમકી આપી હતી કે ખરેખર તેમ કર્યું હતું?' },
-  { q:16, code:'A3', type:'binary',   reverse:false, cat:9,
-    gu:'શું તમારા માતા-પિતા, વાલી કે ઘરના અન્ય સભ્યએ તમને ધબ્બો માર્યો હતો, થપ્પડ મારી હતી, લાત મારી હતી, મુક્કા માર્યા હતા કે માર માર્યો હતો?' },
-  { q:17, code:'A4', type:'binary',   reverse:false, cat:9,
-    gu:'શું તમારા માતા-પિતા, વાલી કે ઘરના અન્ય સભ્યએ ક્યારેય તમને કોઈ વસ્તુ, જેમ કે લાકડી, બોટલ, છરી, ચાબુક વગેરેથી માર્યા હતા કે કાપ્યા હતા?' },
+    // ── E. Community violence ──
+    { q:19, code:'V4', reverse:false, cat:11,
+      gu:'શું તમે ખરેખર (વાસ્તવિક જીવનમાં) ક્યારેય કોઈને માર મારતા જોયા કે સાંભળ્યા હતા?' },
+    { q:20, code:'V5', reverse:false, cat:11,
+      gu:'શું તમે ખરેખર (વાસ્તવિક જીવનમાં) ક્યારેય કોઈને છરી (ચાકુ) કે ગોળી મારતા જોયા કે સાંભળ્યા હતા?' },
+    { q:21, code:'V6', reverse:false, cat:11,
+      gu:'શું તમે ખરેખર (વાસ્તવિક જીવનમાં) ક્યારેય કોઈને છરી (ચાકુ) કે બંદૂકથી ધમકાવતા જોયા કે સાંભળ્યા હતા?' },
 
-  // ── Section D: Peers ──────────────────────────────────────
-  { q:18, code:'V1', type:'binary',   reverse:false, cat:10,
-    gu:'શું તમને ક્યારેય ધમકાવવામાં આવ્યા હતા / અણગમતી રીતે હેરાન કરવામાં આવ્યા હતા?' },
+    // ── F. War / collective trauma ──
+    { q:22, code:'V7',  reverse:false, cat:12,
+      gu:'શું તમને આ ઘટનાઓ (યુદ્ધ/સામૂહિક હિંસા)ને કારણે ક્યારેય બીજી જગ્યાએ રહેવા જવાની ફરજ પડી હતી?' },
+    { q:23, code:'V8',  reverse:false, cat:12,
+      gu:'શું આ ઘટનાઓ (યુદ્ધ/સામૂહિક હિંસા)ને કારણે ક્યારેય તમારા ઘરની તોડફોડ થઈ હતી?' },
+    { q:24, code:'V9',  reverse:false, cat:12,
+      gu:'શું તમને ક્યારેય સૈનિકો, પોલીસ, અથવા ગેરકાયદેસર હથિયારધારી ટોળકી દ્વારા માર મારવામાં આવ્યો હતો?' },
+    { q:25, code:'V10', reverse:false, cat:12,
+      gu:'શું તમારા પરિવારના કોઈ સભ્ય કે મિત્રને સૈનિકો, પોલીસ, અથવા ગેરકાયદેસર હથિયારધારી ટોળકી દ્વારા ક્યારેય માર મારવામાં આવ્યો હતો કે મારી નાખવામાં આવ્યા હતા?' },
+  ];
 
-  // ── Section E: Community violence ────────────────────────
-  { q:19, code:'V4', type:'binary',   reverse:false, cat:11,
-    gu:'શું તમે ખરેખર (વાસ્તવિક જીવનમાં) ક્યારેય કોઈને માર મારતા જોયા કે સાંભળ્યા હતા?' },
-  { q:20, code:'V5', type:'binary',   reverse:false, cat:11,
-    gu:'શું તમે ખરેખર (વાસ્તવિક જીવનમાં) ક્યારેય કોઈને છરી (ચાકુ) કે ગોળી મારતા જોયા કે સાંભળ્યા હતા?' },
-  { q:21, code:'V6', type:'binary',   reverse:false, cat:11,
-    gu:'શું તમે ખરેખર (વાસ્તવિક જીવનમાં) ક્યારેય કોઈને છરી (ચાકુ) કે બંદૂકથી ધમકાવતા જોયા કે સાંભળ્યા હતા?' },
+  const sections = [
+    { label:'A. માતા-પિતા/વાલીઓ સાથેના સંબંધો',  indices:[0,1,2,3,4,5,6,7,8,9]  },
+    { label:'B. ઘરેલુ હિંસાના સાક્ષી',             indices:[10,11,12]             },
+    { label:'C. સીધો દુર્વ્યવહાર',                 indices:[13,14,15,16]          },
+    { label:'D. સાથીદારો દ્વારા હેરાનગતિ',         indices:[17]                   },
+    { label:'E. સમુદાય હિંસા',                      indices:[18,19,20]             },
+    { label:'F. યુદ્ધ / સામૂહિક હિંસા',             indices:[21,22,23,24]          },
+  ];
 
-  // ── Section F: War / collective trauma ───────────────────
-  { q:22, code:'V7',  type:'binary',  reverse:false, cat:12,
-    gu:'શું તમને આ ઘટનાઓ (યુદ્ધ/સામૂહિક હિંસા)ને કારણે ક્યારેય બીજી જગ્યાએ રહેવા જવાની ફરજ પડી હતી?' },
-  { q:23, code:'V8',  type:'binary',  reverse:false, cat:12,
-    gu:'શું આ ઘટનાઓ (યુદ્ધ/સામૂહિક હિંસા)ને કારણે ક્યારેય તમારા ઘરની તોડફોડ થઈ હતી?' },
-  { q:24, code:'V9',  type:'binary',  reverse:false, cat:12,
-    gu:'શું તમને ક્યારેય સૈનિકો, પોલીસ, અથવા ગેરકાયદેસર હથિયારધારી ટોળકી દ્વારા માર મારવામાં આવ્યો હતો?' },
-  { q:25, code:'V10', type:'binary',  reverse:false, cat:12,
-    gu:'શું તમારા પરિવારના કોઈ સભ્ય કે મિત્રને સૈનિકો, પોલીસ, અથવા ગેરકાયદેસર હથિયારધારી ટોળકી દ્વારા ક્યારેય માર મારવામાં આવ્યો હતો કે મારી નાખવામાં આવ્યા હતા?' },
-];
+  const TOTAL = allItems.length; // 25 items answerable
 
-// ── CATEGORY DEFINITIONS ──────────────────────────────────────
-// cat: category number matching allItems[].cat
-// scored: false = data collected but not counted in total (none now)
-const categories = [
-  { cat:1,  label:'ભાવનાત્મક ઉપેક્ષા',          en:'Emotional Neglect',              scored:true  },
-  { cat:2,  label:'શારીરિક ઉપેક્ષા',             en:'Physical Neglect',               scored:true  },
-  { cat:3,  label:'ઘરમાં નશાનો દુરુપયોગ',        en:'Household Substance Use',        scored:true  },
-  { cat:4,  label:'ઘરમાં માનસિક બીમારી',         en:'Household Mental Illness',       scored:true  },
-  { cat:5,  label:'ઘરના સભ્ય કેદમાં',            en:'Incarcerated Household Member',  scored:true  },
-  { cat:6,  label:'એક અથવા કોઈ માતા-પિતા નહીં', en:'One or No Parent',               scored:true  },
-  { cat:7,  label:'ઘરેલુ હિંસાના સાક્ષી',        en:'Violence Against HH Member',     scored:true  },
-  { cat:8,  label:'ભાવનાત્મક દુર્વ્યવહાર',       en:'Emotional Abuse',                scored:true  },
-  { cat:9,  label:'શારીરિક દુર્વ્યવહાર',          en:'Physical Abuse',                 scored:true  },
-  { cat:10, label:'સાથીદારો દ્વારા હેરાનગતિ',   en:'Bullying',                       scored:true  },
-  { cat:11, label:'સામુદાયિક હિંસા',             en:'Community Violence',              scored:true  },
-  { cat:12, label:'યુદ્ધ / સામૂહિક હિંસા',        en:'War / Collective Trauma',        scored:true  },
-];
+  // ── State ──
+  let answers = new Array(TOTAL).fill(null);
 
-// ── SECTION DISPLAY DEFINITIONS ───────────────────────────────
-const sections = [
-  { label:'A. માતા-પિતા/વાલીઓ સાથેના સંબંધો',
-    note: 'તમારા જીવનના પ્રથમ ૧૮ વર્ષ દરમિયાન...',
-    indices:[0,1,2,3,4,5,6,7,8,9] },
-  { label:'B. ઘરેલુ હિંસાના સાક્ષી',
-    note: 'તમારા જીવનના પ્રથમ ૧૮ વર્ષ દરમિયાન...',
-    indices:[10,11,12] },
-  { label:'C. સીધો દુર્વ્યવહાર (Abuse)',
-    note: 'તમારા જીવનના પ્રથમ ૧૮ વર્ષ દરમિયાન...',
-    indices:[13,14,15,16] },
-  { label:'D. સાથીદારો દ્વારા હેરાનગતિ',
-    note: 'તમારા જીવનના પ્રથમ ૧૮ વર્ષ દરમિયાન...',
-    indices:[17] },
-  { label:'E. સમુદાય હિંસા',
-    note: 'તમારા જીવનના પ્રથમ ૧૮ વર્ષ દરમિયાન...',
-    indices:[18,19,20] },
-  { label:'F. યુદ્ધ / સામૂહિક હિંસા',
-    note: 'તમારા જીવનના પ્રથમ ૧૮ વર્ષ દરમિયાન...',
-    indices:[21,22,23,24] },
-];
+  // ── Helpers ──
+  function toGu(num) {
+    return num.toString().split('').map(d =>
+      ['૦','૧','૨','૩','૪','૫','૬','૭','૮','૯'][parseInt(d)] ?? d
+    ).join('');
+  }
 
-// Items requiring an answer (all items now answerable)
-const ANSWERABLE_INDICES = allItems
-  .map((item, i) => item.type !== 'disabled' ? i : null)
-  .filter(i => i !== null);
-const ANSWERABLE_COUNT = ANSWERABLE_INDICES.length; // 23
+  function showScreen(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    const t = document.getElementById(id);
+    if (t) t.classList.add('active');
+    window.scrollTo(0, 0);
+  }
 
-// ── STATE ──────────────────────────────────────────────────────
-let answers    = new Array(allItems.length).fill(null);
-// For ternary items, track selected button index separately
-let ternaryBtn = {};
+  // ── Scoring ──
+  function isAffirmative(idx) {
+    const item = allItems[idx];
+    const raw  = answers[idx];
+    if (raw === null) return false;
+    return item.reverse ? raw === 0 : raw === 1;
+  }
 
-// ── SCORING ───────────────────────────────────────────────────
-/*
-  isAffirmative(idx):
-    Returns true if the item at index idx was affirmatively answered.
-    Reverse items: ના (0) = affirmative
-    Normal items:  હા (1) = affirmative
-*/
-function isAffirmative(idx) {
-  const item = allItems[idx];
-  const raw  = answers[idx];
-  if (item.type === 'disabled' || raw === null) return false;
-  return item.reverse ? raw === 0 : raw === 1;
-}
+  function getCategoryScore(catNum) {
+    return allItems.some((item, i) => item.cat === catNum && isAffirmative(i)) ? 1 : 0;
+  }
 
-/*
-  getCategoryScore(catNum):
-    Returns 0 or 1.
-    1 if ANY item in this category is affirmative, else 0.
-*/
-function getCategoryScore(catNum) {
-  const catItems = allItems
-    .map((item, i) => ({ item, i }))
-    .filter(({ item }) => item.cat === catNum);
-  return catItems.some(({ i }) => isAffirmative(i)) ? 1 : 0;
-}
+  function getTotal() {
+    const cats = [...new Set(allItems.map(i => i.cat))];
+    return cats.reduce((sum, c) => sum + getCategoryScore(c), 0);
+  }
 
-/*
-  getTotal():
-    Sum of scored category scores only (scored:true categories).
-    Max = 12.
-*/
-function getTotal() {
-  return categories
-    .filter(c => c.scored)
-    .reduce((sum, c) => sum + getCategoryScore(c.cat), 0);
-}
+  function getBand(score) {
+    if (score === 0) return 'No ACEs Recorded';
+    if (score <= 3)  return 'Low ACE Burden (1–3)';
+    if (score <= 6)  return 'Moderate ACE Burden (4–6)';
+    return 'High ACE Burden (7–12)';
+  }
 
-function getBand(score) {
-  if (score === 0) return {
-    label:'કોઈ નોંધાયેલ ACE નથી', sub:'No ACEs Recorded',
-    color:'var(--green)', soft:'var(--green-soft)',
-    text:'બાળપણ દરમિયાન કોઈ પ્રતિકૂળ અનુભવ નોંધાયો નથી.'
-  };
-  if (score <= 3) return {
-    label:'ઓછા ACE', sub:'Low ACE Burden (1–3)',
-    color:'#65a30d', soft:'rgba(101,163,13,0.08)',
-    text:'ઓછી સંખ્યામાં પ્રતિકૂળ અનુભવ. ભવિષ્યના સ્વાસ્થ્ય પર પ્રભાવ ઓછો.'
-  };
-  if (score <= 6) return {
-    label:'મધ્યમ ACE', sub:'Moderate ACE Burden (4–6)',
-    color:'var(--amber)', soft:'var(--amber-soft)',
-    text:'મધ્યમ સ્તરના પ્રતિકૂળ અનુભવ. માનસિક અને શારીરિક સ્વાસ્થ્ય પર અસર શક્ય. સહાય ઉપકારક.'
-  };
-  return {
-    label:'ઉચ્ચ ACE', sub:'High ACE Burden (7–12)',
-    color:'var(--red)', soft:'var(--red-soft)',
-    text:'ઉચ્ચ સ્તરના પ્રતિકૂળ અનુભવ. માનસિક, શારીરિક સ્વાસ્થ્ય અને સંબંધો પર નોંધપાત્ર અસર શક્ય. ડૉક્ટર અથવા કાઉન્સેલર સાથે વાત કરવી ઉપકારક છે.'
-  };
-}
+  function allAnswered() {
+    return answers.every(a => a !== null);
+  }
 
-// ── ANSWERED COUNT ────────────────────────────────────────────
-function answeredCount() {
-  return ANSWERABLE_INDICES.filter(i => answers[i] !== null).length;
-}
+  function answeredCount() {
+    return answers.filter(a => a !== null).length;
+  }
 
-function allAnswered() {
-  return ANSWERABLE_INDICES.every(i => answers[i] !== null);
-}
+  // ── Render ──
+  function startScale() {
+    answers = new Array(TOTAL).fill(null);
+    renderQuestions();
+    showScreen('screen-scale');
+  }
 
-// ── RENDER QUESTIONS ──────────────────────────────────────────
-function renderQuestions() {
-  const c = document.getElementById('questions-container');
-  c.innerHTML = '';
-  ternaryBtn  = {};
+  function renderQuestions() {
+    const c = document.getElementById('questions-container');
+    if (!c) return;
+    c.innerHTML = '';
 
-  sections.forEach(sec => {
-    // Section header
-    const hdr = document.createElement('div');
-    hdr.style.cssText = 'margin:1.5rem 0 0.25rem;padding:0.75rem 1rem;background:var(--surface-2,#f5f5f5);border-radius:8px;border-left:3px solid var(--accent,#4f46e5);';
-    hdr.innerHTML = `<div style="font-size:0.95rem;font-weight:600;color:var(--text-primary);">${sec.label}</div>
-                     <div style="font-size:0.78rem;color:var(--text-muted);margin-top:2px;">${sec.note}</div>`;
-    c.appendChild(hdr);
+    sections.forEach(sec => {
+      const hdr = document.createElement('div');
+      hdr.style.cssText = 'margin:1.5rem 0 0.25rem;padding:0.75rem 1rem;background:var(--surface-2,#f5f5f5);border-radius:8px;border-left:3px solid var(--accent,#4f46e5);';
+      hdr.innerHTML = `<div style="font-size:0.95rem;font-weight:600;color:var(--text-primary);">${sec.label}</div>
+                       <div style="font-size:0.78rem;color:var(--text-muted);margin-top:2px;">તમારા જીવનના પ્રથમ ૧૮ વર્ષ દરમિયાન…</div>`;
+      c.appendChild(hdr);
 
-    sec.indices.forEach(idx => {
-      const item       = allItems[idx];
-      const isDisabled = item.type === 'disabled';
-      const isUnscored = item.cat === null && !isDisabled;
+      sec.indices.forEach(idx => {
+        const item = allItems[idx];
+        const card = document.createElement('div');
+        card.className = 'q-card' + (answers[idx] !== null ? ' answered' : '');
+        card.id = `qc-${idx}`;
+        card.innerHTML = `
+          <div class="q-num">${item.code}${item.reverse ? ' <span style="font-size:0.65rem;background:#fef9c3;color:#92400e;padding:1px 5px;border-radius:4px;">R</span>' : ''}</div>
+          <div class="q-text">${item.gu}</div>
+          <div class="options-grid" id="og-${idx}"></div>
+        `;
+        c.appendChild(card);
 
-      const card = document.createElement('div');
-      card.className = 'q-card' + (answers[idx] !== null ? ' answered' : '');
-      card.id = `qc-${idx}`;
-
-      if (isDisabled) {
-        card.style.cssText = 'opacity:0.38;pointer-events:none;';
-      }
-
-      // Badge for unscored items (none - all items are now scored)
-      const badge = isUnscored
-        ? `<span style="font-size:0.68rem;background:var(--surface-2,#eee);color:var(--text-muted);padding:1px 6px;border-radius:4px;margin-left:6px;">સ્કોર નહીં</span>`
-        : '';
-      const revBadge = item.reverse
-        ? `<span style="font-size:0.68rem;background:var(--amber-soft,#fef9c3);color:#92400e;padding:1px 6px;border-radius:4px;margin-left:4px;">R</span>`
-        : '';
-
-      card.innerHTML = `
-        <div class="q-num">
-          ${item.code}${badge}${revBadge}
-        </div>
-        <div class="q-text">${item.gu}</div>
-        <div class="options-grid" id="og-${idx}"></div>
-        ${isDisabled ? '<div style="font-size:0.73rem;color:var(--text-muted);margin-top:4px;">આ પ્રશ્ન આ આવૃત્તિમાં સામેલ નથી</div>' : ''}
-      `;
-      c.appendChild(card);
-
-      if (!isDisabled) {
-        buildOptions(item, idx, card.querySelector(`#og-${idx}`));
-      }
+        const grid = card.querySelector(`#og-${idx}`);
+        [{ label:'હા', value:1 }, { label:'ના', value:0 }].forEach((opt, btnIdx) => {
+          const btn = document.createElement('button');
+          btn.className = 'opt-btn' + (answers[idx] === opt.value ? ' selected' : '');
+          btn.textContent = opt.label;
+          btn.onclick = () => selectAnswer(idx, opt.value, grid, card);
+          grid.appendChild(btn);
+        });
+      });
     });
-  });
 
-  updateProgress();
-}
-
-function buildOptions(item, idx, grid) {
-  let opts = [];
-  if (item.type === 'binary') {
-    opts = [{ label:'હા', value:1 }, { label:'ના', value:0 }];
-  } else if (item.type === 'ternary') {
-    opts = [
-      { label:'હા',        value:1, bIdx:0 },
-      { label:'ના',        value:0, bIdx:1 },
-      { label:'ખબર નથી',  value:0, bIdx:2 },
-    ];
+    updateProgress();
   }
 
-  opts.forEach((opt, btnIdx) => {
-    const btn = document.createElement('button');
-    btn.className = 'opt-btn';
-    btn.innerHTML = `<span class="opt-pip"></span>${opt.label}`;
-    btn.onclick   = () => selectAnswer(idx, opt.value, grid, btnIdx);
-    grid.appendChild(btn);
-  });
-
-  // Restore visual state if re-rendering with existing answers
-  if (answers[idx] !== null && ternaryBtn[idx] !== undefined) {
-    const btns = grid.querySelectorAll('.opt-btn');
-    const sel  = ternaryBtn[idx];
-    if (btns[sel]) {
-      btns[sel].classList.add('selected');
-      btns[sel].querySelector('.opt-pip').textContent = '✓';
-    }
-  } else if (answers[idx] !== null && item.type === 'binary') {
-    const selBtnIdx = answers[idx] === 1 ? 0 : 1;
-    const btns = grid.querySelectorAll('.opt-btn');
-    btns[selBtnIdx].classList.add('selected');
-    btns[selBtnIdx].querySelector('.opt-pip').textContent = '✓';
-  }
-}
-
-function selectAnswer(idx, value, grid, btnIdx) {
-  answers[idx]    = value;
-  ternaryBtn[idx] = btnIdx; // track for ternary visual restore
-  grid.querySelectorAll('.opt-btn').forEach((b, i) => {
-    const sel = i === btnIdx;
-    b.classList.toggle('selected', sel);
-    b.querySelector('.opt-pip').textContent = sel ? '✓' : '';
-  });
-  document.getElementById(`qc-${idx}`)?.classList.add('answered');
-  updateProgress();
-}
-
-function updateProgress() {
-  const done  = answeredCount();
-  document.getElementById('progress-fill').style.width = (done / ANSWERABLE_COUNT * 100) + '%';
-  document.getElementById('progress-text').textContent = `${toGu(done)} / ${toGu(ANSWERABLE_COUNT)}`;
-  document.getElementById('submit-btn').disabled = !allAnswered();
-}
-
-// ── NAVIGATION ────────────────────────────────────────────────
-function startScale() {
-  answers    = new Array(allItems.length).fill(null);
-  ternaryBtn = {};
-  sessionStorage.removeItem('gps_aceiq_state');
-  renderQuestions();
-  showScreen('screen-scale');
-}
-
-function afterScale() {
-  const score = getTotal();
-  const band  = getBand(score);
-
-  sessionStorage.setItem('gps_aceiq_state', JSON.stringify({ answers, ternaryBtn }));
-
-  submitToSheets({
-    type:       'scale',
-    scale:      'ACE-IQ',
-    token:      getToken(),
-    score,
-    band:       band.sub,
-    categories: categories.map(c => ({
-      cat:     c.cat,
-      label:   c.en,
-      scored:  c.scored,
-      result:  getCategoryScore(c.cat)
-    })),
-    items:      answers,
-    timestamp:  new Date().toISOString()
-  });
-
-  const returnTo = sessionStorage.getItem('return_to');
-  const returnStudy = sessionStorage.getItem('return_study');
-
-  if (returnTo && returnStudy) {
-    sessionStorage.setItem(`${returnStudy}_who_ace_iq`, 'true');
-    window.location.href = returnTo;
-  } else {
-    afterScaleSubmit('who-ace-iq-binary.html');
-  }
-}
-
-// ── RENDER RESULTS ────────────────────────────────────────────
-function renderResults() {
-  const score = getTotal();
-  const band  = getBand(score);
-
-  const ring = document.getElementById('result-ring');
-  ring.style.borderColor = band.color;
-  ring.style.background  = band.soft;
-
-  const num = document.getElementById('result-score-num');
-  num.textContent = toGu(score);
-  num.style.color = band.color;
-
-  document.getElementById('result-band-label').textContent = band.label;
-  document.getElementById('result-band-label').style.color = band.color;
-  document.getElementById('result-band-sub').textContent   = band.sub;
-  document.getElementById('result-interp').textContent     = band.text;
-
-  // Category scores table
-  const cs = document.getElementById('category-scores');
-  cs.innerHTML = '';
-  categories.forEach(c => {
-    const sc  = getCategoryScore(c.cat);
-    const row = document.createElement('div');
-    row.className = 'breakdown-row';
-    const notScored = !c.scored
-      ? '<span style="font-size:0.68rem;color:var(--text-muted);margin-left:4px;">(સ્કોર નહીં)</span>'
-      : '';
-    row.innerHTML = `
-      <div class="breakdown-q" style="font-size:0.82rem;">
-        ${c.cat}. ${c.label} <span style="font-size:0.73rem;color:var(--text-muted);">${c.en}</span>${notScored}
-      </div>
-      <div class="breakdown-val" style="color:${c.scored && sc === 1 ? 'var(--red)' : 'var(--text-muted)'};">
-        ${c.scored ? toGu(sc) : '—'}
-      </div>
-    `;
-    cs.appendChild(row);
-  });
-
-  document.getElementById('total-score-line').textContent = `${toGu(score)} / ૧૨`;
-
-  // Item breakdown
-  const bc = document.getElementById('breakdown-container');
-  bc.innerHTML = '';
-  sections.forEach(sec => {
-    const secTitle = document.createElement('div');
-    secTitle.style.cssText = 'font-weight:600;font-size:0.82rem;color:var(--text-primary);margin:0.75rem 0 0.25rem;';
-    secTitle.textContent = sec.label;
-    bc.appendChild(secTitle);
-
-    sec.indices.forEach(idx => {
-      const item     = allItems[idx];
-      const raw      = answers[idx];
-      const disabled = item.type === 'disabled';
-      let ansLabel   = '—';
-      if (!disabled && raw !== null) {
-        if (raw === 1)      ansLabel = 'હા';
-        else if (raw === 0) ansLabel = 'ના';
-      }
-      const affirmative = isAffirmative(idx);
-      const row = document.createElement('div');
-      row.className = 'breakdown-row';
-      row.innerHTML = `
-        <div class="breakdown-q" style="font-size:0.76rem;">
-          ${item.code}${item.reverse ? ' (R)' : ''}${item.cat === null && !disabled ? ' *' : ''}.
-          ${item.gu.substring(0,60)}${item.gu.length > 60 ? '…' : ''}
-        </div>
-        <div class="breakdown-val" style="color:${affirmative ? 'var(--red)' : 'inherit'};">
-          ${disabled ? '—' : ansLabel}
-        </div>
-      `;
-      bc.appendChild(row);
+  function selectAnswer(idx, value, grid, card) {
+    answers[idx] = value;
+    grid.querySelectorAll('.opt-btn').forEach((b, i) => {
+      b.classList.toggle('selected', i === (value === 1 ? 0 : 1));
     });
-  });
-
-  const note = document.createElement('div');
-  note.style.cssText = 'font-size:0.72rem;color:var(--text-muted);margin-top:0.5rem;';
-  note.textContent = '(R) = રિવર્સ સ્કોર — તમારો જવાબ \'ના\' આ વર્ગમાં ગણવામાં આવે છે.';
-  bc.appendChild(note);
-}
-
-// ── ON LOAD ───────────────────────────────────────────────────
-document.addEventListener('DOMContentLoaded', () => {
-  const params = new URLSearchParams(window.location.search);
-  if (params.get('results') === '1') {
-    const saved = sessionStorage.getItem('gps_aceiq_state');
-    if (saved) {
-      const state = JSON.parse(saved);
-      answers    = state.answers;
-      ternaryBtn = state.ternaryBtn || {};
-      renderResults();
-      showScreen('screen-results');
-    } else {
-      showScreen('screen-consent');
-    }
+    card.classList.add('answered');
+    updateProgress();
   }
-});
 
+  function updateProgress() {
+    const done = answeredCount();
+    const fill = document.getElementById('progress-fill');
+    const txt  = document.getElementById('progress-text');
+    const btn  = document.getElementById('submit-btn');
+    if (fill) fill.style.width = `${(done / TOTAL) * 100}%`;
+    if (txt)  txt.textContent  = `${toGu(done)} / ${toGu(TOTAL)}`;
+    if (btn)  btn.disabled     = !allAnswered();
+  }
+
+  // ── Submit ──
+  async function submitScale() {
+    showScreen('screen-submitting');
+
+    const score      = getTotal();
+    const band       = getBand(score);
+    const itemsArray = [...answers]; // 25 items
+    const token      = sessionStorage.getItem('study_token');
+
+    // Pack category scores into impairment field
+    const cats = [...new Set(allItems.map(i => i.cat))];
+    const catScores = {};
+    cats.forEach(c => { catScores[`cat_${c}`] = getCategoryScore(c); });
+    const impairment = JSON.stringify(catScores);
+
+    try {
+      await uploadScaleData(token, 'ACE-IQ', score, band, itemsArray, impairment);
+    } catch (err) {
+      console.error('ACE-IQ upload failed:', err);
+      // Continue anyway — don't block participant
+    }
+
+    sessionStorage.setItem('study_01_who_ace_iq', 'true');
+    window.location.href = 'index_study_01.html';
+  }
 </script>
 
 <div id="site-footer"></div>
-<script src="../assets/shared.js"></script>
+
 </body>
 </html>
