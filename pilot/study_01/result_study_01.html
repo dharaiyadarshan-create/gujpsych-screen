@@ -123,34 +123,7 @@
     <div class="result-actions no-print" style="margin-top:1rem;">
       <button class="btn-ghost" onclick="restartStudy()">← ફરીથી શરૂ કરો</button>
     </div>
-// Clear all study_01 flags and data from sessionStorage, then redirect to consent page
-  
-  function restartStudy() {  
-  const keys = [
-    'study_01_consent',
-    'study_01_who_ace_iq',
-    'study_01_phq9',
-    'study_01_gad7',
-    'study_01_mspss',
-    'study_01_sociodemographic',
-    'study_01_sociodem_submitted',
-    'study_01_sociodem_data',
-    'study_token',
-    'return_to',
-    'return_study',
-    'origin',
-    'result_score_PHQ-9',
-    'result_band_PHQ-9',
-    'result_score_GAD-7',
-    'result_band_GAD-7',
-    'result_score_MSPSS',
-    'result_band_MSPSS',
-    'result_score_ACE-IQ',
-    'result_band_ACE-IQ',
-  ];
-  keys.forEach(k => sessionStorage.removeItem(k));
-  window.location.href = 'consent.html';
-  }
+
 
   </div>
 </main>
@@ -278,6 +251,34 @@
       buildScaleCard('MSPSS');
   });
 
+// Clear all study_01 flags and data from sessionStorage, then redirect to consent page
+  
+  function restartStudy() {  
+  const keys = [
+    'study_01_consent',
+    'study_01_who_ace_iq',
+    'study_01_phq9',
+    'study_01_gad7',
+    'study_01_mspss',
+    'study_01_sociodemographic',
+    'study_01_sociodem_submitted',
+    'study_01_sociodem_data',
+    'study_token',
+    'return_to',
+    'return_study',
+    'origin',
+    'result_score_PHQ-9',
+    'result_band_PHQ-9',
+    'result_score_GAD-7',
+    'result_band_GAD-7',
+    'result_score_MSPSS',
+    'result_band_MSPSS',
+    'result_score_ACE-IQ',
+    'result_band_ACE-IQ',
+  ];
+  keys.forEach(k => sessionStorage.removeItem(k));
+  window.location.href = 'consent.html';
+  }
 </script>
 
 <div id="site-footer"></div>
