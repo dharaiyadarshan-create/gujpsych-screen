@@ -45,6 +45,9 @@
   </p>
 
   <script>
+    // ── Clear any previous session on consent page load ──
+    sessionStorage.clear();
+
     const check = document.getElementById('consent-check');
     const btn   = document.getElementById('btn-proceed');
 
