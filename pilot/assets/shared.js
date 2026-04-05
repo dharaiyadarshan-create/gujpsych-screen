@@ -61,7 +61,6 @@ window.location.href = '../sociodem/sociodem.html?return=' + returnTo;
 }
 
 // ── GOOGLE SHEETS SUBMIT ───────────────────────────────────────
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyh-ZFpxvP73ChVkInh8ovIOtFgMVjh7yIOrhSyoERD2Oqv7Iq8RaR7louq_9UbIAF2/exec';
 
 function submitToSheets(payload) {
   if (APPS_SCRIPT_URL.includes('YOUR_')) {
