@@ -1,5 +1,5 @@
 // pilot/export.js
-const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyH-Y7HO-q2VwTG0N6DxBqEJ10GwrvgJoc4pnGXeqU_V3or1jG4OmDs3GxQt8qTYVTk/exec";
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyAL1vmE7HFAMHLhLwq1iEdlCJ3dzRslI8rxyqSCD7uKbYCr9jxbsPFhPPq9voC03Fjew/exec";
 
 /**
  * Sends Scale data (PHQ-9, GAD-7, ACE-IQ, etc.)
