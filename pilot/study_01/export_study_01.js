@@ -1,4 +1,4 @@
-// pilot/export.js
+// pilot/study_01/export_study_01.js
 const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyAL1vmE7HFAMHLhLwq1iEdlCJ3dzRslI8rxyqSCD7uKbYCr9jxbsPFhPPq9voC03Fjew/exec";
 
 /**

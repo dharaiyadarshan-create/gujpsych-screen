@@ -60,20 +60,7 @@ window.location.href = '../sociodem/sociodem.html?return=' + returnTo;
   }
 }
 
-// ── GOOGLE SHEETS SUBMIT ───────────────────────────────────────
 
-function submitToSheets(payload) {
-  if (APPS_SCRIPT_URL.includes('YOUR_')) {
-    console.log('submitToSheets (dev mode — no URL set):', payload);
-    return;
-  }
-  fetch(APPS_SCRIPT_URL, {
-    method: 'POST',
-    mode: 'no-cors',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload)
-  }).catch(() => {});
-}
 
 // ── LOAD SHARED COMPONENTS ─────────────────────────────────────
 function loadComponents() {
