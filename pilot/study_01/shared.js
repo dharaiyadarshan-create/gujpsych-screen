@@ -1,6 +1,5 @@
 // shared.js
 
-const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwebPcV340Qj0PMG9Ox94RuTxMROCZ95BmwbDDeqIZ94WXhcrQY5319vA3zSlFSlIA-/exec";
 
 function submitToSheets(data) {
   return fetch(APPS_SCRIPT_URL, {
