@@ -276,8 +276,13 @@
     'result_score_ACE-IQ',
     'result_band_ACE-IQ',
   ];
+ // restartStudy() 
+  function restartStudy() {
+  sessionStorage.clear();
+  window.location.href = '../index.html';
+}
   keys.forEach(k => sessionStorage.removeItem(k));
-  window.location.href = 'consent.html';
+  window.location.href = '../index.html';
   }
 </script>
 
