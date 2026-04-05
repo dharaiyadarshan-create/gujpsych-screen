@@ -1,4 +1,6 @@
+// pilot/study_01/shared-ui.js
 // Progress bar — call updateProgress(current, total) from any scale page
+
 function updateProgress(current, total) {
   const fill = document.getElementById('progress-fill');
   const text = document.getElementById('progress-text');

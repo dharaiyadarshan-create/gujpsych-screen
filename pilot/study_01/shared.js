@@ -1,4 +1,4 @@
-// shared.js
+// pilot/study_01/shared.js
 
 
 function submitToSheets(data) {
