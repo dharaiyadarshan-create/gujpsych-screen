@@ -181,6 +181,21 @@
           </div>
         </div>`;
     });
+    // Functional impairment THIS NEED TO STAY.
+    html += `
+      <div class="q-card ${fiAnswer !== null ? 'answered' : ''}">
+        <div class="q-num">પ્રશ્ન ${toGu(TOTAL_QUESTIONS)} / ${toGu(TOTAL_QUESTIONS)}</div>
+        <div class="q-text">જો આવી કોઈ સમસ્યા પર નિશાન લગાવ્યો હોય, તો તમારા કાર્યમાં, ઘરની દેખરેખમાં અથવા વ્યક્તિઓ સાથે મેળ-જોળ રાખવામાં કેટલી તકલીફ થઈ?</div>
+        <div class="options-grid">
+          ${fiOptions.map((opt, idx) => `
+            <button class="opt-btn ${fiAnswer === idx ? 'selected' : ''}"
+                    onclick="selectFI(${idx})">
+              ${opt}
+            </button>
+          `).join('')}
+        </div>
+      </div>`;
+
     container.innerHTML = html;
 
     updateProgress();
