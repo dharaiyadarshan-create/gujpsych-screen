@@ -87,54 +87,77 @@ const SocioDem = (() => {
 
   // ── COURSE MAP (stream → courses) ────────────────────────────────
   const COURSE_MAP = {
-    1: [ // Arts
-      { label: 'BA',            value: 'BA' },
-      { label: 'MA',            value: 'MA' },
-      { label: 'BFA',           value: 'BFA' },
-      { label: 'અન્ય (Other)',  value: '__other__' },
-    ],
-    2: [ // Science
-      { label: 'BSc',           value: 'BSc' },
-      { label: 'MSc',           value: 'MSc' },
-      { label: 'અન્ય (Other)',  value: '__other__' },
-    ],
-    3: [ // Commerce
-      { label: 'BCom',          value: 'BCom' },
-      { label: 'MCom',          value: 'MCom' },
-      { label: 'BBA',           value: 'BBA' },
-      { label: 'MBA',           value: 'MBA' },
-      { label: 'અન્ય (Other)',  value: '__other__' },
-    ],
-    4: [ // Engineering / Technology
-      { label: 'BE / BTech',    value: 'BE_BTech' },
-      { label: 'ME / MTech',    value: 'ME_MTech' },
-      { label: 'Diploma',       value: 'Diploma' },
-      { label: 'અન્ય (Other)',  value: '__other__' },
-    ],
-    5: [ // Medical / Paramedical
-      { label: 'MBBS',          value: 'MBBS' },
-      { label: 'BDS',           value: 'BDS' },
-      { label: 'BAMS',          value: 'BAMS' },
-      { label: 'BHMS',          value: 'BHMS' },
-      { label: 'BPharm',        value: 'BPharm' },
-      { label: 'BSc Nursing',   value: 'BSc_Nursing' },
-      { label: 'Paramedical',   value: 'Paramedical' },
-      { label: 'અન્ય (Other)',  value: '__other__' },
-    ],
-    6: [ // Law
-      { label: 'LLB',           value: 'LLB' },
-      { label: 'LLM',           value: 'LLM' },
-      { label: 'અન્ય (Other)',  value: '__other__' },
-    ],
-    7: [ // Education
-      { label: 'BEd',           value: 'BEd' },
-      { label: 'MEd',           value: 'MEd' },
-      { label: 'અન્ય (Other)',  value: '__other__' },
-    ],
-    8: [ // Other stream
-      { label: 'અન્ય (Other)',  value: '__other__' },
-    ],
-  };
+  1: [ // Arts
+    { label: 'BA', value: 'BA' },
+    { label: 'MA', value: 'MA' },
+    { label: 'BFA', value: 'BFA' },
+    { label: 'MSW', value: 'MSW' },
+    { label: 'BJMC / MJMC', value: 'BJMC_MJMC' },
+    { label: 'અન્ય (Other)', value: '__other__' },
+  ],
+
+  2: [ // Science
+    { label: 'BSc', value: 'BSc' },
+    { label: 'MSc', value: 'MSc' },
+    { label: 'BCA', value: 'BCA' },
+    { label: 'MCA', value: 'MCA' },
+    { label: 'અન્ય (Other)', value: '__other__' },
+  ],
+
+  3: [ // Commerce
+    { label: 'BCom', value: 'BCom' },
+    { label: 'MCom', value: 'MCom' },
+    { label: 'BBA', value: 'BBA' },
+    { label: 'MBA', value: 'MBA' },
+    { label: 'અન્ય (Other)', value: '__other__' },
+  ],
+
+  4: [ // Engineering / Technology
+    { label: 'BE / BTech', value: 'BE_BTech' },
+    { label: 'ME / MTech', value: 'ME_MTech' },
+    { label: 'Diploma Engineering', value: 'Diploma_Engg' },
+    { label: 'અન્ય (Other)', value: '__other__' },
+  ],
+
+  5: [ // Medical / Paramedical
+    { label: 'MBBS', value: 'MBBS' },
+    { label: 'MD / MS', value: 'MD_MS' },
+    { label: 'BDS', value: 'BDS' },
+    { label: 'MDS', value: 'MDS' },
+    { label: 'BAMS', value: 'BAMS' },
+    { label: 'BHMS', value: 'BHMS' },
+    { label: 'BUMS', value: 'BUMS' },
+    { label: 'BSc Nursing', value: 'BSc_Nursing' },
+    { label: 'GNM / ANM', value: 'GNM_ANM' },
+    { label: 'BPharm', value: 'BPharm' },
+    { label: 'MPharm', value: 'MPharm' },
+    { label: 'BPT', value: 'BPT' },
+    { label: 'MPT', value: 'MPT' },
+    { label: 'Paramedical', value: 'Paramedical' },
+    { label: 'અન્ય (Other)', value: '__other__' },
+  ],
+
+  6: [ // Law
+    { label: 'LLB', value: 'LLB' },
+    { label: 'BA LLB / BBA LLB', value: 'Integrated_LLB' },
+    { label: 'LLM', value: 'LLM' },
+    { label: 'અન્ય (Other)', value: '__other__' },
+  ],
+
+  7: [ // Education
+    { label: 'BEd', value: 'BEd' },
+    { label: 'MEd', value: 'MEd' },
+    { label: 'D.El.Ed / PTC', value: 'DElEd_PTC' },
+    { label: 'અન્ય (Other)', value: '__other__' },
+  ],
+
+  8: [ // Other
+    { label: 'Diploma (Non-Engineering)', value: 'Diploma' },
+    { label: 'ITI', value: 'ITI' },
+    { label: 'PhD', value: 'PhD' },
+    { label: 'અન્ય (Other)', value: '__other__' },
+  ],
+};
 
   // ── GUJARAT DISTRICTS ────────────────────────────────────────────
   const GUJARAT_DISTRICTS = [
@@ -171,6 +194,7 @@ const SocioDem = (() => {
     'તાપી (Tapi)',
     'વડોદરા (Vadodara)',
     'વલસાડ (Valsad)',
+    'વાવ-થરાદ (Vav-Tharad)',
   ];
    
   // ── COLLEGE FIELDS ───────────────────────────────────────────────
