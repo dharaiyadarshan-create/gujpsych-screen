@@ -20,16 +20,13 @@
   <div class="screen active" id="screen-intro">
 
     <span class="eyebrow">સ્વ-મૂલ્યાંકન · Self-Assessment</span>
-    <h1>બહુઆયામી સમજાયેલ સામાજિક આધાર માપ</h1>
-    <p class="lead">MSPSS (Multidimensional Scale of Perceived Social Support) · સામાજિક આધાર સ્ક્રીનિંગ</p>
+    <h1>MSPSS (Multidimensional Scale of Perceived Social Support)</h1>
+    <p class="lead"> · અનુભવતા સામાજિક આધાર/સપોર્ટ નું સ્ક્રીનિંગ</p>
 
     <div class="card">
       <div class="card-label">આ મૂલ્યાંકન વિશે</div>
       <ul class="info-list">
-        <li><span class="dot"></span>MSPSS એ ૧૨ વિધાનોની પ્રશ્નાવલિ છે જે સામાજિક આધારના ત્રણ સ્ત્રોત — ખાસ વ્યક્તિ, પરિવાર, અને મિત્રો — માપે છે.</li>
-        <li><span class="dot"></span>ભરવામાં સામાન્ય રીતે ૩ થી ૫ મિનિટ લાગે છે.</li>
-        <li><span class="dot"></span>તમારા જવાબો સંપૂર્ણ અનામી છે — કોઈ અંગત માહિતી સંગ્રહ થતી નથી.</li>
-        <li><span class="dot"></span>ભાગ લેવો સ્વૈચ્છિક છે. સબમિટ કરતાં પહેલાં ગમે ત્યારે બહાર નીકળી શકો.</li>
+        <li><span class="dot"></span>MSPSS એ ૧૨ વિધાનોની પ્રશ્નાવલિ છે જે સામાજિક આધારના ત્રણ સ્ત્રોત — ખાસ વ્યક્તિ, પરિવાર, અને મિત્રો — માપે છે. તેને ભરવામાં સામાન્ય રીતે 3-5 મિનિટ લાગે છે. </li>
       </ul>
     </div>
 
@@ -45,8 +42,7 @@
 
   </div>
 
-  // progress bar (initially empty, will fill as user answers questions)
-
+  
   <div class="progress-wrap" id="progress-wrap" style="display:none;">
   <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
   <div class="progress-text" id="progress-text">૦ / 12</div>
@@ -60,7 +56,7 @@
     
 
     <div class="instruction-band">
-      <strong>સૂચના:</strong> નીચે આપેલા વિધાનો વિશે તમને કેવું લાગે છે તે જણાવો. દરેક વિધાન ધ્યાનથી વાંચો અને તમારો અનુભવ દર્શાવો.
+      <strong>સૂચના:</strong> નીચે આપેલા વિધાનો વિશે તમને કેવું લાગે છે તે જાણવામાં(સમજવામાં) અમને રસ છે. દરેક વિધાન ધ્યાનથી વાંચો. દરેક વિધાન વિશે તમને કેવું લાગે છે (કેવી રીતે અનુભવ કરો છો) તે જણાવો.
     </div>
 
     <div id="questions-container"></div>
@@ -86,7 +82,7 @@
 
 <p class="footnote">
   Your responses are anonymous and confidential.<br>
-  તમારા જવાબો ગુપ્ત અને અનામી છે.
+  તમારા જવાબો ગોપનીય છે.કોઈ વ્યક્તિગત ઓળખ સ્ટોર નથી થતી કે જાહેર નથી થતી. તમારા જવાબો સંશોધન હેતુ માટે જ ઉપયોગ કરવામાં આવશે. તમે કોઈ પણ સમયે આ પૃષ્ઠને બંધ કરી શકો છો અથવા પાછા જઈ શકો છો.
 </p>
 
 <script src="../assets/shared.js"></script>
@@ -104,7 +100,7 @@
     { text: "જ્યારે મને જરૂર હોય છે, ત્યારે મારી આસપાસ કોઈ ખાસ વ્યક્તિ હોય છે.",                          sub: 'SO' },
     { text: "કોઈ ખાસ વ્યક્તિ છે જેની સાથે હું મારા સુખ-દુઃખ વહેંચી શકું છું.",                              sub: 'SO' },
     { text: "મારો પરિવાર (કુટુંબ) ખરેખર મને મદદ કરવાનો પ્રયત્ન કરે છે.",                                    sub: 'FA' },
-    { text: "મને મારા પરિવાર (કુટુંબ) તરફથી જરૂરી લાગણી સભર મદદ અને ટેકો મળે છે.",                         sub: 'FA' },
+    { text: "મને મારા પરિવાર (કુટુંબ) તરફથી જરૂરી લાગણી-સભર મદદ અને ટેકો મળે છે.",                         sub: 'FA' },
     { text: "એક ખાસ વ્યક્તિ છે જે મને માનસિક રીતે સહારો આપે છે.",                                          sub: 'SO' },
     { text: "મારા મિત્રો ખરેખર મને મદદ કરવાનો પ્રયાસ કરે છે.",                                              sub: 'FR' },
     { text: "જ્યારે સમસ્યાઓ આવે છે, ત્યારે હું મારા મિત્રો પર આધાર રાખી શકું છું.",                         sub: 'FR' },
