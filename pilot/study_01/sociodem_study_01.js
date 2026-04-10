@@ -54,7 +54,7 @@ const SocioDem = (() => {
       id: 'age', type: 'number',
       label: 'ઉંમર (Age)',
       sublabel: 'પૂર્ણ વર્ષોમાં · Completed years',
-      min: 18, max: 70, required: true
+      min: 18, max: 30, required: true
     },
     {
       id: 'gender', type: 'radio',
