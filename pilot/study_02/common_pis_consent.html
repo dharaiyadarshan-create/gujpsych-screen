@@ -1,0 +1,147 @@
+//common_pis_consent.html
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Participant Information Sheet — FLOURISH</title>
+
+  <!-- ================= CSS / FONT PLACEHOLDER ================= -->
+  <!-- Add your CSS file here -->
+  <!-- <link rel="stylesheet" href="../styles.css"> -->
+
+  <!-- Add fonts here -->
+  <!-- Example:
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Gujarati&display=swap" rel="stylesheet">
+  -->
+  <!-- ========================================================== -->
+
+</head>
+
+<body>
+
+  <div class="container">
+
+    <h1>Participant Information Sheet (PIS) — Project FLOURISH</h1>
+
+    <!-- ================= GUJARATI SECTION ================= -->
+    <section class="lang-section">
+      <h2>ગુજરાતી (Gujarati)</h2>
+
+      <h3>૧. પ્રોજેક્ટ વિશે</h3>
+      <p>
+        FLOURISH એ ગુજરાતના કોલેજ વિદ્યાર્થીઓ માટે તૈયાર કરવામાં આવેલ એક સંશોધન પ્રોજેક્ટ છે.
+        તેનો મુખ્ય હેતુ માનસિક સ્વાસ્થ્ય વિશે સાચી માહિતી અને સમજ પૂરી પાડવાનો છે.
+      </p>
+
+      <h3>૨. અભ્યાસના તબક્કાઓ</h3>
+      <ul>
+        <li>તબક્કો ૧ (બેઝલાઇન): ૧૦-૧૫ મિનિટની ઓનલાઇન પ્રશ્નાવલી (T0)</li>
+        <li>તબક્કો ૨ (હસ્તક્ષેપ): ૨૮ દિવસ સુધી દરરોજ રાત્રે ૮ વાગ્યે WhatsApp સંદેશ</li>
+        <li>તબક્કો ૩ (પોસ્ટ-એસેસમેન્ટ): T1 પ્રશ્નાવલી અને પ્રતિભાવ</li>
+      </ul>
+
+      <h3>૩. તમારી ભાગીદારી અને અધિકારો</h3>
+      <ul>
+        <li>સ્વૈચ્છિકતા</li>
+        <li>અનામીતા (Anonymous Code)</li>
+        <li>WhatsApp ચેનલ નિયમો (Broadcast-only)</li>
+      </ul>
+
+      <h3>૪. જોખમો અને મર્યાદાઓ</h3>
+      <ul>
+        <li>સંવેદનશીલ પ્રશ્નો હોઈ શકે છે</li>
+        <li>કોઈ સારવાર / નિદાન આપવામાં આવતું નથી</li>
+      </ul>
+
+      <h3>૫. સંપર્ક અને હેલ્પલાઇન</h3>
+      <p>
+        કટોકટીમાં Tele-MANAS (14416) અથવા iCall (9152987821) નો સંપર્ક કરવો.
+      </p>
+    </section>
+
+    <hr>
+
+    <!-- ================= ENGLISH SECTION ================= -->
+    <section class="lang-section">
+      <h2>English</h2>
+
+      <h3>1. About the Project</h3>
+      <p>
+        FLOURISH is a research project designed for college students in Gujarat.
+        Its primary goal is to provide accurate mental health information and literacy.
+      </p>
+
+      <h3>2. Study Phases</h3>
+      <ul>
+        <li>Phase 1: Baseline questionnaire (T0)</li>
+        <li>Phase 2: 28-day WhatsApp intervention</li>
+        <li>Phase 3: Post-assessment (T1) and feedback</li>
+      </ul>
+
+      <h3>3. Participation and Rights</h3>
+      <ul>
+        <li>Voluntary participation</li>
+        <li>Anonymity via self-generated code</li>
+        <li>Broadcast-only WhatsApp channel</li>
+      </ul>
+
+      <h3>4. Risks and Scope</h3>
+      <ul>
+        <li>Some sensitive questions</li>
+        <li>No treatment or diagnosis provided</li>
+      </ul>
+
+      <h3>5. Contact and Support</h3>
+      <p>
+        In distress, contact Tele-MANAS (14416) or iCall (9152987821).
+      </p>
+    </section>
+
+    <hr>
+
+    <!-- ================= CONSENT ================= -->
+    <section class="consent-section">
+      <h3>Universal Master Consent / સાર્વત્રિક સંમતિ</h3>
+
+      <form id="pisConsentForm">
+
+        <label>
+          <input type="checkbox" id="pisConsentCheck">
+          મેં આ માહિતી પત્રક સંપૂર્ણ વાંચ્યું છે. હું અભ્યાસના તમામ તબક્કાઓ માટે સંમત છું.
+          <br>
+          I have read this Information Sheet in full and voluntarily consent to participate.
+        </label>
+
+        <br><br>
+
+        <button type="submit" id="nextBtn" disabled>
+          Next / આગળ વધો
+        </button>
+
+      </form>
+    </section>
+
+  </div>
+
+  <!-- ================= SCRIPT ================= -->
+  <script>
+    const checkbox = document.getElementById("pisConsentCheck");
+    const button = document.getElementById("nextBtn");
+
+    checkbox.addEventListener("change", function() {
+      button.disabled = !this.checked;
+    });
+
+    document.getElementById("pisConsentForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      if (checkbox.checked) {
+        // Redirect to sociodemographic page (update filename later if needed)
+        window.location.href = "sociodem_study_0201.html";
+      }
+    });
+  </script>
+
+</body>
+</html>

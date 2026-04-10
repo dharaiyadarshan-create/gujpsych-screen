@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Informed Consent | Study 02</title>
+  <link rel="stylesheet" href="shared_study_02.css">
+</head>
+<body>
+
+<div class="container">
+  <span class="badge p1">Informed Consent — Please read carefully</span>
+  <h1>Informed Consent Form</h1>
+  <p>Before you begin, please read the following information carefully and completely.</p>
+
+  <div class="consent-box">
+    <h2>Purpose of the Study</h2>
+    <p>
+      <!-- TODO: Replace with actual study purpose -->
+      This study examines [describe the topic, e.g., attitudes toward help-seeking, mental health literacy,
+      and psychological well-being]. The information gathered will be used for research purposes only.
+    </p>
+
+    <h2>What You Will Be Asked to Do</h2>
+    <p>
+      You will complete several questionnaires across multiple time points. The first session involves
+      five questionnaires and a brief set of background questions. Subsequent sessions involve the same
+      questionnaires only. Total time per session is approximately 20–30 minutes.
+    </p>
+
+    <h2>Voluntary Participation</h2>
+    <p>
+      Your participation is entirely voluntary. You may withdraw at any time without penalty or
+      consequence. Withdrawing will not affect you in any way.
+    </p>
+
+    <h2>Confidentiality</h2>
+    <p>
+      All responses are anonymous and confidential. Data will be stored securely and used only for
+      research purposes. Your identity will not be disclosed in any publications or reports.
+    </p>
+
+    <h2>Risks and Benefits</h2>
+    <p>
+      There are no known risks to participation. You will not receive direct personal benefit, but
+      your participation contributes to advancing knowledge in this area.
+    </p>
+
+    <h2>Eligibility</h2>
+    <p>
+      You must be 18 years of age or older to participate.
+    </p>
+
+    <h2>Contact Information</h2>
+    <p>
+      If you have any questions about this study, please contact:<br>
+      <!-- TODO: Replace with actual researcher details -->
+      [Researcher Name] — [Email Address] — [Institution]
+    </p>
+
+    <h2>Ethics Approval</h2>
+    <p>
+      <!-- TODO: Replace with actual ethics details -->
+      This study has been approved by [Ethics Committee / IRB Name], Reference No. [XXXXXX].
+    </p>
+  </div>
+
+  <div class="notice notice-info">
+    By clicking <strong>"I Agree"</strong>, you confirm that:
+    <ul style="margin-top:.5rem">
+      <li>You have read and understood this consent form.</li>
+      <li>You are 18 years of age or older.</li>
+      <li>You voluntarily agree to participate in this study.</li>
+    </ul>
+  </div>
+
+  <div class="btn-row between">
+    <button class="btn btn-danger"    onclick="onDecline()">✕ I Do Not Agree</button>
+    <button class="btn btn-primary"   onclick="onAgree()">✓ I Agree — Begin Study</button>
+  </div>
+</div>
+
+<script src="shared.js"></script>
+<script>
+  function onAgree() {
+    STUDY.initPID();
+    STUDY.setPhase(1);
+    STUDY.go('index_study_02.html');
+  }
+  function onDecline() {
+    document.querySelector('.container').innerHTML = `
+      <div class="result-card">
+        <div class="result-icon">🙏</div>
+        <h1>Thank You</h1>
+        <p>You have chosen not to participate. Thank you for your time.</p>
+        <p style="color:var(--muted);font-size:.9rem">You may close this window.</p>
+      </div>`;
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,137 @@
+//common_disclaimer.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>FLOURISH — Common Disclosure</title>
+
+  <!-- ================= CSS / FONT PLACEHOLDER ================= -->
+  <!-- Add your CSS file link here -->
+  <!-- <link rel="stylesheet" href="../styles.css"> -->
+
+  <!-- Add Google Fonts or custom fonts here -->
+  <!-- Example:
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Gujarati&display=swap" rel="stylesheet">
+  -->
+  <!-- ========================================================== -->
+
+</head>
+
+<body>
+
+  <div class="container">
+
+    <h1>FLOURISH — Common Disclosure</h1>
+
+    <!-- ================= GUJARATI SECTION ================= -->
+    <section class="lang-section">
+      <h2>ગુજરાતી (Gujarati)</h2>
+
+      <h3>આ અભ્યાસ વિશે (About the Study)</h3>
+      <p>
+        FLOURISH એ ગુજરાતના કોલેજ વિદ્યાર્થીઓ માટે માનસિક સ્વાસ્થ્ય વિશેનો એક ઓનલાઇન સંશોધન અભ્યાસ છે.
+        આ અભ્યાસ દ્વારા અમે સમજવા માંગીએ છીએ કે દ્વિભાષી (ગુજરાતી-અંગ્રેજી) ઓનલાઇન માહિતી વિદ્યાર્થીઓના
+        માનસિક સ્વાસ્થ્ય જ્ઞાનમાં કેવી રીતે મદદરૂપ થઈ શકે છે.
+      </p>
+
+      <h3>મહત્વપૂર્ણ મર્યાદાઓ (Important Limitations)</h3>
+      <ol>
+        <li>આ ક્લિનિકલ સેવા નથી: આ પ્રોગ્રામ માત્ર સ્વાસ્થ્ય શિક્ષણ (Psychoeducation) માટે છે.</li>
+        <li>કટોકટી સેવા નથી: કોઈ તાત્કાલિક સહાય ઉપલબ્ધ નથી.</li>
+        <li>કોઈ પ્રમાણપત્ર નહીં: ભાગ લેવા બદલ કોઈ પ્રમાણપત્ર આપવામાં આવશે નહીં.</li>
+      </ol>
+
+      <h3>સહભાગિતાના નિયમો (Rules of Participation)</h3>
+      <ul>
+        <li>સ્વૈચ્છિક અને અનામી</li>
+        <li>છૂટા થવાનો અધિકાર</li>
+        <li>તબક્કાવાર સંમતિ</li>
+      </ul>
+
+      <h3>કટોકટી હેલ્પલાઇન (24/7 Crisis Helplines)</h3>
+      <ul>
+        <li>Tele-MANAS: 14416</li>
+        <li>Vandrevala Foundation: 1860-2662-345</li>
+        <li>iCall: 9152987821</li>
+      </ul>
+    </section>
+
+    <hr>
+
+    <!-- ================= ENGLISH SECTION ================= -->
+    <section class="lang-section">
+      <h2>English</h2>
+
+      <h3>About the Study</h3>
+      <p>
+        FLOURISH is a voluntary, online research study designed for college students in Gujarat.
+        It explores how bilingual (Gujarati-English) online psychoeducation can improve mental
+        health literacy and well-being.
+      </p>
+
+      <h3>Scope and Limitations</h3>
+      <ol>
+        <li>Not a Clinical Service</li>
+        <li>No Emergency Care</li>
+        <li>No Certificate</li>
+      </ol>
+
+      <h3>Participation Details</h3>
+      <ul>
+        <li>Voluntary & Anonymous</li>
+        <li>Right to Withdraw</li>
+        <li>Staged Process</li>
+      </ul>
+
+      <h3>If you are in distress, please contact:</h3>
+      <ul>
+        <li>Tele-MANAS: 14416</li>
+        <li>Vandrevala Foundation: 1860-2662-345</li>
+        <li>iCall: 9152987821</li>
+      </ul>
+    </section>
+
+    <hr>
+
+    <!-- ================= ACKNOWLEDGEMENT ================= -->
+    <section class="consent-section">
+      <h3>Acknowledgement / સ્વીકૃતિ</h3>
+
+      <form id="consentForm">
+        <label>
+          <input type="checkbox" id="consentCheck">
+          મેં ઉપરની માહિતી વાંચી અને સમજી છે. હું આગળ વધવા ઈચ્છું છું.
+          <br>
+          I have read and understood the information provided above. I wish to proceed.
+        </label>
+
+        <br><br>
+
+        <button type="submit" id="proceedBtn" disabled>
+          Proceed / આગળ વધો
+        </button>
+      </form>
+    </section>
+
+  </div>
+
+  <!-- ================= SCRIPT ================= -->
+  <script>
+    const checkbox = document.getElementById("consentCheck");
+    const button = document.getElementById("proceedBtn");
+
+    checkbox.addEventListener("change", function() {
+      button.disabled = !this.checked;
+    });
+
+    document.getElementById("consentForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      if (checkbox.checked) {
+        window.location.href = "common_pis_consent.html";
+      }
+    });
+  </script>
+
+</body>
+</html>

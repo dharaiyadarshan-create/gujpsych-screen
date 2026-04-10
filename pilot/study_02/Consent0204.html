@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Final Consent | Study 02</title>
+  <link rel="stylesheet" href="shared_study_02.css">
+</head>
+<body>
+
+<div class="container">
+  <span class="badge p3">Phase 3 — Final Data Submission</span>
+
+  <h1>Consent for Final Data Collection</h1>
+  <p>
+    You have now reached the final phase of this study. Please read the following information
+    and provide your consent below.
+  </p>
+
+  <div class="consent-box">
+    <h2>Final Phase Overview</h2>
+    <p>
+      <!-- TODO: Describe what the final phase involves -->
+      This is the final step of the study. Your complete dataset — including all questionnaire
+      responses from Part 1 and the follow-up — will now be compiled and submitted.
+    </p>
+
+    <h2>Data Use Confirmation</h2>
+    <p>
+      By proceeding, you confirm that you consent to your data being used for the research purposes
+      described in the original consent form. All data will be treated in strict accordance with
+      the privacy and confidentiality commitments made at the start of the study.
+    </p>
+
+    <h2>Right to Withdraw</h2>
+    <p>
+      You may still withdraw your data at this point by clicking <strong>"Withdraw My Data"</strong>
+      below. If you withdraw, all your data collected during this study will be deleted.
+    </p>
+
+    <h2>Debriefing</h2>
+    <p>
+      <!-- TODO: Add debriefing information -->
+      [Insert debriefing statement here — explain the study's purpose, any withheld information,
+      and what the data will be used for.]
+    </p>
+  </div>
+
+  <div class="notice notice-info">
+    Clicking <strong>"I Consent — Submit Data"</strong> will finalise your participation.
+    A complete data file will be downloaded to your device as confirmation.
+  </div>
+
+  <div class="btn-row between">
+    <button class="btn btn-danger"  onclick="onWithdraw()">Withdraw My Data</button>
+    <button class="btn btn-primary" onclick="onAgree()">I Consent — Submit Data ✓</button>
+  </div>
+</div>
+
+<script src="shared.js"></script>
+<script src="export_study_0203.js"></script>
+<script>
+  function onAgree() {
+    STUDY.saveData('consent_t3', { agreed: true, ts: new Date().toISOString() });
+    STUDY.setPhase(3);
+    runExport03(); // from export_study_0203.js — downloads full data JSON
+
+    // Show study-complete thank-you to participant.
+    // result_study_0203.html is researcher-only and is NOT linked here.
+    document.querySelector('.container').innerHTML = `
+      <span class="badge p3">Study Complete ✓</span>
+      <div class="result-card">
+        <div class="result-icon">🙏</div>
+        <h1>Thank You — Study Complete!</h1>
+        <p style="color:var(--muted)">Your participation in Study 02 is now complete.</p>
+      </div>
+      <div class="notice notice-success">
+        ✓ Your complete data has been submitted. A copy has been downloaded to your device.
+      </div>
+      <hr class="divider">
+      <h2>Study Debrief</h2>
+      <p>
+        <!-- TODO: Add full debriefing text here -->
+        [Insert full debriefing information here — study purpose, expected findings, contact details.]
+      </p>
+      <p>
+        If you have any concerns about your well-being, please contact:<br>
+        <!-- TODO: Add support contact details -->
+        [Support/Crisis Line Name] — [Phone Number / Website]
+      </p>
+      <p style="color:var(--muted); font-size:.88rem; margin-top:1.5rem">
+        You may now close this window. Thank you for contributing to this research.
+      </p>`;
+  }
+
+  function onWithdraw() {
+    if (confirm('Are you sure you want to withdraw all your data? This action cannot be undone.')) {
+      STUDY.clearAll();
+      document.querySelector('.container').innerHTML = `
+        <div class="result-card">
+          <div class="result-icon">✓</div>
+          <h1>Data Withdrawn</h1>
+          <p>
+            Your data has been deleted. Thank you for your time. You may close this window.
+          </p>
+        </div>`;
+    }
+  }
+</script>
+</body>
+</html>

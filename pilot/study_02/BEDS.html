@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BEDS | Study 02</title>
+  <link rel="stylesheet" href="shared_study_02.css">
+</head>
+<body>
+
+<div class="container">
+  <span class="badge" id="phase-badge">Questionnaire 2 of 5</span>
+
+  <div class="progress-wrap">
+    <div class="progress-label" id="progress-label">Questionnaire 2 of 5</div>
+    <div class="progress-track"><div class="progress-fill" style="width:40%"></div></div>
+  </div>
+
+  <div class="step-dots" data-steps="5" data-current="2"></div>
+
+  <h1>BEDS</h1>
+  <!-- TODO: Replace with full scale name -->
+  <p>
+    <!-- TODO: Add scale instructions -->
+    Please read each statement and respond according to how you have felt over the past [time period].
+    Use the response options provided.
+  </p>
+  <p><em>Response scale: <!-- TODO: Add anchors e.g. 1 = Never, 5 = Always --></em></p>
+
+  <hr class="divider">
+
+  <form id="scale-form">
+    <!-- TODO: Replace placeholder items with actual BEDS items -->
+
+    <div class="question-block">
+      <p class="question-text">1. [BEDS Item 1 — add text here]</p>
+      <div class="likert-row">
+        <label><input type="radio" name="q1" value="1" required><span>1<br>Never</span></label>
+        <label><input type="radio" name="q1" value="2"><span>2<br>Rarely</span></label>
+        <label><input type="radio" name="q1" value="3"><span>3<br>Sometimes</span></label>
+        <label><input type="radio" name="q1" value="4"><span>4<br>Often</span></label>
+        <label><input type="radio" name="q1" value="5"><span>5<br>Always</span></label>
+      </div>
+    </div>
+
+    <div class="question-block">
+      <p class="question-text">2. [BEDS Item 2 — add text here]</p>
+      <div class="likert-row">
+        <label><input type="radio" name="q2" value="1" required><span>1<br>Never</span></label>
+        <label><input type="radio" name="q2" value="2"><span>2<br>Rarely</span></label>
+        <label><input type="radio" name="q2" value="3"><span>3<br>Sometimes</span></label>
+        <label><input type="radio" name="q2" value="4"><span>4<br>Often</span></label>
+        <label><input type="radio" name="q2" value="5"><span>5<br>Always</span></label>
+      </div>
+    </div>
+
+    <div class="question-block">
+      <p class="question-text">3. [BEDS Item 3 — add text here]</p>
+      <div class="likert-row">
+        <label><input type="radio" name="q3" value="1" required><span>1<br>Never</span></label>
+        <label><input type="radio" name="q3" value="2"><span>2<br>Rarely</span></label>
+        <label><input type="radio" name="q3" value="3"><span>3<br>Sometimes</span></label>
+        <label><input type="radio" name="q3" value="4"><span>4<br>Often</span></label>
+        <label><input type="radio" name="q3" value="5"><span>5<br>Always</span></label>
+      </div>
+    </div>
+
+    <!-- Continue adding items following the same pattern -->
+
+  </form>
+
+  <div class="btn-row between">
+    <button class="btn btn-secondary" onclick="goBack()">← Back</button>
+    <button class="btn btn-primary"   onclick="goNext()">Next →</button>
+  </div>
+</div>
+
+<script src="shared.js"></script>
+<script src="shared-ui.js"></script>
+<script>
+  const _phase = STUDY.getPhase();
+  document.getElementById('phase-badge').textContent  = `Phase ${_phase} — Questionnaire 2 of 5`;
+  document.getElementById('progress-label').textContent = `Phase ${_phase} — Questionnaire 2 of 5`;
+
+  function goBack() {
+    STUDY.go(STUDY.prevBeforeScale('BEDS.html'));
+  }
+
+  function goNext() {
+    const data = STUDY.collectForm('scale-form');
+    STUDY.saveData(`t${_phase}_beds`, data);
+    STUDY.go(STUDY.nextAfterScale('BEDS.html'));
+  }
+</script>
+</body>
+</html>

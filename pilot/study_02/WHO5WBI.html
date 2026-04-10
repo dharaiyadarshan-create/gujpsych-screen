@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WHO-5 WBI | Study 02</title>
+  <link rel="stylesheet" href="shared_study_02.css">
+</head>
+<body>
+
+<div class="container">
+  <span class="badge" id="phase-badge">Questionnaire 5 of 5</span>
+
+  <div class="progress-wrap">
+    <div class="progress-label" id="progress-label">Questionnaire 5 of 5 — Last questionnaire!</div>
+    <div class="progress-track"><div class="progress-fill" style="width:100%"></div></div>
+  </div>
+
+  <div class="step-dots" data-steps="5" data-current="5"></div>
+
+  <h1>WHO-5 Well-Being Index (WHO-5 WBI)</h1>
+  <p>
+    Please indicate for each of the following statements how well it describes how you have been
+    feeling over the <strong>last two weeks</strong>.
+  </p>
+  <p>
+    <em>
+      Response scale:
+      <strong>0 = At No Time</strong>,
+      <strong>1 = Some of the Time</strong>,
+      <strong>2 = Less than Half the Time</strong>,
+      <strong>3 = More than Half the Time</strong>,
+      <strong>4 = Most of the Time</strong>,
+      <strong>5 = All of the Time</strong>
+    </em>
+  </p>
+
+  <hr class="divider">
+
+  <form id="scale-form">
+    <!-- WHO-5 WBI has 5 items — replace placeholder text with actual items -->
+
+    <div class="question-block">
+      <p class="question-text">1. I have felt cheerful and in good spirits.</p>
+      <div class="likert-row">
+        <label><input type="radio" name="q1" value="0" required><span>0<br>At No<br>Time</span></label>
+        <label><input type="radio" name="q1" value="1"><span>1<br>Some of<br>the Time</span></label>
+        <label><input type="radio" name="q1" value="2"><span>2<br>Less than<br>Half</span></label>
+        <label><input type="radio" name="q1" value="3"><span>3<br>More than<br>Half</span></label>
+        <label><input type="radio" name="q1" value="4"><span>4<br>Most of<br>the Time</span></label>
+        <label><input type="radio" name="q1" value="5"><span>5<br>All of<br>the Time</span></label>
+      </div>
+    </div>
+
+    <div class="question-block">
+      <p class="question-text">2. I have felt calm and relaxed.</p>
+      <div class="likert-row">
+        <label><input type="radio" name="q2" value="0" required><span>0<br>At No<br>Time</span></label>
+        <label><input type="radio" name="q2" value="1"><span>1<br>Some of<br>the Time</span></label>
+        <label><input type="radio" name="q2" value="2"><span>2<br>Less than<br>Half</span></label>
+        <label><input type="radio" name="q2" value="3"><span>3<br>More than<br>Half</span></label>
+        <label><input type="radio" name="q2" value="4"><span>4<br>Most of<br>the Time</span></label>
+        <label><input type="radio" name="q2" value="5"><span>5<br>All of<br>the Time</span></label>
+      </div>
+    </div>
+
+    <div class="question-block">
+      <p class="question-text">3. I have felt active and vigorous.</p>
+      <div class="likert-row">
+        <label><input type="radio" name="q3" value="0" required><span>0<br>At No<br>Time</span></label>
+        <label><input type="radio" name="q3" value="1"><span>1<br>Some of<br>the Time</span></label>
+        <label><input type="radio" name="q3" value="2"><span>2<br>Less than<br>Half</span></label>
+        <label><input type="radio" name="q3" value="3"><span>3<br>More than<br>Half</span></label>
+        <label><input type="radio" name="q3" value="4"><span>4<br>Most of<br>the Time</span></label>
+        <label><input type="radio" name="q3" value="5"><span>5<br>All of<br>the Time</span></label>
+      </div>
+    </div>
+
+    <div class="question-block">
+      <p class="question-text">4. I woke up feeling fresh and rested.</p>
+      <div class="likert-row">
+        <label><input type="radio" name="q4" value="0" required><span>0<br>At No<br>Time</span></label>
+        <label><input type="radio" name="q4" value="1"><span>1<br>Some of<br>the Time</span></label>
+        <label><input type="radio" name="q4" value="2"><span>2<br>Less than<br>Half</span></label>
+        <label><input type="radio" name="q4" value="3"><span>3<br>More than<br>Half</span></label>
+        <label><input type="radio" name="q4" value="4"><span>4<br>Most of<br>the Time</span></label>
+        <label><input type="radio" name="q4" value="5"><span>5<br>All of<br>the Time</span></label>
+      </div>
+    </div>
+
+    <div class="question-block">
+      <p class="question-text">5. My daily life has been filled with things that interest me.</p>
+      <div class="likert-row">
+        <label><input type="radio" name="q5" value="0" required><span>0<br>At No<br>Time</span></label>
+        <label><input type="radio" name="q5" value="1"><span>1<br>Some of<br>the Time</span></label>
+        <label><input type="radio" name="q5" value="2"><span>2<br>Less than<br>Half</span></label>
+        <label><input type="radio" name="q5" value="3"><span>3<br>More than<br>Half</span></label>
+        <label><input type="radio" name="q5" value="4"><span>4<br>Most of<br>the Time</span></label>
+        <label><input type="radio" name="q5" value="5"><span>5<br>All of<br>the Time</span></label>
+      </div>
+    </div>
+
+  </form>
+
+  <div class="btn-row between">
+    <button class="btn btn-secondary" onclick="goBack()">← Back</button>
+    <button class="btn btn-primary"   onclick="goNext()" id="nextBtn">Next →</button>
+  </div>
+</div>
+
+<script src="shared.js"></script>
+<script src="shared-ui.js"></script>
+<script src="export_study_0202.js"></script>
+<script>
+  const _phase = STUDY.getPhase();
+  document.getElementById('phase-badge').textContent    = `Phase ${_phase} — Questionnaire 5 of 5`;
+  document.getElementById('progress-label').textContent = `Phase ${_phase} — Questionnaire 5 of 5 — Last questionnaire!`;
+  if (_phase === 1) {
+    document.getElementById('nextBtn').textContent = 'Next: Background Questions →';
+  }
+
+  function goBack() {
+    STUDY.go(STUDY.prevBeforeScale('WHO5WBI.html'));
+  }
+
+  function goNext() {
+    const data = STUDY.collectForm('scale-form');
+    STUDY.saveData(`t${_phase}_who5`, data);
+
+    const next = STUDY.nextAfterScale('WHO5WBI.html');
+
+    if (next === '__export02__') {
+      // Phase 2: export T2 data then go to result02
+      runExport02(); // from export_study_0202.js
+      STUDY.go('result_study_0202.html');
+    } else {
+      // Phase 1: go to sociodemographic
+      STUDY.go(next); // → sociodem_study_0201.html
+    }
+  }
+</script>
+</body>
+</html>

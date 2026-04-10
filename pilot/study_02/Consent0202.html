@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WhatsApp Group Consent | Study 02</title>
+  <link rel="stylesheet" href="shared_study_02.css">
+</head>
+<body>
+
+<div class="container">
+  <span class="badge p2">Phase 2 — WhatsApp Group Consent</span>
+
+  <h1>Consent to Join Study WhatsApp Group</h1>
+  <p>
+    As part of this study, you are invited to join a dedicated WhatsApp group. Please read the
+    following information carefully before deciding whether to proceed.
+  </p>
+
+  <div class="consent-box">
+    <h2>Purpose of the WhatsApp Group</h2>
+    <p>
+      <!-- TODO: Describe what the group is for (e.g., psychoeducation, mental health tips, study updates) -->
+      The WhatsApp group will be used to deliver [describe content/intervention, e.g., weekly
+      mental health information, psychoeducation sessions, study reminders, etc.].
+    </p>
+
+    <h2>Duration</h2>
+    <p>
+      <!-- TODO: Specify the duration -->
+      The group will be active for approximately [X weeks/months], after which a follow-up
+      assessment will be requested.
+    </p>
+
+    <h2>Privacy Considerations</h2>
+    <ul>
+      <li>Your phone number will be visible to other group members and the researcher.</li>
+      <li>Do not share personal identifying information in the group.</li>
+      <li>Content posted in the group by the research team is for study purposes only.</li>
+    </ul>
+
+    <h2>Voluntary Participation</h2>
+    <p>
+      Joining this group is voluntary. You may leave the group at any time without penalty. If
+      you choose not to join, you may still complete the remaining parts of the study.
+    </p>
+  </div>
+
+  <div class="notice notice-info">
+    <strong>Step 1:</strong> Read the information above.<br>
+    <strong>Step 2:</strong> Click the WhatsApp link below to join the group.<br>
+    <strong>Step 3:</strong> Return to this page and click <strong>"I Have Joined — Continue"</strong>.
+  </div>
+
+  <!-- TODO: Replace href with the actual WhatsApp group invite link -->
+  <div style="text-align:center; margin: 1.2rem 0;">
+    <a href="https://chat.whatsapp.com/REPLACE_WITH_ACTUAL_LINK"
+       target="_blank"
+       rel="noopener"
+       class="btn btn-wa"
+       style="text-decoration:none; font-size:1.05rem; padding:.75rem 2rem;">
+      &#128172; Join WhatsApp Group
+    </a>
+    <p style="font-size:.82rem; color:var(--muted); margin-top:.6rem;">
+      Link opens in WhatsApp. Return here after joining.
+    </p>
+  </div>
+
+  <div class="btn-row between">
+    <button class="btn btn-secondary" onclick="onDecline()">I Prefer Not to Join</button>
+    <button class="btn btn-primary"   onclick="onAgree()">I Have Joined — Continue →</button>
+  </div>
+</div>
+
+<script src="shared.js"></script>
+<script>
+  function onAgree() {
+    STUDY.saveData('consent_whatsapp', { agreed: true, ts: new Date().toISOString() });
+    STUDY.go('Consent0203.html');
+  }
+
+  function onDecline() {
+    STUDY.saveData('consent_whatsapp', { agreed: false, ts: new Date().toISOString() });
+    // Still allow them to continue even if they didn't join
+    if (confirm('You have chosen not to join the WhatsApp group. Would you still like to continue with the follow-up study?')) {
+      STUDY.go('Consent0203.html');
+    }
+  }
+</script>
+</body>
+</html>

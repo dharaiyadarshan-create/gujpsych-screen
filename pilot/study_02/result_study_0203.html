@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Researcher Data Summary | Study 02</title>
+  <link rel="stylesheet" href="shared_study_02.css">
+</head>
+<body>
+
+<!-- ⚠ RESEARCHER-ONLY PAGE — not linked from participant flow -->
+<div class="researcher-bar">⚠ Researcher Access Only — Not Displayed to Participants</div>
+
+<div class="container" style="border-radius: 0 0 var(--radius) var(--radius);">
+
+  <!-- Access gate shown by default -->
+  <div id="gate">
+    <span class="badge researcher">Restricted Access</span>
+    <h1>Study 02 — Data Summary</h1>
+    <p>
+      This page is for researcher use only. It is not part of the participant flow and will not
+      be shown to participants. Enter the researcher access code to view collected data.
+    </p>
+
+    <div class="notice notice-researcher">
+      ⚠ Ensure you are in a secure, private environment before proceeding.
+      Do not view participant data in a public setting.
+    </div>
+
+    <div class="form-group" style="max-width:340px; margin-top:1.2rem;">
+      <label for="access-code">Researcher Access Code</label>
+      <input type="password" id="access-code" placeholder="Enter access code" autocomplete="off">
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="checkAccess()">View Data →</button>
+    </div>
+  </div>
+
+  <!-- Data view shown after correct code -->
+  <div id="data-view" style="display:none">
+    <span class="badge researcher">Researcher View — Handle with Care</span>
+    <h1>Study 02 — Complete Data Summary</h1>
+
+    <table style="width:100%; font-size:.88rem; border-collapse:collapse; margin-bottom:1.2rem;">
+      <tr>
+        <td style="padding:.3rem .6rem; color:var(--muted); width:160px;">Participant ID</td>
+        <td id="pid-display" style="font-weight:600; font-family:monospace;">—</td>
+      </tr>
+      <tr>
+        <td style="padding:.3rem .6rem; color:var(--muted);">Viewed at</td>
+        <td id="time-display" style="font-family:monospace;">—</td>
+      </tr>
+      <tr>
+        <td style="padding:.3rem .6rem; color:var(--muted);">Phase reached</td>
+        <td id="phase-display" style="font-family:monospace;">—</td>
+      </tr>
+    </table>
+
+    <h2>Raw Data (JSON)</h2>
+    <pre id="data-display"
+         style="background:#f4f6f9; padding:1rem; border-radius:8px;
+                overflow-x:auto; font-size:.8rem; max-height:480px;
+                overflow-y:auto; border:1px solid var(--border);
+                font-family:'Consolas','Courier New',monospace;">
+    </pre>
+
+    <div class="btn-row" style="margin-top:1.4rem;">
+      <button class="btn btn-primary"   onclick="downloadAll()">⬇ Download Full JSON</button>
+      <button class="btn btn-secondary" onclick="lockView()">🔒 Lock &amp; Clear View</button>
+    </div>
+  </div>
+
+</div>
+
+<script src="shared.js"></script>
+<script>
+  // TODO: Change this to a secure code before deployment.
+  // Consider server-side authentication for production use.
+  const RESEARCHER_CODE = 'STUDY02_RES';
+
+  function checkAccess() {
+    const entered = document.getElementById('access-code').value;
+    if (entered === RESEARCHER_CODE) {
+      showData();
+    } else {
+      alert('Incorrect access code. Please try again.');
+    }
+  }
+
+  function showData() {
+    document.getElementById('gate').style.display      = 'none';
+    document.getElementById('data-view').style.display = 'block';
+
+    document.getElementById('pid-display').textContent   = STUDY.getPID() || '(none recorded)';
+    document.getElementById('time-display').textContent  = new Date().toLocaleString();
+    document.getElementById('phase-display').textContent = `Phase ${STUDY.getPhase()} (last recorded)`;
+
+    const allData = STUDY.loadData();
+    document.getElementById('data-display').textContent = JSON.stringify(allData, null, 2);
+  }
+
+  function downloadAll() {
+    const payload = {
+      study: 'study_02',
+      participantId: STUDY.getPID(),
+      downloadedAt: new Date().toISOString(),
+      allData: STUDY.loadData()
+    };
+    STUDY.downloadJSON(payload, `study02_RESEARCHER_${STUDY.getPID()}_${Date.now()}.json`);
+  }
+
+  function lockView() {
+    document.getElementById('data-view').style.display  = 'none';
+    document.getElementById('gate').style.display       = 'block';
+    document.getElementById('access-code').value        = '';
+    document.getElementById('data-display').textContent = '';
+  }
+
+  // Allow Enter key on access-code field
+  document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('access-code')?.addEventListener('keydown', e => {
+      if (e.key === 'Enter') checkAccess();
+    });
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Follow-up Consent | Study 02</title>
+  <link rel="stylesheet" href="shared_study_02.css">
+</head>
+<body>
+
+<div class="container">
+  <span class="badge p2">Phase 2 — Follow-up Assessment Consent (T2)</span>
+
+  <h1>Consent for Follow-up Assessment</h1>
+  <p>
+    You are about to begin the follow-up assessment (Time 2). Please read the information below
+    before proceeding.
+  </p>
+
+  <div class="consent-box">
+    <h2>About This Assessment (T2)</h2>
+    <p>
+      This follow-up assessment repeats the same five questionnaires you completed in Part 1.
+      Completing this allows us to measure any changes that may have occurred since your first
+      assessment.
+    </p>
+
+    <h2>What to Expect</h2>
+    <ul>
+      <li>You will complete the <strong>same 5 questionnaires</strong> as before.</li>
+      <li>Background (sociodemographic) information will <strong>not</strong> be collected again.</li>
+      <li>Estimated time: <strong>15–20 minutes</strong>.</li>
+    </ul>
+
+    <h2>Withdrawal</h2>
+    <p>
+      Your participation remains entirely voluntary. You may withdraw at any time without penalty.
+    </p>
+
+    <h2>Data Use</h2>
+    <p>
+      Your responses will be combined with your Part 1 data for comparison purposes. All data
+      remains anonymous and confidential.
+    </p>
+  </div>
+
+  <div class="notice notice-info">
+    After agreeing, you will complete the 5 questionnaires. There is no sociodemographic section
+    in this phase.
+  </div>
+
+  <hr class="divider">
+
+  <h2>Enter Your Study Code to Continue</h2>
+  <p>
+    Please re-enter the same 8-digit code you used in Part 1.
+    This links your follow-up responses to your baseline data.
+  </p>
+  <p style="font-size:.88rem; color:var(--muted);">
+    <strong>Reminder:</strong> last 4 digits of your mobile number + your date of birth in DDMM
+    &nbsp;(e.g. <code style="background:#f0f4f1;padding:1px 5px;border-radius:4px;">7823<strong>1402</strong></code>)
+  </p>
+
+  <div class="form-group" style="max-width: 320px;">
+    <label for="pcode-t2">
+      Your 8-digit study code
+      <span style="font-weight:400; color:var(--muted);">(phone last 4 + DDMM)</span>
+    </label>
+    <input type="text"
+           id="pcode-t2"
+           placeholder="e.g. 7823-1402"
+           maxlength="9"
+           inputmode="numeric"
+           autocomplete="off"
+           style="letter-spacing:.1em; font-size:1.1rem;">
+    <p id="code-error-t2" style="color:var(--danger); font-size:.85rem; margin-top:.3rem; display:none;"></p>
+  </div>
+
+  <div class="btn-row between">
+    <button class="btn btn-danger"  onclick="onDecline()">I Wish to Withdraw</button>
+    <button class="btn btn-primary" onclick="onAgree()">I Agree — Begin Follow-up →</button>
+  </div>
+</div>
+
+<script src="shared.js"></script>
+<script>
+  function onAgree() {
+    const raw   = document.getElementById('pcode-t2').value.trim();
+    const errEl = document.getElementById('code-error-t2');
+
+    // Validate format first
+    const result = STUDY.setCode(raw);  // re-sets the same code (overwrites with same value)
+    if (!result.ok) {
+      errEl.textContent = result.msg;
+      errEl.style.display = 'block';
+      document.getElementById('pcode-t2').focus();
+      return;
+    }
+
+    // Warn (not block) if code doesn't match T1
+    const t1Code = STUDY.getPID();
+    if (t1Code && result.code !== t1Code) {
+      const proceed = confirm(
+        `⚠ The code you entered (${result.code}) does not match the code from Part 1 (${t1Code}).\n\n` +
+        'This may affect data linking. Do you want to continue anyway?\n\n' +
+        'Click OK to continue, or Cancel to re-enter your code.'
+      );
+      if (!proceed) return;
+    }
+
+    errEl.style.display = 'none';
+    STUDY.saveData('consent_t2', { agreed: true, code_t2: result.code, ts: new Date().toISOString() });
+    STUDY.setPhase(2);
+    STUDY.go(STUDY.SCALES[0]); // → ATSPPH_SF.html (phase 2)
+  }
+
+  function onDecline() {
+    STUDY.saveData('consent_t2', { agreed: false, ts: new Date().toISOString() });
+    document.querySelector('.container').innerHTML = `
+      <div class="result-card">
+        <div class="result-icon">🙏</div>
+        <h1>Thank You for Your Participation</h1>
+        <p>
+          You have chosen to withdraw from the follow-up assessment. Your Part 1 data has been
+          saved and will be used in accordance with the original consent.
+        </p>
+        <p style="color:var(--muted); font-size:.9rem">You may close this window.</p>
+      </div>`;
+  }
+</script>
+</body>
+</html>

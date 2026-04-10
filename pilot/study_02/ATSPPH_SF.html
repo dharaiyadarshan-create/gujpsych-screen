@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ATSPPH-SF | Study 02</title>
+  <link rel="stylesheet" href="shared_study_02.css">
+</head>
+<body>
+
+<div class="container">
+  <span class="badge" id="phase-badge">Questionnaire 1 of 5</span>
+
+  <div class="progress-wrap">
+    <div class="progress-label" id="progress-label">Questionnaire 1 of 5</div>
+    <div class="progress-track"><div class="progress-fill" style="width:20%"></div></div>
+  </div>
+
+  <div class="step-dots" data-steps="5" data-current="1"></div>
+
+  <h1>Attitudes Toward Seeking Professional Psychological Help — Short Form (ATSPPH-SF)</h1>
+  <p>
+    Please read each statement below and indicate the degree to which you agree or disagree with it.
+    Use the scale: <strong>0 = Disagree, 1 = Partly Disagree, 2 = Partly Agree, 3 = Agree</strong>
+  </p>
+
+  <hr class="divider">
+
+  <form id="scale-form">
+    <!-- TODO: Replace placeholder items with the 10 actual ATSPPH-SF items -->
+
+    <div class="question-block">
+      <p class="question-text">1. [ATSPPH-SF Item 1 — add text here]</p>
+      <div class="likert-row">
+        <label><input type="radio" name="q1" value="0" required><span>0<br>Disagree</span></label>
+        <label><input type="radio" name="q1" value="1"><span>1<br>Partly Disagree</span></label>
+        <label><input type="radio" name="q1" value="2"><span>2<br>Partly Agree</span></label>
+        <label><input type="radio" name="q1" value="3"><span>3<br>Agree</span></label>
+      </div>
+    </div>
+
+    <div class="question-block">
+      <p class="question-text">2. [ATSPPH-SF Item 2 — add text here]</p>
+      <div class="likert-row">
+        <label><input type="radio" name="q2" value="0" required><span>0<br>Disagree</span></label>
+        <label><input type="radio" name="q2" value="1"><span>1<br>Partly Disagree</span></label>
+        <label><input type="radio" name="q2" value="2"><span>2<br>Partly Agree</span></label>
+        <label><input type="radio" name="q2" value="3"><span>3<br>Agree</span></label>
+      </div>
+    </div>
+
+    <div class="question-block">
+      <p class="question-text">3. [ATSPPH-SF Item 3 — add text here]</p>
+      <div class="likert-row">
+        <label><input type="radio" name="q3" value="0" required><span>0<br>Disagree</span></label>
+        <label><input type="radio" name="q3" value="1"><span>1<br>Partly Disagree</span></label>
+        <label><input type="radio" name="q3" value="2"><span>2<br>Partly Agree</span></label>
+        <label><input type="radio" name="q3" value="3"><span>3<br>Agree</span></label>
+      </div>
+    </div>
+
+    <!-- Continue adding items: q4 through q10 following the same pattern -->
+
+  </form>
+
+  <div class="btn-row between">
+    <button class="btn btn-secondary" onclick="goBack()">← Back</button>
+    <button class="btn btn-primary"   onclick="goNext()">Next →</button>
+  </div>
+</div>
+
+<script src="shared.js"></script>
+<script src="shared-ui.js"></script>
+<script>
+  const _phase = STUDY.getPhase();
+  document.getElementById('phase-badge').textContent  = `Phase ${_phase} — Questionnaire 1 of 5`;
+  document.getElementById('progress-label').textContent = `Phase ${_phase} — Questionnaire 1 of 5`;
+
+  function goBack() {
+    STUDY.go(STUDY.prevBeforeScale('ATSPPH_SF.html'));
+  }
+
+  function goNext() {
+    // Optional: uncomment to enforce all answers
+    // if (!validateForm('scale-form')) return;
+    const data = STUDY.collectForm('scale-form');
+    STUDY.saveData(`t${_phase}_atspph`, data);
+    STUDY.go(STUDY.nextAfterScale('ATSPPH_SF.html'));
+  }
+</script>
+</body>
+</html>
