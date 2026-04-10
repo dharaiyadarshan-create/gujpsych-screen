@@ -8,80 +8,72 @@
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Gujarati:wght@400;500;700&family=Noto+Serif+Gujarati:wght@400;700&family=DM+Serif+Display&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="shared_study_0201.css"/>
   <link rel="stylesheet" href="sociodem_study_0201.css"/>
+ 
+  <style>
+    /* Ensure the main form is hidden until ID is entered */
+    .page-main { display: none; }
+    
+    #id-container {
+      max-width: 400px;
+      margin: 4rem auto;
+      padding: 2rem;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      text-align: center;
+    }
+    
+    #id-container h3 { margin-top: 0; color: #333; }
+    
+    #id-container input {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: 2px solid #eee;
+      border-radius: 6px;
+      font-size: 1rem;
+      box-sizing: border-box;
+    }
+
+    #id-container button {
+      width: 100%;
+      padding: 12px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+  </style>
 </head>
 <body>
 
 <div id="site-header"></div>
 
-<div id="id-container">
-    <h3>Enter Participant Details</h3>
-    <input type="text" id="phonePart" placeholder="Last 4 digits of Mobile" maxlength="4">
-    <input type="text" id="datePart" placeholder="DDMM of Birth" maxlength="4">
-    <button type="button" id="start-btn">Next</button>
-</div>
-
 <main class="page-main">
-
-  <!-- ══════════════════════════
-       SCREEN 1 — SOCIODEM FORM
-  ══════════════════════════ -->
   <div class="screen active" id="screen-sociodem">
-
     <span class="eyebrow">સામાજિક માહિતી · Sociodemographic</span>
     <h1>તમારા વિશે થોડી માહિતી</h1>
     <p class="lead">
       આ માહિતી સંશોધન હેતુ માટે છે અને આ માહિતી ગોપનીય રહે છે.
-      તારાંકિત (<span style="color:var(--red);">*</span>) પ્રશ્નો ફરજિયાત છે.
     </p>
 
-    
     <div id="sd-container"></div>
 
-    <div class="notice notice-amber mt-2">
-      <span class="notice-label">📋 નોંધ</span>
-      <p>આ ડેટા ફક્ત સંશોધન માટે ઉપયોગ થશે. કોઈ અંગત ઓળખ સ્ટોર થતી નથી.</p>
-    </div>
-
-    <div class="scale-actions mt-2">
-      <button class="btn-ghost" onclick="goBack()">← પાછળ</button>
-      <button class="btn-primary" id="submit-btn" onclick="handleSubmit()" disabled>
-        સબમિટ કરો (Submit)
-      </button>
-    </div>
-
-  </div>
-
-  <!-- ══════════════════════════
-       SCREEN — SUBMITTING
-  ══════════════════════════ -->
-  <div class="screen" id="screen-submitting">
-    <div style="text-align:center; padding: 3rem 1rem;">
-      <div style="font-size:2.5rem; margin-bottom:1rem;">⏳</div>
-      <p style="font-size:1rem; color:var(--text-secondary);">ડેટા સેવ થઈ રહ્યો છે… / Saving your responses…</p>
-    </div>
-  </div>
-
-</main>
-
-<p class="footnote">
-  Your responses are anonymous and confidential.<br>
-  તમારા જવાબો ગોપનીય છે.કોઈ વ્યક્તિગત ઓળખ સ્ટોર નથી થતી કે જાહેર નથી થતી. તમારા જવાબો સંશોધન હેતુ માટે જ ઉપયોગ કરવામાં આવશે. તમે કોઈ પણ સમયે આ પૃષ્ઠને બંધ કરી શકો છો અથવા પાછા જઈ શકો છો.
-</p>
-
 <script src="../assets/shared.js"></script>
-<script src="export_study_01.js"></script>
 <script src="sociodem_study_0201.js"></script>
 
-// ── 1. Participant ID Guard ──
+<script>
+  // ── 1. Participant ID Logic ──
   document.getElementById('start-btn').addEventListener('click', () => {
     const p = document.getElementById('phonePart').value;
     const d = document.getElementById('datePart').value;
     
-    // Use the STUDY module from shared.js
     const result = STUDY.setCode(p + d);
 
     if (result.ok) {
-      // Hide ID entry and show the Sociodem form
       document.getElementById('id-container').style.display = 'none';
       document.querySelector('.page-main').style.display = 'block';
     } else {
@@ -89,11 +81,11 @@
     }
   });
 
-  // ── 2. Standard Init ──
+  // ── 2. Initialization ──
   const SUBMITTED_KEY = 'study_01_sociodem_submitted';
 
   document.addEventListener('DOMContentLoaded', () => {
-    // If ID is already set in this session (e.g. page refresh), skip entry
+    // Auto-reveal if ID already exists in session
     if (STUDY.getPID()) {
       document.getElementById('id-container').style.display = 'none';
       document.querySelector('.page-main').style.display = 'block';
@@ -119,38 +111,25 @@
     }, 50);
   }
 
-  // ── 3. Submit & Redirect to GHSQ ──
+  // ── 3. Submit & Move to First Scale ──
   async function handleSubmit() {
     const data = SocioDem.getData();
+    if (!data) return;
 
-   showScreen('screen-submitting');
+    showScreen('screen-submitting');
 
-    // Save sociodem data to the STUDY state
     STUDY.saveData('sociodemo', data);
     sessionStorage.setItem(SUBMITTED_KEY, '1');
 
     try {
-      // Build the full payload (includes 8-digit ID + sociodemo data)
       const payload = STUDY.buildExport(1);
-      
-      // Fire-and-forget submission to Google Sheets
       STUDY.submitToSheets(payload);
-      
-      // Optional: Local backup download
-      // STUDY.downloadJSON(payload, `backup_${payload.participantId}.json`);
-
     } catch (err) {
       console.error('Submission failed:', err);
     }
 
-    // Redirect to the first scale: GHSQ.html
+    // Direct transition to the first scale
     window.location.href = 'GHSQ.html';
-  }
-
-  function lockAfterSubmit() {
-    document.getElementById('submit-btn').disabled = true;
-    document.querySelectorAll('#sd-container input, #sd-container button, #sd-container select')
-      .forEach(el => el.disabled = true);
   }
 
   function showScreen(id) {
@@ -161,11 +140,10 @@
   }
 
   function goBack() {
-    // Resetting back to ID entry if needed
     location.reload();
   }
+</script>
 
 <div id="site-footer"></div>
-
 </body>
 </html>
