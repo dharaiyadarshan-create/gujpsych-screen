@@ -13,6 +13,13 @@
 
 <div id="site-header"></div>
 
+<div id="id-container">
+    <h3>Enter Participant Details</h3>
+    <input type="text" id="phonePart" placeholder="Last 4 digits of Mobile" maxlength="4">
+    <input type="text" id="datePart" placeholder="DDMM of Birth" maxlength="4">
+    <button type="button" id="start-btn">Next</button>
+</div>
+
 <main class="page-main">
 
   <!-- ══════════════════════════
@@ -65,18 +72,33 @@
 <script src="export_study_01.js"></script>
 <script src="sociodem_study_0201.js"></script>
 
-<script>
-  // ── Guard: must have consent ──
-  if (sessionStorage.getItem('study_01_consent') !== 'true') {
-    window.location.href = 'consent.html';
-  }
+// ── 1. Participant ID Guard ──
+  document.getElementById('start-btn').addEventListener('click', () => {
+    const p = document.getElementById('phonePart').value;
+    const d = document.getElementById('datePart').value;
+    
+    // Use the STUDY module from shared.js
+    const result = STUDY.setCode(p + d);
 
-  // ── Keys ──
+    if (result.ok) {
+      // Hide ID entry and show the Sociodem form
+      document.getElementById('id-container').style.display = 'none';
+      document.querySelector('.page-main').style.display = 'block';
+    } else {
+      alert(result.msg);
+    }
+  });
+
+  // ── 2. Standard Init ──
   const SUBMITTED_KEY = 'study_01_sociodem_submitted';
-  const DATA_KEY      = 'study_01_sociodem_data';
 
-  // ── Init ──
   document.addEventListener('DOMContentLoaded', () => {
+    // If ID is already set in this session (e.g. page refresh), skip entry
+    if (STUDY.getPID()) {
+      document.getElementById('id-container').style.display = 'none';
+      document.querySelector('.page-main').style.display = 'block';
+    }
+
     SocioDem.reset();
     SocioDem.render('sd-container');
 
@@ -84,65 +106,53 @@
     sd.addEventListener('click', updateButtons);
     sd.addEventListener('input', updateButtons);
 
-    // If already submitted this session, lock form
     if (sessionStorage.getItem(SUBMITTED_KEY) === '1') {
       lockAfterSubmit();
     }
   });
 
-  // ── Button state ──
   function updateButtons() {
     setTimeout(() => {
-      const isComplete  = SocioDem.isComplete();
+      const isComplete = SocioDem.isComplete();
       const isSubmitted = sessionStorage.getItem(SUBMITTED_KEY) === '1';
       document.getElementById('submit-btn').disabled = !isComplete || isSubmitted;
     }, 50);
   }
 
-  // ── Submit ──
+  // ── 3. Submit & Redirect to GHSQ ──
   async function handleSubmit() {
     const data = SocioDem.getData();
 
-    if (!data) {
-      alert('ફોર્મ પૂર્ણ કરો ❗');
-      return;
-    }
+   showScreen('screen-submitting');
 
-    if (!confirm('શું તમે ખાતરી કરો છો? એકવાર સબમિટ કર્યા પછી માહિતી દૂર કરી શકાશે નહીં.')) {
-      return;
-    }
-
-    // Show submitting screen
-    showScreen('screen-submitting');
-
-    // Save to sessionStorage
-    sessionStorage.setItem(DATA_KEY, JSON.stringify(data));
+    // Save sociodem data to the STUDY state
+    STUDY.saveData('sociodemo', data);
     sessionStorage.setItem(SUBMITTED_KEY, '1');
 
-    // token 
-
-    const token = sessionStorage.getItem('study_token');
-
     try {
-      await uploadSocioDemData(token, data);
+      // Build the full payload (includes 8-digit ID + sociodemo data)
+      const payload = STUDY.buildExport(1);
+      
+      // Fire-and-forget submission to Google Sheets
+      STUDY.submitToSheets(payload);
+      
+      // Optional: Local backup download
+      // STUDY.downloadJSON(payload, `backup_${payload.participantId}.json`);
+
     } catch (err) {
-      console.error('Sociodem upload failed:', err);
-      // Continue anyway — don't block participant
+      console.error('Submission failed:', err);
     }
 
-    // Mark complete and return to state machine
-    sessionStorage.setItem('study_01_sociodemographic', 'true');
-    window.location.href = 'index_study_02.html';
+    // Redirect to the first scale: GHSQ.html
+    window.location.href = 'GHSQ.html';
   }
 
-  // ── Lock UI after submit ──
   function lockAfterSubmit() {
     document.getElementById('submit-btn').disabled = true;
     document.querySelectorAll('#sd-container input, #sd-container button, #sd-container select')
       .forEach(el => el.disabled = true);
   }
 
-  // ── Screen helper ──
   function showScreen(id) {
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     const t = document.getElementById(id);
@@ -150,11 +160,10 @@
     window.scrollTo(0, 0);
   }
 
-  // ── Back ──
   function goBack() {
-    window.location.href = 'index_study_02.html';
+    // Resetting back to ID entry if needed
+    location.reload();
   }
-</script>
 
 <div id="site-footer"></div>
 

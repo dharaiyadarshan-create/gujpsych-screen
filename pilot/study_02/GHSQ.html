@@ -85,19 +85,47 @@
 
 <script src="shared.js"></script>
 <script src="shared-ui.js"></script>
-<script>
-  const _phase = STUDY.getPhase();
-  document.getElementById('phase-badge').textContent  = `Phase ${_phase} — Questionnaire 3 of 5`;
-  document.getElementById('progress-label').textContent = `Phase ${_phase} — Questionnaire 3 of 5`;
 
+<script src="../assets/shared.js"></script>
+<script>
+  // Get the current phase (default to 1 for Baseline)
+  const _phase = STUDY.getPhase ? STUDY.getPhase() : 1;
+  
+  // UI Updates for the badge/labels
+  const badgeText = `Questionnaire 1 of 5`; // GHSQ is usually first in your scale list
+  if(document.getElementById('phase-badge')) document.getElementById('phase-badge').textContent = badgeText;
+  if(document.getElementById('progress-label')) document.getElementById('progress-label').textContent = badgeText;
+
+  /**
+   * Navigate back to Sociodemo
+   */
   function goBack() {
-    STUDY.go(STUDY.prevBeforeScale('GHSQ.html'));
+    window.location.href = 'sociodem_study_0201.html';
   }
 
+  /**
+   * Save GHSQ data and move to MHLS
+   */
   function goNext() {
-    const data = STUDY.collectForm('scale-form');
+    // 1. Collect form data from the Likert rows
+    const form = document.getElementById('scale-form');
+    
+    // Simple validation: check if all radios are selected
+    if (!form.checkValidity()) {
+      alert("કૃપા કરીને બધા પ્રશ્નોના જવાબ આપો. (Please answer all questions.)");
+      form.reportValidity();
+      return;
+    }
+
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData.entries());
+    
+    // 2. Save data locally under a unique key for this phase
+    // Example key: t1_ghsq
     STUDY.saveData(`t${_phase}_ghsq`, data);
-    STUDY.go(STUDY.nextAfterScale('GHSQ.html'));
+    
+    // 3. Navigate to the next scale
+    window.location.href = 'MHLS.html';
   }
 </script>
 </body>

@@ -43,6 +43,46 @@
  *
  */
 
+let participantID = "";
+
+// 1. Transition from ID to SD Form
+document.getElementById('start-btn').addEventListener('click', function() {
+    const p = document.getElementById('phonePart').value;
+    const d = document.getElementById('datePart').value;
+
+    if (p.length === 4 && d.length === 4) {
+        participantID = p + d; // The 8-digit numerical ID
+        document.getElementById('display-id').innerText = participantID;
+        
+        // Hide ID section, show SD form
+        document.getElementById('id-container').style.display = 'none';
+        document.getElementById('sd-form').style.display = 'block';
+    } else {
+        alert("Please enter exactly 4 digits for both.");
+    }
+});
+
+// 2. Submission Logic
+document.getElementById('sd-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const formData = new FormData(this);
+    const data = Object.fromEntries(formData.entries());
+    
+    // Manually add the generated ID to the data object
+    data.participantID = participantID;
+
+    // Send to Google Apps Script
+    fetch('YOUR_GAS_URL', {
+        method: 'POST',
+        mode: 'no-cors',
+        body: JSON.stringify(data)
+    }).then(() => {
+        // Silent clear/reset
+        location.reload();
+    });
+});
+
 const SocioDem = (() => {
 
   // ── GENERIC FIELDS ───────────────────────────────────────────────

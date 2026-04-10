@@ -1,19 +1,27 @@
-// export_study_0201.js — Export Phase 1 (Baseline / T1) data
+// export_study_0201.js 
 
-/**
- * 1. Builds the T1 payload (scales + sociodemo).
- * 2. Downloads a local JSON backup immediately.
- * 3. Submits fire-and-forget to Google Sheets via Apps Script.
- *
- * Called from sociodem_study_0201.js before navigating to result01.
- */
 function runExport01() {
-  const payload  = STUDY.buildExport(1);
-  const pid      = STUDY.getPID();
+  // 1. Ensure the 8-digit ID is valid before exporting
+  const pid = STUDY.getPID(); 
+  
+  if (!pid || pid.length !== 8) {
+    console.error('[Export 01] Error: Invalid or missing Participant ID.');
+    return; // Stop export if ID is corrupted
+  }
+
+  // 2. Build the payload including Socio-demo and Scales
+  const payload = STUDY.buildExport(1);
+  
+  // 3. Tweak: Force the 8-digit ID into the payload root for easy Sheet mapping
+  payload.participantID = pid;
+  payload.phase = "Baseline_T1";
+  payload.submittedAt = new Date().toISOString();
+
   const filename = `study02_T1_${pid}_${Date.now()}.json`;
 
-  STUDY.downloadJSON(payload, filename);   // local backup first
-  STUDY.submitToSheets(payload);           // then send to Google Sheets
+  // 4. Execution
+  STUDY.downloadJSON(payload, filename); 
+  STUDY.submitToSheets(payload); 
 
-  console.log('[Export 01] Baseline data exported:', filename);
+  console.log('[Export 01] 8-digit ID mapped and exported:', pid);
 }

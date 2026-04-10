@@ -111,32 +111,68 @@
 <script src="shared.js"></script>
 <script src="shared-ui.js"></script>
 <script src="export_study_0202.js"></script>
+<script src="../assets/shared.js"></script>
 <script>
-  const _phase = STUDY.getPhase();
-  document.getElementById('phase-badge').textContent    = `Phase ${_phase} — Questionnaire 5 of 5`;
-  document.getElementById('progress-label').textContent = `Phase ${_phase} — Questionnaire 5 of 5 — Last questionnaire!`;
-  if (_phase === 1) {
-    document.getElementById('nextBtn').textContent = 'Next: Background Questions →';
+  // Get the current phase
+  const _phase = STUDY.getPhase ? STUDY.getPhase() : 1;
+  
+  // UI Updates: Final Questionnaire 5 of 5
+  if(document.getElementById('phase-badge')) {
+    document.getElementById('phase-badge').textContent = `Questionnaire 5 of 5`;
+  }
+  if(document.getElementById('progress-label')) {
+    document.getElementById('progress-label').textContent = `Final Questionnaire — Almost done!`;
   }
 
+  /**
+   * Navigate back to BEDS
+   */
   function goBack() {
-    STUDY.go(STUDY.prevBeforeScale('WHO5WBI.html'));
+    window.location.href = 'BEDS.html';
   }
 
-  function goNext() {
-    const data = STUDY.collectForm('scale-form');
+  /**
+   * Final Submission & Routing
+   */
+  async function goNext() {
+    const form = document.getElementById('scale-form');
+    
+    // Validation
+    if (!form.checkValidity()) {
+      alert("કૃપા કરીને બધા પ્રશ્નોના જવાબ આપો. (Please answer all questions.)");
+      form.reportValidity();
+      return;
+    }
+
+    // 1. Collect and save the final scale data
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData.entries());
     STUDY.saveData(`t${_phase}_who5`, data);
 
-    const next = STUDY.nextAfterScale('WHO5WBI.html');
+    // 2. Build the final payload for this phase
+    // This includes the 8-digit ID and ALL saved scales (GHSQ, MHLS, ATSPPH, BEDS, WHO5)
+    const payload = STUDY.buildExport(_phase);
 
-    if (next === '__export02__') {
-      // Phase 2: export T2 data then go to result02
-      runExport02(); // from export_study_0202.js
-      STUDY.go('result_study_0202.html');
-    } else {
-      // Phase 1: go to sociodemographic
-      STUDY.go(next); // → sociodem_study_0201.html
+    try {
+      // 3. Fire-and-forget submission to Google Sheets
+      STUDY.submitToSheets(payload);
+      
+      // Optional: Local JSON backup
+      // STUDY.downloadJSON(payload, `study02_final_${payload.participantId}.json`);
+    } catch (err) {
+      console.error('Final export failed:', err);
     }
+
+    // 4. Present the final choice: WhatsApp Channel or Completion
+    showFinalChoice();
+  }
+
+  /**
+   * Simple overlay or redirect to a choice page
+   */
+  function showFinalChoice() {
+    // You can redirect to a dedicated choice page:
+    window.location.href = 'final_choice.html';
   }
 </script>
 </body>

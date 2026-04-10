@@ -71,21 +71,45 @@
 
 <script src="shared.js"></script>
 <script src="shared-ui.js"></script>
+<<script src="../assets/shared.js"></script>
 <script>
-  const _phase = STUDY.getPhase();
-  document.getElementById('phase-badge').textContent  = `Phase ${_phase} — Questionnaire 1 of 5`;
-  document.getElementById('progress-label').textContent = `Phase ${_phase} — Questionnaire 1 of 5`;
+  // Get the current phase (default to 1 for Baseline)
+  const _phase = STUDY.getPhase ? STUDY.getPhase() : 1;
+  
+  // UI Updates: Adjusting sequence number based on your flow
+  const badgeText = `Questionnaire 2 of 5`; 
+  if(document.getElementById('phase-badge')) document.getElementById('phase-badge').textContent = badgeText;
+  if(document.getElementById('progress-label')) document.getElementById('progress-label').textContent = badgeText;
 
+  /**
+   * Navigate back to MHLS
+   */
   function goBack() {
-    STUDY.go(STUDY.prevBeforeScale('ATSPPH_SF.html'));
+    window.location.href = 'MHLS.html';
   }
 
+  /**
+   * Save ATSPPH data and move to BEDS
+   */
   function goNext() {
-    // Optional: uncomment to enforce all answers
-    // if (!validateForm('scale-form')) return;
-    const data = STUDY.collectForm('scale-form');
+    const form = document.getElementById('scale-form');
+    
+    // Validation to ensure no items are missed
+    if (!form.checkValidity()) {
+      alert("કૃપા કરીને બધા પ્રશ્નોના જવાબ આપો. (Please answer all questions.)");
+      form.reportValidity();
+      return;
+    }
+
+    // 1. Collect form data
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData.entries());
+    
+    // 2. Save data locally (Key: t1_atspph)
     STUDY.saveData(`t${_phase}_atspph`, data);
-    STUDY.go(STUDY.nextAfterScale('ATSPPH_SF.html'));
+    
+    // 3. Navigate to BEDS.html
+    window.location.href = 'BEDS.html';
   }
 </script>
 </body>

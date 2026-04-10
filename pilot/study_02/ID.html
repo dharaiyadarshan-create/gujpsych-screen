@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>8-Digit ID Generator</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f2f5;
+        }
+        .card {
+            background: #fff;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            width: 320px;
+        }
+        h2 { margin-top: 0; font-size: 1.2rem; color: #333; }
+        label { display: block; margin: 15px 0 5px; font-size: 0.9rem; color: #666; }
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            box-sizing: border-box;
+            outline: none;
+        }
+        input:focus { border-color: #007bff; }
+        button {
+            width: 100%;
+            margin-top: 20px;
+            padding: 12px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        button:hover { background: #0056b3; }
+        .output {
+            margin-top: 20px;
+            padding: 15px;
+            background: #e9ecef;
+            border-radius: 6px;
+            text-align: center;
+            font-family: monospace;
+            font-size: 1.4rem;
+            letter-spacing: 2px;
+            color: #222;
+        }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>Generate Participant ID</h2>
+    
+    <label>Last 4 digits of Mobile:</label>
+    <input type="text" id="phonePart" maxlength="4" placeholder="e.g. 5678" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+
+    <label>DDMM of Birth:</label>
+    <input type="text" id="datePart" maxlength="4" placeholder="e.g. 2512" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+
+    <button onclick="makeID()">Combine</button>
+
+    <div class="output" id="result">00000000</div>
+</div>
+
+<script>
+    function makeID() {
+        const p = document.getElementById('phonePart').value;
+        const d = document.getElementById('datePart').value;
+        const res = document.getElementById('result');
+
+        if (p.length === 4 && d.length === 4) {
+            // Generates 8 numerical digits only, no spaces
+            res.innerText = p + d;
+        } else {
+            alert("Please enter exactly 4 digits in both boxes.");
+        }
+    }
+</script>
+
+</body>
+</html>

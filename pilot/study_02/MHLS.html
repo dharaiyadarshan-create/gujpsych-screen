@@ -80,19 +80,45 @@
 
 <script src="shared.js"></script>
 <script src="shared-ui.js"></script>
+<script src="../assets/shared.js"></script>
 <script>
-  const _phase = STUDY.getPhase();
-  document.getElementById('phase-badge').textContent  = `Phase ${_phase} — Questionnaire 4 of 5`;
-  document.getElementById('progress-label').textContent = `Phase ${_phase} — Questionnaire 4 of 5`;
+  // Get the current phase (default to 1 for Baseline)
+  const _phase = STUDY.getPhase ? STUDY.getPhase() : 1;
+  
+  // UI Updates: Questionnaire 4 of 5
+  const badgeText = `Questionnaire 4 of 5`; 
+  if(document.getElementById('phase-badge')) document.getElementById('phase-badge').textContent = badgeText;
+  if(document.getElementById('progress-label')) document.getElementById('progress-label').textContent = badgeText;
 
+  /**
+   * Navigate back to GHSQ
+   */
   function goBack() {
-    STUDY.go(STUDY.prevBeforeScale('MHLS.html'));
+    window.location.href = 'GHSQ.html';
   }
 
+  /**
+   * Save MHLS data and move to ATSPPH_SF
+   */
   function goNext() {
-    const data = STUDY.collectForm('scale-form');
+    const form = document.getElementById('scale-form');
+    
+    // Validation
+    if (!form.checkValidity()) {
+      alert("Please answer all questions before proceeding.");
+      form.reportValidity();
+      return;
+    }
+
+    // 1. Collect form data
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData.entries());
+    
+    // 2. Save data locally (Key: t1_mhls)
     STUDY.saveData(`t${_phase}_mhls`, data);
-    STUDY.go(STUDY.nextAfterScale('MHLS.html'));
+    
+    // 3. Navigate to the next scale in the sequence
+    window.location.href = 'ATSPPH_SF.html';
   }
 </script>
 </body>
